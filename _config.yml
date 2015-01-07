@@ -14,7 +14,7 @@ title:               Down to the Wire
 description:         'A blog by <a href="https://twitter.com/JoeFriedrichsen" target="_blank">@JoeFriedrichsen</a>.'
 url:                 http://downtothewire.io
 baseurl:             /
-paginate:            5
+paginate:            1
 
 # About/contact
 author:
