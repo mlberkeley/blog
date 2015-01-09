@@ -25,6 +25,7 @@
  * Pagination
  * Reverse layout
  * Themes
+ * Input elements
  */
 
 
@@ -56,7 +57,7 @@ h1, h2, h3, h4, h5, h6 {
  * Wrapper
  *
  * The wrapper is used to position site content when the sidebar is toggled. We
- * use an outter wrap to position the sidebar without interfering with the
+ * use an outer wrap to position the sidebar without interfering with the
  * regular page content.
  */
 
@@ -434,7 +435,8 @@ a.pagination-item:hover {
 /* Red */
 .theme-base-08 .sidebar,
 .theme-base-08 .sidebar-toggle:active,
-.theme-base-08 #sidebar-checkbox:checked ~ .sidebar-toggle {
+.theme-base-08 #sidebar-checkbox:checked ~ .sidebar-toggle,
+.theme-base-08 .search-submit {
   background-color: #ac4142;
 }
 .theme-base-08 .container a,
@@ -446,7 +448,8 @@ a.pagination-item:hover {
 /* Orange */
 .theme-base-09 .sidebar,
 .theme-base-09 .sidebar-toggle:active,
-.theme-base-09 #sidebar-checkbox:checked ~ .sidebar-toggle {
+.theme-base-09 #sidebar-checkbox:checked ~ .sidebar-toggle,
+.theme-base-09 .search-submit {
   background-color: #d28445;
 }
 .theme-base-09 .container a,
@@ -458,7 +461,8 @@ a.pagination-item:hover {
 /* Yellow */
 .theme-base-0a .sidebar,
 .theme-base-0a .sidebar-toggle:active,
-.theme-base-0a #sidebar-checkbox:checked ~ .sidebar-toggle {
+.theme-base-0a #sidebar-checkbox:checked ~ .sidebar-toggle,
+.theme-base-0a .search-submit {
   background-color: #f4bf75;
 }
 .theme-base-0a .container a,
@@ -470,7 +474,8 @@ a.pagination-item:hover {
 /* Green */
 .theme-base-0b .sidebar,
 .theme-base-0b .sidebar-toggle:active,
-.theme-base-0b #sidebar-checkbox:checked ~ .sidebar-toggle {
+.theme-base-0b #sidebar-checkbox:checked ~ .sidebar-toggle,
+.theme-base-0b .search-submit {
   background-color: #90a959;
 }
 .theme-base-0b .container a,
@@ -482,7 +487,8 @@ a.pagination-item:hover {
 /* Cyan */
 .theme-base-0c .sidebar,
 .theme-base-0c .sidebar-toggle:active,
-.theme-base-0c #sidebar-checkbox:checked ~ .sidebar-toggle {
+.theme-base-0c #sidebar-checkbox:checked ~ .sidebar-toggle,
+.theme-base-0c .search-submit {
   background-color: #75b5aa;
 }
 .theme-base-0c .container a,
@@ -494,7 +500,8 @@ a.pagination-item:hover {
 /* Blue */
 .theme-base-0d .sidebar,
 .theme-base-0d .sidebar-toggle:active,
-.theme-base-0d #sidebar-checkbox:checked ~ .sidebar-toggle {
+.theme-base-0d #sidebar-checkbox:checked ~ .sidebar-toggle,
+.theme-base-0d .search-submit {
   background-color: #6a9fb5;
 }
 .theme-base-0d .container a,
@@ -506,7 +513,8 @@ a.pagination-item:hover {
 /* Magenta */
 .theme-base-0e .sidebar,
 .theme-base-0e .sidebar-toggle:active,
-.theme-base-0e #sidebar-checkbox:checked ~ .sidebar-toggle {
+.theme-base-0e #sidebar-checkbox:checked ~ .sidebar-toggle,
+.theme-base-0e .search-submit {
   background-color: #aa759f;
 }
 .theme-base-0e .container a,
@@ -518,13 +526,55 @@ a.pagination-item:hover {
 /* Brown */
 .theme-base-0f .sidebar,
 .theme-base-0f .sidebar-toggle:active,
-.theme-base-0f #sidebar-checkbox:checked ~ .sidebar-toggle {
+.theme-base-0f #sidebar-checkbox:checked ~ .sidebar-toggle,
+.theme-base-0f .search-submit {
   background-color: #8f5536;
 }
 .theme-base-0f .container a,
 .theme-base-0f .sidebar-toggle,
 .theme-base-0f .related-posts li a:hover {
   color: #8f5536;
+}
+
+
+/*
+ * Input elements
+ *
+ */
+
+.search-form-container {
+  display: table;
+  width: 100%;
+}
+
+.search-input-container {
+  display: table-cell;
+  width: auto;
+}
+
+.search-submit-container {
+  display: table-cell;
+}
+
+.search-input {
+  border: 1px solid #9a9a9a;
+  font-size: 1rem;
+  height: 2rem;
+  margin: 1rem 0 0 0;
+  padding-left: .4rem;
+  width: 100%;
+}
+
+.search-submit {
+  border: medium none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+  margin: 1rem 0 0 1rem;
+  padding-top: .4rem;
+  padding-right: 1rem;
+  padding-bottom: .4rem;
+  padding-left: 1rem;
 }
 
 
