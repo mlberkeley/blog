@@ -9,6 +9,7 @@ permalink:           pretty
 relative_permalinks: true
 
 # Setup
+exclude:             [CNAME, Gemfile, README.md, LICENSE.md]
 title:               Down to the Wire
 #tagline:             'Elements of LabVIEW'
 description:         'A blog by <a href="https://twitter.com/JoeFriedrichsen" target="_blank">@JoeFriedrichsen</a>.'
