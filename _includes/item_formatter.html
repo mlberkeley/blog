@@ -1,0 +1,11 @@
+{% comment %}
+  Create a list item with a "small_text" descriptor,
+  and a link to "item_href" with text "item_link".
+{% endcomment %}
+
+<li>
+  <h3>
+    <small>{{ include.small_text }}</small><br>
+    <a href="{{ include.item_href }}">{{ include.item_link }}</a>
+  </h3>
+</li>

@@ -2,13 +2,8 @@
 layout: default
 ---
 
-{% for data_tag in site.data.tags %}
-  {% if data_tag.slug == page.tag %}
-    {% assign tag_name = data_tag.name %}
-  {% endif %}
-{% endfor %}
-
-{% capture post_tagged_message %}Posts tagged <em>{{ tag_name }}</em>{% endcapture %}
+{% include find_tag.html tag_to_find_as_slug=page.tag %}
+{% capture post_tagged_message %}Posts tagged <em>{{ data_tag.name }}</em>{% endcapture %}
 {% assign no_posts_tagged_message = 'There are no posts with this tag.' %}
 
 <div class="page">

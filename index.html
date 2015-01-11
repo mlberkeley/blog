@@ -3,15 +3,5 @@ layout: default
 title: Home
 ---
 
-<div>
-  <ul class="related-posts">
-    {% for post in site.posts %}
-      <li>
-        <h3>
-          <small>{{ post.date | date_to_string }}</small><br>
-          <a href="{{ post.url }}">{{ post.title }}</a>
-        </h3>
-      </li>
-    {% endfor %}
-  </ul>
-</div>
+{% include top_tags.html count_as_heading='Five' count_as_number=5 %}
+{% include post_archive.html %}
