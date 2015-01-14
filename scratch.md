@@ -20,18 +20,39 @@ Testing new features, behaviors, and visuals.
     return commentHtml;
   }
 
+  function updateCommentDivs(allCommentsHtml, loadCommentsHtml, leaveCommentsHtml)
+  {
+    if (allCommentsHtml) document.getElementById("all_comments").innerHTML = allCommentsHtml;
+    if (loadCommentsHtml) document.getElementById("load_comments_button").innerHTML = loadCommentsHtml;
+    if (leaveCommentsHtml) document.getElementById("leave_comment_link").innerHTML = leaveCommentsHtml;
+  }
+
   function presentAllComments(allComments) {
-    var allCommentsHtml = allComments.length === 0 ? "<p>No comments</p>" : "";
+    var allCommentsHtml = "";
     for (var i = 0; i < allComments.length; i++) {
       var user = allComments[i].user;
       allCommentsHtml += formatComment(user.avatar_url, user.html_url, user.login, allComments[i].body_html, allComments[i].updated_at);
     }
 
-    document.getElementById("all_comments").innerHTML = allCommentsHtml;
-    document.getElementById("load_comments_button").innerHTML = "";
+    updateCommentDivs(allCommentsHtml, null, null)
+  }
 
-    var leaveCommentUrl = allComments.length > 0 ? allComments.pop().html_url : IssueUrl;
-    document.getElementById("add_comment_link").innerHTML = '<a href="' + leaveCommentUrl + '">Leave a comment</a>';
+  function updateCommentActions(allComments)
+  {
+    var allCommentsHtml = "";
+    var loadCommentsHtml = "";
+    var leaveCommentUrl = "";
+    if (allComments.length === 0) {
+      allCommentsHtml = "<p>No comments</p>";
+      leaveCommentUrl = IssueUrl;
+    }
+    else {
+      loadCommentsHtml = '<button class="search-submit" onclick="presentAllComments(CommentsArray)">Show ' + allComments.length + ' Comments</button>';
+      leaveCommentUrl = allComments[allComments.length - 1].html_url
+    }
+
+    var leaveCommentsHtml = '<a href="' + leaveCommentUrl + '">Leave a comment</a>';
+    updateCommentDivs(allCommentsHtml, loadCommentsHtml, leaveCommentsHtml)
   }
 
   function getGitHubApiRequestWithCompletion(url, completion)
@@ -61,10 +82,10 @@ Testing new features, behaviors, and visuals.
           return;
         }
       }
-      presentAllComments(CommentsArray);
+      updateCommentActions(CommentsArray);
     }
     else {
-      presentAllComments(CommentsArray);
+      updateCommentActions(CommentsArray);
     }
   }
 
@@ -75,21 +96,21 @@ Testing new features, behaviors, and visuals.
       getGitHubApiRequestWithCompletion(searchResults.items[0].comments_url, onCommentsUpdated);
     }
     else {
-      presentAllComments(CommentsArray);
+      updateCommentActions(CommentsArray);
     }
   }
 
-  function findAndPresentComments(userName, repositoryName, issueTitle) {
+  function findAndCollectComments(userName, repositoryName, issueTitle) {
     var safeQuery = encodeURI(issueTitle);
     var seachQueryUrl = "https://api.github.com/search/issues?q=" + safeQuery + "+repo:" + userName + "/" + repositoryName + "+type:issue+in:title";
     getGitHubApiRequestWithCompletion(seachQueryUrl, onSearchComplete)
   }
+
+  findAndCollectComments("joyent", "node", "net.js - possible EventEmitter memory leak detected")
 </script>
 
 <div id="all_comments"></div>
 
-<div id="load_comments_button">
-  <button class="search-submit" onclick='findAndPresentComments("joyent", "node", "net.js - possible EventEmitter memory leak detected")'>Show Comments</button> 
-</div>
+<div id="load_comments_button"></div>
 
-<div id="add_comment_link"></div>
+<div id="leave_comment_link"></div>
