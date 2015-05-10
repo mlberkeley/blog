@@ -1,7 +1,3 @@
-# Dependencies
-markdown:            redcarpet
-highlighter:         pygments
-
 # Permalinks
 #
 # Use of `relative_permalinks` ensures post links from the index work properly.
@@ -15,7 +11,7 @@ description:         'A reserved <a href="http://jekyllrb.com" target="_blank">J
 url:                 http://lanyon.getpoole.com
 
 # If this is a user site, keep this one
-baseurl:             
+baseurl:             ''
 # If this is a repository site, keep this one
 #baseurl:             /your-repository-name
 
