@@ -1,2 +1,11 @@
 - slug: vikit
   name: VIKit
+
+- slug: github-pages
+  name: GitHub Pages
+
+- slug: jekyll
+  name: Jekyll
+
+- slug: liquid
+  name: Liquid
