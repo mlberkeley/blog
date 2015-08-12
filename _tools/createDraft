@@ -1,27 +1,21 @@
 #!/bin/bash
 #
-# createPost
+# createDraft
 # Copyright 2015 Joe Friedrichsen
 # Licensed under the MIT License
 
 if test $# -ne 1; then
-  echo "Usage: createPost 'Pretty Name'"
+  echo "Usage: createDraft 'Pretty Name'"
   exit 1
 fi
 
 newPostPrettyName="$1"
 newPostSlugName="$(echo -n "${newPostPrettyName}" | sed -e 's/[^[:alnum:]]/-/g' | tr -s '-' | tr A-Z a-z)"
 
-currentYear=$(date +%Y)
-currentMonth=$(date +%m)
-currentDay=$(date +%d)
-
-newPostFullSlug="${currentYear}-${currentMonth}-${currentDay}-${newPostSlugName}"
-
 gitRepoRoot="$(git rev-parse --show-toplevel)"
-newPostFileName="${gitRepoRoot}/_posts/${newPostFullSlug}.md"
+newPostFileName="${gitRepoRoot}/_drafts/${newPostSlugName}.md"
 
-mkdir -p "${gitRepoRoot}/_posts"
+mkdir -p "${gitRepoRoot}/_drafts"
 cat > "${newPostFileName}" <<-new-post-entry
 ---
 layout: post
@@ -30,5 +24,5 @@ tags: []
 ---
 new-post-entry
 
-echo "Created new post! Use 'git add' on this file:"
-echo "  git add \"${newPostFileName}\""
+echo "Created new draft! Edit this file:"
+echo "  \"${newPostFileName}\""
