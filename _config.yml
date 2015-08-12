@@ -6,8 +6,9 @@ relative_permalinks: true
 # Setup
 exclude:             [CNAME, Gemfile, README.md, LICENSE.md, scratch.md]
 unpublished:         true
+show_drafts:         false
 title:               Down to the Wire
-#tagline:             'Elements of LabVIEW'
+tagline:             Elements of LabVIEW
 description:         'A blog by <a href="https://twitter.com/JoeFriedrichsen" target="_blank">@JoeFriedrichsen</a>.'
 url:                 http://downtothewire.io
 baseurl:             ''
