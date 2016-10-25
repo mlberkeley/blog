@@ -4,7 +4,12 @@
 
 <!-- Toggleable sidebar -->
 <div class="sidebar" id="sidebar">
-  <div class="sidebar-item">
+
+  <div style="align:center">
+      <img src="{{ site.baseurl }}/images/mlabprofile.png"/>
+  </div>
+
+  <div class="sidebar-item" style="text-align:center">
     <p>{{ site.description }}</p>
   </div>
 
@@ -25,7 +30,6 @@
       {% endif %}
     {% endfor %}
 
-    <a class="sidebar-nav-item" href="{{ site.github.repo }}">GitHub - (should we link our mlab github?)</a>
     <span class="sidebar-nav-item">Currently v{{ site.version }}</span>
   </nav>
 
@@ -41,6 +45,12 @@
     </a>
     {% endif %}
 
+    {% if site.author.github %}
+    <a href="https://www.github.com/{{ site.author.github }}">
+      <i class="fa fa-github fa-lg"></i>
+    </a>
+    {% endif %}
+
     {% if site.author.email %}
     <a href="mailto: {{ site.author.email }}">
       <i class="fa fa-envelope fa-lg"></i>
@@ -49,9 +59,4 @@
 
   </div>
 
-  <div class="sidebar-item">
-    <p>
-      &copy; {{ site.time | date: '%Y' }}. All rights reserved.
-    </p>
-  </div>
 </div>

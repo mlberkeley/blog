@@ -11,12 +11,28 @@ We're rolling w Jekyll for the blog cuz I don't have time to build css for this 
 
 Code snippet example:
 
+Ruby:
 {% highlight ruby %}
 def print_hi(name)
   puts "Hi, #{name}"
 end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
+print_hi('David')
+#=> prints 'Hi, David' to STDOUT.
+{% endhighlight %}
+
+Python:
+{% highlight python %}
+class cs61a:
+  is_silly = True
+
+  def __init__(self):
+    self.is_silly = False
+
+cs61a.is_silly
+>>True
+
+class.is_silly
+>>>False
 {% endhighlight %}
 
 Markdown math possibilities:
