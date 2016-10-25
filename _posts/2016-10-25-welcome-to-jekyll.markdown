@@ -3,6 +3,7 @@ layout: post
 title:  "Welcome"
 date:   2016-10-25 12:30:17 -0700
 categories: Initialize
+comments: true
 ---
 Daniel and Shannon, this is a placeholder post.
 
