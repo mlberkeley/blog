@@ -1,0 +1,22 @@
+# Permalinks
+permalink:           pretty
+
+# Setup
+title:               ML@B
+tagline:             'Blog'
+description:         'The official blog of <a href="http://ml.berkeley.edu">Machine Learning @ Berkeley</a>.'
+url:                 http://mlberkeley.github.io
+baseurl:             ''
+paginate:            5
+paginate_path:       "page:num"
+
+# About/contact
+author:
+  name:              ML@B
+  url:               https://ml.berkeley.edu/
+  email:             ml.at.berkeley@gmail.com
+
+# Custom vars
+version:             1.0.0
+
+gems: [jekyll-paginate]
