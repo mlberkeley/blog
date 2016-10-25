@@ -29,6 +29,26 @@
     <span class="sidebar-nav-item">Currently v{{ site.version }}</span>
   </nav>
 
+  <div class="sidebar-item" id="contact-list" style="text-align:center">
+
+    <p>
+      Reach out to us:
+    </p>
+
+    {% if site.author.facebook %}
+    <a href="https://www.facebook.com/{{ site.author.facebook }}">
+      <i class="fa fa-facebook-square fa-lg"></i>
+    </a>
+    {% endif %}
+
+    {% if site.author.email %}
+    <a href="mailto: {{ site.author.email }}">
+      <i class="fa fa-envelope fa-lg"></i>
+    </a>
+    {% endif %}
+
+  </div>
+
   <div class="sidebar-item">
     <p>
       &copy; {{ site.time | date: '%Y' }}. All rights reserved.
