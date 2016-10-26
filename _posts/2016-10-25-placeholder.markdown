@@ -63,4 +63,18 @@ adder(2, 6);
 
 ## Math
 
+You can use TeX and LaTeX notation, MathML notation, AsciiMath notation, or a combination of all three within the same page.
+
+### In-line mathematics
+
+in line $$ax^2 + bx + c = 0$$ math
+
+### Displayed mathematics
+
 $$\sum_{n=1}^\infty 1/n^2 = \frac{\pi^2}{6}$$
+
+### Sample TeX From my ee16a hw8.tex:
+
+$$\begin{equation*}
+  h_{H_2O} = \frac{C_{known}(\frac{V_{in}}{V_o} - 1 \pm \sqrt{1 - 2\frac{V_o}{V_{in}}}) - \epsilon h_{tot}}{80\epsilon}
+\end{equation*}$$
