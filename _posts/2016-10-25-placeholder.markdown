@@ -1,15 +1,32 @@
 ---
 layout: post
-title:  "Welcome"
+title:  "Placeholder/Examples for you guys to go off of"
 date:   2016-10-25 12:30:17 -0700
-categories: Initialize
 comments: true
 ---
 Daniel and Shannon, this is a placeholder post.
 
 We're rolling w Jekyll for the blog cuz I don't have time to build css for this Tuesday night deadline.
 
-Code snippet example:
+Here are some examples so u guys can ref:
+
+## Stuff for blogging
+
+Use #,##,...,###### like html's <h1>,<h2>,... tags
+
+> Comments/Quotes(?) sections
+
+For **bold**, *italic*, and _**both**_, or ~~strikethrough~~
+
+1. some
+2. ordered
+  * and
+  * sub
+3. lists
+
+[Links](ml.berkeley.edu)
+
+## Code snippets: ##
 
 Ruby:
 {% highlight ruby %}
@@ -33,10 +50,17 @@ cs61a.is_silly
 
 class.is_silly
 >>>False
+
 {% endhighlight %}
 
-Markdown math possibilities:
+js:
+{% highlight js %}
+var adder = new Function("a", "b", "return a + b");
 
--maybe R-studio
--Mathjax
--latex pdf embed
+adder(2, 6);
+// > 8
+{% endhighlight %}
+
+# Math
+
+$$\sum_{n=1}^\infty 1/n^2 = \frac{\pi^2}{6}$$
