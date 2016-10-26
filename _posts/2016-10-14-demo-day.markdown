@@ -10,6 +10,7 @@ One of our main goals here at ML@B is to help students understand how to use mac
 
 Just this Friday, we had our first demo day--a day where project members got to show what they were up to. Here’s a brief summary of what they had to show:
 
+<!-- break -->
 
 ### Code Synthesis
 

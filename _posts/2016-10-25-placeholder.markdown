@@ -6,9 +6,11 @@ comments: true
 ---
 Daniel and Shannon, this is a placeholder post.
 
-We're rolling w Jekyll for the blog.
+I set up the blog so you can display everything w markdown.
 
 Here are some examples so u guys can ref:
+
+<!-- break -->
 
 ## Stuff for blogging
 
@@ -24,7 +26,7 @@ For **bold**, *italic*, and _**both**_, or ~~strikethrough~~
   * sub
 3. lists
 
-[Links](ml.berkeley.edu)
+[Links](http://ml.berkeley.edu)
 
 ## Code snippets: ##
 
