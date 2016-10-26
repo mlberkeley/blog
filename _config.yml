@@ -5,7 +5,7 @@ permalink:           pretty
 title:               ML@B
 tagline:             'Blog'
 description:         'The official blog of <a href="http://ml.berkeley.edu">Machine Learning @ Berkeley</a>.'
-url:                 http://mlberkeley.github.io
+url:                 http://mlberkeley.github.io/blog/
 baseurl:             ''
 paginate:            5
 paginate_path:       "page:num"
