@@ -6,7 +6,7 @@ comments: true
 ---
 Daniel and Shannon, this is a placeholder post.
 
-We're rolling w Jekyll for the blog cuz I don't have time to build css for this Tuesday night deadline.
+We're rolling w Jekyll for the blog.
 
 Here are some examples so u guys can ref:
 
