@@ -1,16 +1,33 @@
 ---
 layout: post
-title:  "Placeholder/Examples for you guys to go off of"
+title:  "Tutorial Post #1"
 date:   2016-10-25 12:30:17 -0700
 comments: true
 ---
-Daniel and Shannon, this is a placeholder post.
 
-I set up the blog so you can display everything w markdown.
+Machine learning (ML) has received a lot of hype recently, and not without good reason. It has already revolutionized fields from image recognition to healthcare. Yet to many, the subject seems incredibly complicated.
 
-Here are some examples so u guys can ref:
+This post, the first in a series of ML tutorials, aims to make machine learning accessible to anyone willing to learn. We’ve designed it to give you a solid understanding of how ML algorithms work as well as provide you the tools to harness it in your projects. 
 
-<!-- break -->
+### What is Machine Learning?
+
+At it’s core, machine learning is not a difficult concept to grasp. In fact, the vast majority of machine learning algorithms are concerned with just one simple task: drawing lines. In particular, machine learning is all about drawing lines through data. What does that mean? Let’s look at an example:
+
+### Classification
+
+Let’s say you’re a computer with a collection of apple and orange images. From each image, you can infer the color and size of a fruit, and for some reason you want to classify the fruit as either an apple or an orange. The first step in many machine learning algorithms is to obtain labeled training data. This means getting information about the properties of the fruit - such as the size and color of the fruit -  and a label - whether the fruit is an apple or an orange. For example, our labeled training data might look like this:
+
+<center>
+	<img src="/assets/classification_no_line.png" width="500">
+</center>
+
+The red x’s are labeled  apples and the orange x’s are labeled oranges. As you’ll probably notice, apples seems to congregate on the left side of the graph, and oranges the right. This is because for the most part, apples are red and oranges are orange.
+
+Now we get to draw lines! For this particular machine learning problem, our goal is to draw a line between the two labeled groups, called a decision boundary. The simplest decision boundary for our data might look something like this:
+
+<center><div id="container"><canvas id="canvas1" style="border: 1px solid black;" width="300" height="300"></canvas></div></center>
+
+<center><p id="cost">Cost: 100</p></center>
 
 ## Stuff for blogging
 
