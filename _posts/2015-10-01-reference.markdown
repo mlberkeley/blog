@@ -1,3 +1,15 @@
+---
+layout: post
+title:  "Reference"
+date:   2016-10-01 12:30:17 -0700
+comments: true
+published: false
+---
+
+Reference post
+
+<!-- break -->
+
 ## Stuff for blogging
 
 Use #,##,...,###### like html's <h1>,<h2>,... tags

@@ -3,13 +3,14 @@ layout: post
 title:  "Tutorial Post #1"
 date:   2016-10-25 12:30:17 -0700
 comments: true
+published: true
 ---
 
 Machine learning (ML) has received a lot of hype recently, and not without good reason. It has already revolutionized fields from image recognition to healthcare. Yet to many, the subject seems incredibly complicated.
 
-<!-- break -->
+This post, the first in a series of ML tutorials, aims to make machine learning accessible to anyone willing to learn. We’ve designed it to give you a solid understanding of how ML algorithms work as well as provide you the tools to harness it in your projects.
 
-This post, the first in a series of ML tutorials, aims to make machine learning accessible to anyone willing to learn. We’ve designed it to give you a solid understanding of how ML algorithms work as well as provide you the tools to harness it in your projects. 
+<!-- break -->
 
 ### What is Machine Learning?
 
@@ -43,7 +44,7 @@ So we’ve drawn a line that separates apples and oranges in the training data. 
 	<img src="{{ site.baseurl }}/assets/classification_testing.png" width="500">
 </center>
 
-Now this is the power of machine learning. We take some training data (labeled apple and orange images), run a machine learning algorithm which draws a decision boundary on the data, and then extrapolate what we’ve learned to completely new pieces of data. 
+Now this is the power of machine learning. We take some training data (labeled apple and orange images), run a machine learning algorithm which draws a decision boundary on the data, and then extrapolate what we’ve learned to completely new pieces of data.
 
 
 Of course, distinguishing between apples and oranges is quite a mundane task. However, we can apply this strategy to much more exciting problems, such as classifying tumors as malignant or benign, marking emails as spam or not spam, and analyzing fingerprints for a fingerprint scanner.
@@ -76,4 +77,3 @@ In a sense, we can say that the predictor represents a bunch of “typical” ho
 <center><div id="container"><canvas id="canvas1" style="border: 1px solid black;" width="300" height="300"></canvas></div></center>
 
 <center><p id="cost">Cost: 100</p></center>
-
