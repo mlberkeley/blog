@@ -14,7 +14,7 @@ Machine learning (ML) has received a lot of attention recently, and not without 
 > "A computer program is said to learn from experience *E* with respect to some class of tasks *T* and performance measure *P* if its performance at tasks in *T*, as measured by *P*, improves with experience *E*."		
 
 
-—Wikipedia
+
 
 
 Not very clear, is it? This post, the first in a series of ML tutorials, aims to make machine learning accessible to anyone willing to learn. We’ve designed it to give you a solid understanding of how ML algorithms work as well as provide you the knowledge to harness it in your projects. 
@@ -34,7 +34,7 @@ Let’s say you’re a computer with a collection of apple and orange images. Fr
 
 
 <center>
-	<img src="{{ site.baseurl }}/assets/image_0.svg" width="500">
+	<img src="{{ site.baseurl }}/assets/image_0.svg" width="400">
 </center>
 
 
@@ -46,7 +46,7 @@ For this particular problem, our goal is to create an algorithm that draws a lin
 
 
 <center>
-	<img src="{{ site.baseurl }}/assets/image_1.svg" width="500">
+	<img src="{{ site.baseurl }}/assets/image_1.svg" width="400">
 </center>
 
 
@@ -55,7 +55,7 @@ Just a straight line between the apples and the oranges. However, much more comp
 
 
 <center>
-	<img src="{{ site.baseurl }}/assets/image_2.svg" width="500">
+	<img src="{{ site.baseurl }}/assets/image_2.svg" width="400">
 </center>
 
 
@@ -64,7 +64,7 @@ Our assumption is that the line we’ve drawn to distinguish an apple image from
 
 
 <center>
-	<img src="{{ site.baseurl }}/assets/image_3.svg" width="500">
+	<img style="position:relative; left:75px" src="{{ site.baseurl }}/assets/image_3.svg" width="500">
 </center>
 
 
@@ -114,15 +114,15 @@ The predictor doesn’t necessarily have to be linear. It can be any type of fun
 Looking back at our model for house price  we could ask: why limit ourselves to just one input variable? Turns out we can consider as many types of information as we want, such as the cost of living in the city, condition, building material, and so on. For example, we can plot the price against the cost of living in the house’s location and its square footage on a single graph like this, where the vertical axis plots price, and the two horizontal axes plot square footage and cost of living:
 
 
-<video poster="//i.imgur.com/m2cTv6dh.jpg" preload="auto" autoplay="autoplay" muted="muted" loop="loop" webkit-playsinline="" style="width: 720px; height: 404px;">
+<center><video poster="//i.imgur.com/m2cTv6dh.jpg" preload="auto" autoplay="autoplay" muted="muted" loop="loop" webkit-playsinline="" style="width: 500px;">
                 <source src="//i.imgur.com/m2cTv6d.mp4" type="video/mp4">
-</video>
+</video></center>
 
 In this case we can again fit a predictor to the data. But instead of drawing a line through the data we have to draw a plane through the data because the function that best predicts the housing price is a function of two variables.
 
-<video poster="//i.imgur.com/9C5ZeYah.jpg" preload="auto" autoplay="autoplay" muted="muted" loop="loop" webkit-playsinline="" style="width: 720px; height: 404px;">
+<center><video poster="//i.imgur.com/9C5ZeYah.jpg" preload="auto" autoplay="autoplay" muted="muted" loop="loop" webkit-playsinline="" style="width: 500px;">
                 <source src="//i.imgur.com/9C5ZeYa.mp4" type="video/mp4">
-</video>
+</video></center>
 
 
 So we’ve seen examples of one and two input variables, but many machine learning applications take into account hundreds and even thousands of variables. Although humans are regrettably unable to visualize anything higher than three dimensions, the same principles we just learned will apply to those systems. 
@@ -170,19 +170,23 @@ The key to determining what parameters to choose to best approximate the data is
 The best predictor will minimize the output of the cost function, or in other words, it will minimize the cost. To visualize this, let’s look at the three predictor functions below:
 
 
-![Screen Shot 2016-10-06 at 11.30.50 PM.svg](/blog/assets/image_12.svg" width="500">
+<center>
+    <img src="{{ site.baseurl }}/assets/image_12.svg" width="500">
 </center>
 
 
 
-Predictors *a* and *c* don’t really fit the data very well, and our cost function should give the two lines a high cost. On the other hand, predictor b seems to fit the data very well, and as a result our cost function should give it a very low cost. You can play around with a cost function yourself using this simulation below. Click and drag data points and the line to move them around, and double click to make new data points.
+Predictors *a* and *c* don’t really fit the data very well, and our cost function should give the two lines a high cost. On the other hand, predictor b seems to fit the data very well, and as a result our cost function should give it a very low cost. 
+
 
 
 <center><div id="container"><canvas id="canvas1" width="300" height="300"></canvas></div>
 <script>init();</script>
-<p id="cost">Cost: 100</p></center>
 
-<center><p id="cost">Cost: 100</p></center>
+<p id="cost" style="font-size:24px; color: grey">100</p></center>
+
+<p style="border-style: solid; border-width: 1px; padding: 5px 10px">You can play around with a cost function yourself using the simulation above. Click and drag data points and the line to move them around, and double click to make new data points.</p>
+
 
 
 So just what is the cost function? There are actually many different types of cost functions we can use, but for this example we’ll stick to a very commonly used one called the **mean squared error**.
@@ -192,7 +196,7 @@ Let’s break down the name "mean squared error." Error in this case means the v
 
 
 <center>
-	<img src="{{ site.baseurl }}/assets/image_13.svg" width="500">
+	<img src="{{ site.baseurl }}/assets/image_13.svg" width="600">
 </center>
 
 
@@ -218,7 +222,9 @@ Here, we’ve summed up all of the squared errors, and divided by N, which is th
 When we graph the cost function (with only two variables) it will look something like this:
 
 
-![cost function](/blog/assets/image_17.png)
+<center>
+	<img src="{{ site.baseurl }}/assets/image_17.png" width="350">
+</center>
 
 
 Now, it’s pretty evident where the minimum of this cost function is. We can just eyeball it. However, remember we only have one feature—square footage. In reality, almost all applications for modern machine learning algorithms take in much more than just one feature. In some cases, up to [tens of millions](https://www.nvidia.cn/content/tesla/pdf/machine-learning/imagenet-classification-with-deep-convolutional-nn.pdf) of parameters are used—have fun trying to picture a ten million dimensional space!
