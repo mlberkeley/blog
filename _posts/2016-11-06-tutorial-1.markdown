@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Machine Learning Crash Course: Part 1"
-date:   2016-10-25 12:30:17 -0700
+date:   2016-11-06
 comments: true
 published: true
 ---
@@ -134,7 +134,7 @@ So we’ve seen examples of one and two input variables, but many machine learni
 As we mentioned earlier, there are many different types of predictors. In our example with house prices, we used a linear model to approximate our data. The mathematical form of a linear predictor looks something like this:
 
 
-$$f\left( x \right)=c_{n}x_{n-1}+c_{n-1}x_{n-2}+...+c_{2}x+c$$
+$$f\left( x \right)\; =\; c_{n}x_{n}\; +\; c_{n-1}x_{n-1}\; +\; …\; +\; c_{1}x_{1}\; +\; c_{0}$$
 
 
 Each *x* represents a different input feature, such as square footage or cost of living, and each *c* is called a parameter or a weight. The greater a particular weight is, the more the model considers its corresponding feature. For example, square footage is a good predictor of house prices, so our algorithm should give square footage a lot of consideration by increasing the coefficient associated with square footage. In contrast, if our data included the number of power outlets in the house, our algorithm will probably give it a relatively low weight because the number of outlets doesn’t have much to do with the price of a house.
@@ -143,7 +143,7 @@ Each *x* represents a different input feature, such as square footage or cost of
 In our example of predicting house prices based on square footage, since we’re only considering one variable our model only needs one input feature, or just one x:
 
 
-$$y\left( x \right)=c_{2}x+c_{1}$$
+$$y\left( x \right)=c_{1}x+c_{0}$$
 
 
 This equation is probably more recognizable in this form:
@@ -158,7 +158,7 @@ $$y(x)$$ is our output, or in this case the price of a house, and $$x$$ is our f
 Now the question becomes: How does a machine learning algorithm choose $$c_{2}$$ and $$c_{1}$$ so that the line best predicts house prices?
 
 
-*It’s worth noting here that the coefficients can actually be found directly and very efficiently through a matrix relation called the [normal equation](http://mathworld.wolfram.com/NormalEquation.html), without using machine learning at all. However, since this method becomes impractical when working with hundreds or thousands of variables, we'll be using the method machine learning algorithms actually use.
+*It’s worth noting here that the coefficients can actually be found directly and very efficiently through a matrix relation called the [normal equation](http://mathworld.wolfram.com/NormalEquation.html). However, since this method becomes impractical when working with hundreds or thousands of variables, we'll be using the method machine learning algorithms often use.
 
 
 **Cost Functions**
