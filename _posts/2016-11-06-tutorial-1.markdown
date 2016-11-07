@@ -113,17 +113,17 @@ The predictor doesn’t necessarily have to be linear. It can be any type of fun
 
 Looking back at our model for house price  we could ask: why limit ourselves to just one input variable? Turns out we can consider as many types of information as we want, such as the cost of living in the city, condition, building material, and so on. For example, we can plot the price against the cost of living in the house’s location and its square footage on a single graph like this, where the vertical axis plots price, and the two horizontal axes plot square footage and cost of living:
 
-
-<center><video poster="//i.imgur.com/m2cTv6dh.jpg" preload="auto" autoplay="autoplay" muted="muted" loop="loop" webkit-playsinline="" style="width: 500px;">
-                <source src="//i.imgur.com/m2cTv6d.mp4" type="video/mp4">
-</video></center>
-
-In this case we can again fit a predictor to the data. But instead of drawing a line through the data we have to draw a plane through the data because the function that best predicts the housing price is a function of two variables.
-
 <center><video poster="//i.imgur.com/9C5ZeYah.jpg" preload="auto" autoplay="autoplay" muted="muted" loop="loop" webkit-playsinline="" style="width: 500px;">
                 <source src="//i.imgur.com/9C5ZeYa.mp4" type="video/mp4">
 </video></center>
 
+
+In this case we can again fit a predictor to the data. But instead of drawing a line through the data we have to draw a plane through the data because the function that best predicts the housing price is a function of two variables.
+
+
+<center><video poster="//i.imgur.com/m2cTv6dh.jpg" preload="auto" autoplay="autoplay" muted="muted" loop="loop" webkit-playsinline="" style="width: 500px;">
+                <source src="//i.imgur.com/m2cTv6d.mp4" type="video/mp4">
+</video></center>
 
 So we’ve seen examples of one and two input variables, but many machine learning applications take into account hundreds and even thousands of variables. Although humans are regrettably unable to visualize anything higher than three dimensions, the same principles we just learned will apply to those systems.
 
