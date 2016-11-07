@@ -9,6 +9,20 @@
 
 // Constructor for Shape objects to hold data for all drawn objects.
 // For now they will just be defined as rectangles.
+// --now hacked into circles
+
+var lineImg = document.createElement('img');
+  lineImg.src = "/blog/assets/pink-dot.png";
+  
+  var dataImg = document.createElement('img');
+  dataImg.src = "/blog/assets/blue-dot.png";
+  dataImg.src = "/blog/assets/blue-dot.png";
+  
+var background = document.createElement('img');
+background.src = "/blog/assets/coordinates.svg";
+
+var radius = 10;
+
 function Shape(x, y, w, h, fill, first, second) {
   // This is a very simple and unsafe constructor. All we're doing is checking if the values exist.
   // "x || 0" just means "if there is a value for x, use that. Otherwise use 0."
@@ -24,14 +38,21 @@ function Shape(x, y, w, h, fill, first, second) {
 
 // Draws this shape to a given context
 Shape.prototype.draw = function(ctx) {
-  ctx.fillStyle = this.fill;
-  ctx.fillRect(this.x, this.y, this.w, this.h);
+  if(this.fill == "red") {var theImage = lineImg;}
+  else {var theImage = dataImg;}
+  ctx.drawImage(theImage, this.x-this.w/4, this.y-this.h/4, this.w, this.h);
+  //  ctx.imageSmoothingEnabled = false;
+//  ctx.fillStyle = this.fill;
+//  ctx.beginPath();
+//  ctx.arc(this.x, this.y, this.w, 0, 2*Math.PI);
+//  ctx.fill();
 }
 
 // Determine if a point is inside the shape's bounds
 Shape.prototype.contains = function(mx, my) {
   // All we have to do is make sure the Mouse X,Y fall in the area between
   // the shape's X and (X + Height) and its Y and (Y + Height)
+//  return  this.w > Math.sqrt(Math.pow(mx-this.x, 2) + Math.pow(my-this.y, 2));
   return  (this.x <= mx) && (this.x + this.w >= mx) &&
           (this.y <= my) && (this.y + this.h >= my);
 }
@@ -43,6 +64,7 @@ function CanvasState(canvas) {
   this.width = canvas.width;
   this.height = canvas.height;
   this.ctx = canvas.getContext('2d');
+  this.ctx.imageSmoothingEnabled = false;
   // This complicates things a little but but fixes mouse co-ordinate problems
   // when there's a border or padding. See getMouse for more detail
   var stylePaddingLeft, stylePaddingTop, styleBorderLeft, styleBorderTop;
@@ -122,7 +144,7 @@ function CanvasState(canvas) {
   // double click for making new shapes
   canvas.addEventListener('dblclick', function(e) {
     var mouse = myState.getMouse(e);
-    myState.addShape(new Shape(mouse.x - 3, mouse.y - 3, 6, 6, 'black', false, false));
+    myState.addShape(new Shape(mouse.x, mouse.y, radius, radius, 'black', false, false));
   }, true);
   
   // **** Options! ****
@@ -140,6 +162,7 @@ CanvasState.prototype.addShape = function(shape) {
 
 CanvasState.prototype.clear = function() {
   this.ctx.clearRect(0, 0, this.width, this.height);
+  this.ctx.drawImage(background, 0, 0, 301, 301);
 }
 
 // While draw is called as often as the INTERVAL variable demands,
@@ -165,12 +188,12 @@ CanvasState.prototype.draw = function() {
     
     // draw selection
     // right now this is just a stroke along the edge of the selected Shape
-    if (this.selection != null) {
-      ctx.strokeStyle = this.selectionColor;
-      ctx.lineWidth = this.selectionWidth;
-      var mySel = this.selection;
-      ctx.strokeRect(mySel.x,mySel.y,mySel.w,mySel.h);
-    }
+//    if (this.selection != null) {
+//      ctx.strokeStyle = this.selectionColor;
+//      ctx.lineWidth = this.selectionWidth;
+//      var mySel = this.selection;
+//      ctx.strokeRect(mySel.x,mySel.y,mySel.w,mySel.h);
+//    }
     
     // ** Add stuff you want drawn on top all the time here **
     // Draw line
@@ -202,18 +225,28 @@ CanvasState.prototype.draw = function() {
       sum += (e * e) / 1000;
     }
     
-    sum = sum/shapes.length;
-    sum = sum.toFixed(3);
-    document.getElementById("cost").innerHTML = "Cost: " + sum;
+    sum = sum/shapes.length
+    outputSum = sum.toFixed(5);
+    if(isNaN(outputSum)) {outputSum = ":(";}
+    else if(outputSum == 0) {outputSum = "0 :)";}
+    document.getElementById("cost").innerHTML = "Cost: " + outputSum;
     
     ctx.beginPath();
     // Add 300 (width) to ensure line fills screen
     ctx.moveTo(ax + 3 - 300,ay + 3 - (300 * m));
     ctx.lineTo(bx + 3 + 300,by + 3 + (300 * m));
-    ctx.strokeStyle = 'black';
+    ctx.strokeStyle = 'green';
     ctx.lineWidth = 1;
     ctx.stroke();
     
+    for (var i = 0; i < l; i++) {
+      var shape = shapes[i];
+      // We can skip the drawing of elements that have moved off the screen:
+      if (shape.first == true || shape.second == true) {
+        shapes[i].draw(ctx);
+      }
+      
+    }
     this.valid = true;
   }
 }
@@ -249,15 +282,17 @@ CanvasState.prototype.getMouse = function(e) {
 //init();
 
 function init() {
-  var s = new CanvasState(document.getElementById('canvas1'));
-  s.addShape(new Shape(40,40,6,6, 'red', true, false)); // The default is gray
-  s.addShape(new Shape(60,140,6,6, 'red', false, true));
-  s.addShape(new Shape(140,160,6,6, 'black', false, false));
-  s.addShape(new Shape(145,175,6,6, 'black', false, false));
-  s.addShape(new Shape(110,180,6,6, 'black', false, false));
-  s.addShape(new Shape(70,210,6,6, 'black', false, false));
-  s.addShape(new Shape(170,123,6,6, 'black', false, false));
-  s.addShape(new Shape(180,100,6,6, 'black', false, false));  
+    var s = new CanvasState(document.getElementById('canvas1'));
+    s.addShape(new Shape(40,40,radius,radius, 'red', true, false)); // The default is gray
+    s.addShape(new Shape(60,140,radius,radius, 'red', false, true));
+    s.addShape(new Shape(140,160,radius,radius, 'black', false, false));
+    s.addShape(new Shape(145,175,radius,radius, 'black', false, false));
+    s.addShape(new Shape(110,180,radius,radius, 'black', false, false));
+    s.addShape(new Shape(70,210,radius,radius, 'black', false, false));
+    s.addShape(new Shape(170,123,radius,radius, 'black', false, false));
+    s.addShape(new Shape(180,100,radius,radius, 'black', false, false));  
+  
+  
 }
 
 // Now go make something amazing!
