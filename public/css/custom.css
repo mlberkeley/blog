@@ -4,3 +4,8 @@
   color: #9a9a9a;
   margin-top: 0;
 }
+
+pre { 
+  white-space: normal;
+  background-color: white;
+}
