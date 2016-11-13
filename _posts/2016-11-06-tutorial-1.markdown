@@ -245,3 +245,6 @@ So after reading all of that, hopefully machine learning is starting to make mor
 
 
 Put another way, really machine learning is just pattern recognition. ML algorithms learn patterns by drawing lines through training data, and then generalizes the patterns it sees to new data. But that begs the question, is machine learning actually "learning"? Well, who’s to say learning isn’t just pattern recognition?
+
+<pre><script src="{{ site.baseurl }}/assets/shapes.js"></script>
+<script> init(); </script>
