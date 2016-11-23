@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Code Synthesis Update 2"
-date:   2016-11-20
+date:   2016-11-22
 author: Max Johansen
 comments: true
 published: true
