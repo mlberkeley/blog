@@ -2,6 +2,7 @@
 layout: post
 title:  "Hello World!"
 date:   2016-10-04 12:30:17 -0700
+author: Daniel Geng and Shannon Shih
 comments: true
 published: true
 ---

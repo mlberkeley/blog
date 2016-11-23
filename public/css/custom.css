@@ -9,3 +9,11 @@ pre {
   white-space: normal;
   background-color: white;
 }
+
+.post-author {
+  margin-bottom: 1.5 rem;
+}
+
+.post-date { 
+  margin-top: 0;
+}
