@@ -35,7 +35,7 @@ Let’s say you’re a computer with a collection of apple and orange images. Fr
 
 
 <center>
-	<img src="{{ site.baseurl }}/assets/image_0.svg" width="400">
+	<img src="{{ site.baseurl }}/assets/tutorials/1/image_0.svg" width="400">
 </center>
 
 
@@ -47,7 +47,7 @@ For this particular problem, our goal is to create an algorithm that draws a lin
 
 
 <center>
-	<img src="{{ site.baseurl }}/assets/image_1.svg" width="400">
+	<img src="{{ site.baseurl }}/assets/tutorials/1/image_1.svg" width="400">
 </center>
 
 
@@ -56,7 +56,7 @@ Just a straight line between the apples and the oranges. However, much more comp
 
 
 <center>
-	<img src="{{ site.baseurl }}/assets/image_2.svg" width="400">
+	<img src="{{ site.baseurl }}/assets/tutorials/1/image_2.svg" width="400">
 </center>
 
 
@@ -65,7 +65,7 @@ Our assumption is that the line we’ve drawn to distinguish an apple image from
 
 
 <center>
-	<img style="position:relative; left:75px" src="{{ site.baseurl }}/assets/image_3.svg" width="500">
+	<img style="position:relative; left:75px" src="{{ site.baseurl }}/assets/tutorials/1/image_3.svg" width="500">
 </center>
 
 
@@ -83,7 +83,7 @@ Say we have some labeled training data. In particular, let’s say we have the p
 
 
 <center>
-	<img src="{{ site.baseurl }}/assets/image_4.svg" width="500">
+	<img src="{{ site.baseurl }}/assets/tutorials/1/image_4.svg" width="500">
 </center>
 
 
@@ -95,7 +95,7 @@ Just by looking at the training data intuitively we can see that there is a diag
 
 
 <center>
-	<img src="{{ site.baseurl }}/assets/image_5.svg" width="500">
+	<img src="{{ site.baseurl }}/assets/tutorials/1/image_5.svg" width="500">
 </center>
 
 
@@ -104,7 +104,7 @@ Now we can generalize even more and ask, for any given square footage, how much 
 
 
 <center>
-	<img src="{{ site.baseurl }}/assets/image_6.svg" width="500">
+	<img src="{{ site.baseurl }}/assets/tutorials/1/image_6.svg" width="500">
 </center>
 
 
@@ -172,7 +172,7 @@ The best predictor will minimize the output of the cost function, or in other wo
 
 
 <center>
-    <img src="{{ site.baseurl }}/assets/image_12.svg" width="500">
+    <img src="{{ site.baseurl }}/assets/tutorials/1/image_12.svg" width="500">
 </center>
 
 
@@ -197,7 +197,7 @@ Let’s break down the name "mean squared error." Error in this case means the v
 
 
 <center>
-	<img src="{{ site.baseurl }}/assets/image_13.svg" width="600">
+	<img src="{{ site.baseurl }}/assets/tutorials/1/image_13.svg" width="600">
 </center>
 
 
@@ -224,7 +224,7 @@ When we graph the cost function (with only two variables) it will look something
 
 
 <center>
-	<img src="{{ site.baseurl }}/assets/image_17.png" width="350">
+	<img src="{{ site.baseurl }}/assets/tutorials/1/image_17.png" width="350">
 </center>
 
 
