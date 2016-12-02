@@ -9,8 +9,12 @@ published: true
 
 One crucial thing that all statistical learning algorithms need is the ability to handle a tremendous amount of data very quickly. Throughout the years, people have used different frameworks for querying, or fetching, data. Among these include Hadoop’s [MapReduce](https://en.wikipedia.org/wiki/MapReduce) framework and the Apache Spark framework. SAP Hana Vora’s (HV) unique in-memory hadoop query engine for MapReduce frameworks is a promising new tool for big data and performing analysis in a distributed fashion on large databases of information. We demonstrate HV’s potential as a powerful resource for ML by examining its performance on tasks such as stock prediction on market data. To this end we also contribute some additional functionality to the SAP HV library.
 
-
 <!-- break -->
+
+<center>
+	<img src="{{ site.baseurl }}/assets/2016-12-1-sap-stock-trading/SAP_group.png" width="600">
+</center>
+
 
 ## Backtesting and Data set
 
@@ -30,12 +34,15 @@ Quantopian additionally provides quandl’s training and validation datasets as 
 
 Recent approaches to creating stock predictor algorithms have leveraged [Deep Q Learning](https://deepmind.com/research/dqn/) to learn a function to approximate the profit (rewards) received from executing buy and sell operations given input data about stock history. We follow this approach; however, we relax the problem by learning a simpler linear function for these predictions (as opposed to a deep neural network). As input data we take current stock information and the output from the last time step; thus allowing us to leverage recurrence in the problem and build a simple linear model that also has an attention component.
 
-[COLLAPSIBLE]
-To this end we leverage HV’s map reduce capabilities to compute all our buy/sell actions in a training batch by computing a linear operation on all the input data (minus the recurrent information about the last action). After this we use a prefix sum scan (described in <link to Our contribution to Hana Vora md section>) to then perform the linear operation on the recurrent component of our input data. We then compute the resulting rewards and use this information to optimize our learned reward approximation function. Given large training batch sizes this allows us to have a training system that is able to efficiently distribute large amounts of computation. 
-[COLLAPSIBLE]
+{% capture regularization-math %}
+
+To this end we leverage HV’s map reduce capabilities to compute all our buy/sell actions in a training batch by computing a linear operation on all the input data (minus the recurrent information about the last action). After this we use a <a href="http://127.0.0.1:4000/blog/2016/12/01/sap-stock-trading/#prefix-sum">prefix sum scan</a> to then perform the linear operation on the recurrent component of our input data. We then compute the resulting rewards and use this information to optimize our learned reward approximation function. Given large training batch sizes this allows us to have a training system that is able to efficiently distribute large amounts of computation. 
+
+{% endcapture %}
+{% include collapsible.html content=regularization-math title="Stock Trading Algorithm"%}
 
 ## Our Contribution to Hana Vora
-
+<div id="prefix-sum"></div>
 #### The Prefix Sum...
 
 The prefix sum is an operation on a list of number defined by:

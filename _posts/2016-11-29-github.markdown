@@ -1,0 +1,55 @@
+---
+layout: post
+title:  "Github Programming Language Classification"
+date:   2016-11-29
+author: Jin Park
+comments: true
+published: true
+---
+
+Github doesn’t only make version control software; it’s tasked with the unique challenge of exploring programming languages. With over 10 million repositories, Github has an incredible corpus of files written by over 3 million users… that’s a lot of files. Our team had the unique opportunity of classifying each of these files into programming languages. Our dataset has 50,000+ files with over 600 languages, a non-trivial multi-class problem. We’ve improved on Github’s existing classifier, Linguist, and, in the process, peered into the intricacies of programming languages.
+
+<!-- break -->
+
+<center>
+	<img src="{{ site.baseurl }}/assets/2016-12-2-github/github_team.png" width="600">
+</center>
+
+## Improvement #1: Dataset
+
+Github’s Linguist has less than 5,000 files in its training data. As a result, their Naive Bayes classifier did not generalize well to other datasets. Not only that, but their classifier also requires that this dataset be curated and maintained as languages evolve and are added. We tackled this by scraping Rosetta Code, a site with tons of files categorized by task and, more importantly, language. Shifting from the Linguist dataset to Rosetta Code increased our test accuracy by 13.2%. Training error went down as expected, because the Linguist classifier overfit to the smaller dataset. This is not concerning because test error is really the metric that counts, and our higher test error indicates that the larger dataset lets us generalize better to new, previously unseen files.
+
+||Train|Test|
+|Old Linguist Data Set|94.7%|53.7%|
+|New Rosetta Code Dataset|85.6%|66.9%|
+
+## Improvement #2: Feature Engineering
+
+Github’s current classifier relies on bag-of-words methods to classify files, which means it can run into trouble differentiating programming languages with similar common statements. For example, C and C++ cannot be easily differentiated just by looking at which words are used. For ambiguous cases, Github’s Linguist uses hand-engineered features to settle the classification. Unfortunately, these hand-engineered features take significant time to construct and may change as languages evolve. 
+
+Because of this, our team has taken the prototypical bag-of-words approach and augmented it with linear and nonlinear features learned from data rather than constructed to match the data. For example, our team is currently modelling new features based off of features learned by RNN’s. This data-centric approaches scales well, grows easily to fit larger datasets, and requires much less human supervision on Github’s end.
+
+These new features, both drawn from the raw data and learned by models, have allowed us to increase our classification accuracy from ~60% to 79-81%.
+
+## Improvement #3: Model Types
+
+Github’s previous Naive Bayes Classifier may be, well, naive, but that doesn’t mean it does a poor job. Bayesian classifiers work rather well with small datasets and integrate well with heuristic knowledge about the problem. However, Naive Bayes can be slow to train and classify files, may not generalize well, and requires human supervision to maintain well-behaved heuristics.
+
+Our first new model is a multi-class Linear SVC. Linear SVCs are the classification variant of the popular SVM, which aims to divide the data points by class such that the minimum distance between the decision boundary and either class is maximized. This results in a classifier that is both robust, as it is highly linear, and complex, as many input features are non-linear.
+
+We also used decision trees, chosen to mimic Linguist’s heuristic decision making process, and neural networks, chosen to deal well with reducing the sparse high-dimensional problem into something more tractable.
+
+<center>
+	<img src="{{ site.baseurl }}/assets/2016-12-2-github/github_graphs.png" width="600">
+</center>
+
+## Improvement #4: Error Metrics
+
+It's easy to feel comfortable about a model’s performance when it has been constructed to match the dataset. Even with a larger dataset, more carefully constructed error metrics allow us to guard against overconfident accuracy reports and to examine where our models are failing. 
+
+Our team tests our models with stratified cross-validation to ensure truthful accuracy measures by language and is working on an error metric pipeline so that Github can easily examine where their models are falling short and what can be improved
+
+<center>
+	<img src="{{ site.baseurl }}/assets/2016-12-2-github/github_image1.png" width="600">
+</center>
+
