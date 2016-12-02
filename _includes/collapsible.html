@@ -4,12 +4,26 @@
     background-color: rgba(78, 139, 205, 0.1);
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.6s;
+    transition: 0.6s;
+  }
+  
+  label {
+    color: #0275d8;
+    background-color: transparent;
+    border-color: #0275d8;
+    border-radius: .25rem;
+    border: 1px solid #0275d8;
+    padding: .25rem;
+    font-size: 1rem;
+    position: relative;
+    top: -.5rem;
   }
   
   label:hover {
-    background-color: rgba(78, 139, 205, 0.2);
-    transition: background-color 0.3s ease-in;
+    background-color: #0275d8;
+    border-color: #0275d8;
+    color: white;
+    transition: background-color 0.3s;
   }
   
   #toggle {
@@ -24,7 +38,7 @@
 </style>
 <div>
 <input id="toggle" type="checkbox">
-<label for="toggle">Click for a brief overview of the Prophet Paper</label>
+<label for="toggle">{{ include.title }}</label>
 <div class="collapsible">
   {{ include.content }}
   

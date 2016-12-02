@@ -30,9 +30,10 @@ Quantopian additionally provides quandl’s training and validation datasets as 
 
 Recent approaches to creating stock predictor algorithms have leveraged [Deep Q Learning](https://deepmind.com/research/dqn/) to learn a function to approximate the profit (rewards) received from executing buy and sell operations given input data about stock history. We follow this approach; however, we relax the problem by learning a simpler linear function for these predictions (as opposed to a deep neural network). As input data we take current stock information and the output from the last time step; thus allowing us to leverage recurrence in the problem and build a simple linear model that also has an attention component.
 
-[COLLAPSIBLE]
+{% capture algorithm %}
 To this end we leverage HV’s map reduce capabilities to compute all our buy/sell actions in a training batch by computing a linear operation on all the input data (minus the recurrent information about the last action). After this we use a prefix sum scan (described in <link to Our contribution to Hana Vora md section>) to then perform the linear operation on the recurrent component of our input data. We then compute the resulting rewards and use this information to optimize our learned reward approximation function. Given large training batch sizes this allows us to have a training system that is able to efficiently distribute large amounts of computation. 
-[COLLAPSIBLE]
+{% endcapture %}
+{% include collapsible.html content=algorithm title="the algorithm" %}
 
 ## Our Contribution to Hana Vora
 
