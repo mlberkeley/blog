@@ -40,7 +40,11 @@ Our first new model is a multi-class Linear SVC. Linear SVCs are the classificat
 We also used decision trees, chosen to mimic Linguist’s heuristic decision making process, and neural networks, chosen to deal well with reducing the sparse high-dimensional problem into something more tractable.
 
 <center>
-	<img src="{{ site.baseurl }}/assets/2016-12-2-github/github_graphs.png" width="600">
+	<img src="{{ site.baseurl }}/assets/2016-12-2-github/github_graph1.png" width="600">
+</center>
+
+<center>
+	<img src="{{ site.baseurl }}/assets/2016-12-2-github/github_graph2.png" width="600">
 </center>
 
 ## Improvement #4: Error Metrics
