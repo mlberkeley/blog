@@ -57,7 +57,7 @@ For example:
 
 $$PrefixSum([0,1,2,3,4]) = [0,1,3,6,10]$$
 
-#### Parallelizing the prefix sum with HV
+#### Parallelizing the prefix sum with HV...
 
 The prefix sum is an inherently serial algorithm so this can produce bottlenecks in performance even if all other computations are done in parallel with MapReduce. To this end we can leverage MapReduce with a graph-like computation structure (visualized below) to efficiently parallelize this inherently serial function. We implemented this algorithm with modularity in mind and it can be generalized to run on any kernel that can describe the reduce steps in the below algorithm (eg. it can work on prefix multiplication by swapping a x+y kernel with a x*y kernel). The parallelization of this algorithm is a relevant contribution to hana vora as it opens up the possibility for other functions such as an exponential moving average, markov models, etc.
 
