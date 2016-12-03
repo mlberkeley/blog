@@ -1,0 +1,17 @@
+---
+layout: post
+title:  "Tutorial 2"
+date:   2016-12-1
+author: Daniel Geng and Shannon Shih
+comments: true
+published: true
+---
+
+Hey tutorial post 2! omg!!!
+
+<!-- break -->
+
+## Supervised and Unsupervised Algorithms
+
+In machine learning, there are two general classes of algorithms. You’ll remember that in our last post, we discussed regression and classification. These two methods fall under the larger umbrella of _supervised_ learning algorithms, one of the two classes of machine learning algorithms. The other class of algorithms is called unsupervised algorithms. Supervised algorithms take their name from the fact that they take labeled training data. The algorithms are “supervised” because we know what the correct answer is. Given labeled training data on apples and oranges, by definition we know if a data point is an apple or an orange–the data is labeled. In the case of unsupervised algorithms, we don’t actually know what the correct answer is in our training data. We take unlabeled data and try to infer patterns from just the data itself. A common technique in unsupervised learning is clustering, which is exactly what it sounds like.
+

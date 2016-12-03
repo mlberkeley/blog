@@ -32,6 +32,8 @@ Quantopian additionally provides quandl’s training and validation datasets as 
 
 #### The technical details...
 
+{% capture regularization-math %}
+
 Recent approaches to creating stock predictor algorithms have leveraged [Deep Q Learning](https://deepmind.com/research/dqn/) to learn a function to approximate the profit (rewards) received from executing buy and sell operations given input data about stock history. We follow this approach; however, we relax the problem by learning a simpler linear function for these predictions (as opposed to a deep neural network). As input data we take current stock information and the output from the last time step; thus allowing us to leverage recurrence in the problem and build a simple linear model that also has an attention component.
 
 {% capture regularization-math %}
