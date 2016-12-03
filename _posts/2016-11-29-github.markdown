@@ -2,7 +2,7 @@
 layout: post
 title:  "Github Programming Language Classification"
 date:   2016-11-29
-author: Jin Park
+author: the Github Team 
 comments: true
 published: true
 ---
