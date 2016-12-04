@@ -34,9 +34,12 @@
     display: none;
   }
   
+  .inner-collapsible {
+    padding: 30px;
+  }
+  
   #toggle:checked ~ .collapsible {
     max-height: 3000px;
-    padding: 30px;
   }
   
 </style>
@@ -44,7 +47,9 @@
 <input id="toggle" type="checkbox">
 <label for="toggle">{{ include.title }}</label>
 <div class="collapsible">
-  {{ include.content }}
+  <div class="inner-collapsible">
+    {{ include.content }}
+  </div>
   
   </div>
 </div>
