@@ -4,7 +4,7 @@ title:  "SAP Hana Vora Stock Trading"
 date:   2016-12-1
 author: Raul Puric
 comments: true
-published: true
+published: false 
 ---
 
 One crucial thing that all statistical learning algorithms need is the ability to handle a tremendous amount of data very quickly. Throughout the years, people have used different frameworks for querying, or fetching, data. Among these include Hadoop’s [MapReduce](https://en.wikipedia.org/wiki/MapReduce) framework and the Apache Spark framework. SAP Hana Vora’s (HV) unique in-memory hadoop query engine for MapReduce frameworks is a promising new tool for big data and performing analysis in a distributed fashion on large databases of information. We demonstrate HV’s potential as a powerful resource for ML by examining its performance on tasks such as stock prediction on market data. To this end we also contribute some additional functionality to the SAP HV library.
