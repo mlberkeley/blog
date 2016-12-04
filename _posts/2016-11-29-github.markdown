@@ -60,3 +60,5 @@ Our team tested our models with [stratified cross-validation](https://en.wikiped
 	<img src="{{ site.baseurl }}/assets/2016-12-2-github/misclassified.png" width="100%">
 </center>
 
+## Conclusion
+Fourteen weeks of part-time work is not nearly enough to explore this problem, and ML@B’s Github team only touched the tip of the iceberg by finding a larger dataset, extracting machine-learned features, comparing different model types, and exploring various error metrics. There were many iterative improvements that are not mentioned in this post, but can be found [here](lexicon.github.io). All experiments that we conducted to improve our classifier can be replicated in our code, which is currently open to the public. We hope to extend this project by opening the [code](github.com/github/lexicon) up to the entire public, possibly starting an open source project about programming language processing. If you are interested in contributing, email [machinelearning@berkeley.edu](mailto:machinelearning@berkeley.edu). 
