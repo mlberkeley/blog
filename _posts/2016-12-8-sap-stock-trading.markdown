@@ -2,7 +2,7 @@
 layout: post
 title:  "SAP Hana Vora Stock Trading"
 date:   2016-12-8
-author: Raul Puric
+author: Raul Puri
 comments: true
 published: true 
 ---
@@ -14,7 +14,7 @@ One crucial element that all statistical learning algorithms need is the ability
     <figure>
         <img src="{{ site.baseurl }}/assets/2016-12-SAP/team_photo.png" width="100%">
         <figcaption>The SAP team: <br>
-        Akash Khosla, Christoph Shache, Ishan Dikshit, Rahil Mathur, Michael Tu,  Rishi Satoor, Zhongxia Yan, Phillip Kuznetsov</figcaption>
+        Raul Puri, Akash Khosla, Christoph Shache, Ishan Dikshit, Rahil Mathur, Michael Tu,  Rishi Satoor, Zhongxia Yan, Phillip Kuznetsov</figcaption>
     </figure>
 </center>
 
