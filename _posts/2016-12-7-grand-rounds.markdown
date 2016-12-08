@@ -1,10 +1,10 @@
 ---
 layout: post
 title:  "Grand Rounds Medical Data Classification"
-date:   2016-12-1
+date:   2016-12-7
 author: Humza Iqbal
 comments: true
-published: false 
+published: true
 ---
 
 Since our last demo day, the Grand Rounds team has been busy working on many aspects of the project. Our team was provided a database of anonymous medicare information, including information on doctors visits. Associated with each visit were claim numbers, the total charge, the complication code (essentially the reason for the visit), and the NPI number (which indicates which physician was doing the procedure), as well as other information.
