@@ -6,6 +6,7 @@ author: the Github Team
 comments: true
 published: true
 ---
+<meta property="og:image" content="https://ml.berkeley.edu/blog/assets/2016-12-2-github/github_team.jpg" />
 
 Github doesn’t only make version control software; it’s tasked with the unique challenge of analyzing programming languages. With over 10 million repositories, Github has an incredible corpus of files written by over 3 million users… that’s a lot of files. Our team had the unique opportunity of identifying which programming language each file was written in. Our dataset has 50,000+ files with over 600 languages, a nontrivial multi-class problem. We’ve improved on Github’s existing classifier, [Linguist](https://github.com/github/linguist), and, in the process, learned about what makes each programming language unique from one another.
 <!-- break -->
