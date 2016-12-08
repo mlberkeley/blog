@@ -30,7 +30,7 @@
     transition: background-color 0.3s;
   }
   
-  #toggle {
+  .toggle {
     display: none;
   }
   
@@ -38,14 +38,14 @@
     padding: 30px;
   }
   
-  #toggle:checked ~ .collapsible {
+  .toggle:checked ~ .collapsible {
     max-height: 3000px;
   }
   
 </style>
 <div>
-<input id="toggle" type="checkbox">
-<label for="toggle">{{ include.title }}</label>
+<input class="toggle" id="{{ include.title | url_encode }}" type="checkbox">
+<label for="{{ include.title | url_encode }}">{{ include.title }}</label>
 <div class="collapsible">
   <div class="inner-collapsible">
     {{ include.content }}
