@@ -11,6 +11,15 @@ Since our last demo day, the Grand Rounds team has been busy working on many asp
 
 <!-- break -->
 
+<center>
+    <figure>
+        <img src="{{ site.baseurl }}/assets/GR/GR-team.jpg" width="100%">
+        <figcaption>The GR team: <br>
+        (from left) Kunal Singh, Pranav Sekhar, Tatevik Stepanyan, Shrinu Sivakumar, Jaume Vives, Alvin Zhang, Humza Iqbal</figcaption>
+    </figure>
+</center>
+
+
 Given the total number of doctors visits in the US tops one billion a year, our dataset was massive. Just accessing the data took too much time, so we wrote scripts which would transfer all the information we needed to a PostgreSQL database, making it faster and easier to access the information.
 
 We’ve organized our goals into two projects. Our first project involved figuring out how to distinguish routine from non-routine doctor’s visits in the dataset. Grand Rounds initially wanted us to classify visits into three groups—”routine”, “unexpected”, and ”readmission”—but we decided to instead go with just “routine” (such as yearly checkups) and “non-routine" (such as emergency treatment for heart failure). We are currently working on implementing a classifier based on the amount of time between visits as well as using the cost of each visit. 
