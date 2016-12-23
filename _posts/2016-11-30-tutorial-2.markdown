@@ -1,17 +1,166 @@
 ---
 layout: post
 title:  "Tutorial 2"
-date:   2016-12-1
+date:   2016-12-18
 author: Daniel Geng and Shannon Shih
 comments: true
-published: false
+published: true
 ---
 
 Hey tutorial post 2! omg!!!
 
 <!-- break -->
 
+<style type="text/css">
+canvas { 
+    border: 1px solid #555;
+    margin-top: 10px;
+}
+#dec {
+  width: 100%;
+  height: 100px;
+  background-color: #F5FAFF;
+  border-bottom: 1px solid #E5EAEF;
+  margin-bottom: 20px;
+}
+#optsdiv {
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+
 ## Supervised and Unsupervised Algorithms
 
 In machine learning, there are two general classes of algorithms. You’ll remember that in our last post, we discussed regression and classification. These two methods fall under the larger umbrella of _supervised_ learning algorithms, one of the two classes of machine learning algorithms. The other class of algorithms is called unsupervised algorithms. Supervised algorithms take their name from the fact that they take labeled training data. The algorithms are “supervised” because we know what the correct answer is. Given labeled training data on apples and oranges, by definition we know if a data point is an apple or an orange–the data is labeled. In the case of unsupervised algorithms, we don’t actually know what the correct answer is in our training data. We take unlabeled data and try to infer patterns from just the data itself. A common technique in unsupervised learning is clustering, which is exactly what it sounds like.
+
+## Support Vector Machines
+
+Support vector machines, or SVMs for short, are a class of machine learning algorithms that have become incredibly popular in the past few years. They are based on a very intuitive idea. Here, we’ll introduce SVMs and go through the key ideas in the algorithm.
+
+#### Margins
+
+If you remember the section on classification from our last post, we classify data by drawing a line, called a decision boundary, to separate them. 
+
+<center>
+	<img src="{{ site.baseurl }}/assets/tutorials/2/image_1.png" width="400">
+</center>
+
+Once we’ve drawn a decision boundary, we can find the margin for each datapoint. The margin for a single data point is just the distance from that data point to the decision boundary. 
+
+<center>
+	<img src="{{ site.baseurl }}/assets/tutorials/2/image_2.png" width="400">
+</center>
+
+In a way, a margin is a way to determine how confident we are in our classification. If a data point has a large margin, and hence is very far away from the decision boundary we can be pretty confident about our prediction. However, if a data point has a very small margin, and is hence very close to the decision boundary then we probably aren’t as sure of our classification.
+
+<center>
+	<img src="{{ site.baseurl }}/assets/tutorials/2/image_3.png" width="400">
+</center>
+
+Now that we’ve defined margins, we can talk about “support vectors.” A **support vector** is simply the data point whose margin is the smallest. In other words, it’s the data point that is closest to the decision boundary. The name vector comes from the fact that you can define a margin as a vector (in other words, an arrow) from the data point to the decision boundary. This vector, in fact, any margin, will be perpendicular to the decision boundary because the smallest distance between a point and a line is a perpendicular line.
+
+<center>
+	<img src="{{ site.baseurl }}/assets/tutorials/2/image_4.png" width="400">
+</center>
+
+The idea behind a support vector machine is to classify data by drawing a decision boundary such that it maximizes the support vectors. By maximizing the support vectors, we’re also maximizing the margins in a data set, and thus the decision boundary is as far away as possible from the data points. 
+
+#### Linear Separability
+
+If you’ve played around with the simulation enough, you’ll notice that sometimes the algorithm fails completely. This happens only when the data points aren’t **linearly separable**. Think of it this way: when you have a set of data points which you can’t draw a straight line to separate them with, then you have a **linearly inseparable** dataset, and since it’s impossible to draw a line to split them, then the SVM algorithm fails.
+
+So how do we deal with linear inseparability? Turns out we can reformulate our optimization problem. Before, we wanted _every single_ data point to be as far away (to the correct side) from the decision boundary as possible. Now, we’ll allow a data point to stray toward the wrong side of the boundary, but we’ll add a “cost” to that happening (remember cost functions from the last post?). This is something that happens very often in machine learning and is called **regularization**. It basically allows our model to be a bit more flexible when trying to classify the data. The cost of violating the decision boundaries can be as high or as low as we want it to be, and is controlled by something called the **regularization parameter**. 
+
+COLLAPSIBLE
+This part is a bit mathy, which is why it’s hidden, but it’s also very fascinating. Now the SVMs shown so far can only make straight decision boundaries. But what if we wanted to classify data using a different kind of boundary? Well, that’s where kernels come in. **Kernels** are (loosely speaking) just a fancy term for an inner product (and if you don’t know what inner products are, don’t worry about it. It’s a very elementary subject in linear algebra and there are tons of places to find out what it is. If you don’t have the time, then you can just think of an inner product as something that takes in two vectors and sorta kinda encodes their lengths and the angle between the two vectors.). So why do we need kernels? It turns out that the SVM algorithm never depends on a data point itself, but rather on the inner product between data points. For that reason, we never need to know the coordinates of a data point, we only need to know the inner products between all the data points! Using this fact, we can actually use data points that are unrepresentable in a computer. For example, we can use data points in infinite dimensional space. As long as we have a way of computing the inner product, or the kernel, quickly. And luckily, there are ways to do this! It’s actually possible to calculate the inner product between two vectors in an infinite dimensional space almost instantaneously.
+
+
+<link type="text/css" href="{{ site.baseurl }}/assets/tutorials/2/js/FullSVMJS/jquery-ui-1.8.21.custom.css" rel="Stylesheet">	
+
+<body onload="NPGinit(30); NPGPause(30, 'btnMin');">
+
+<center>
+
+<canvas id="NPGcanvas" width="500" height="500">Browser not supported for Canvas. Get a real browser.</canvas><br><br>
+
+<div id="optsdiv">
+
+<div style="width:230px; float: left; margin-left: 10px;"><div id="slider1" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a class="ui-slider-handle ui-state-default ui-corner-all" href="http://cs.stanford.edu/people/karpathy/svmjs/demo/#" style="left: 50%;"></a></div><br><span id="creport">C = 1.0</span></div>
+<div style="width:230px; float: right; margin-right: 10px;"><div id="slider2" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a class="ui-slider-handle ui-state-default ui-corner-all" href="http://cs.stanford.edu/people/karpathy/svmjs/demo/#" style="left: 50%;"></a></div><br><span id="sigreport">RBF Kernel sigma = 1.0</span></div>
+
+
+<div style="width:230px; float: left; margin-top: 15px; margin-left: 10px;"><div id="slider3" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a class="ui-slider-handle ui-state-default ui-corner-all" href="http://cs.stanford.edu/people/karpathy/svmjs/demo/#" style="left: 50%;"></a></div><br><span id="polyCreport">Polynomial Kernel C = 0.0</span></div>
+<div style="width:230px; float: right; margin-top: 15px; margin-right: 10px;"><div id="slider4" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a class="ui-slider-handle ui-state-default ui-corner-all" href="http://cs.stanford.edu/people/karpathy/svmjs/demo/#" style="left: 50%;"></a></div><br><span id="polyDreport">Polynomial Kernel Degree = 2.0</span></div>
+
+</div>
+
+</center>
+
+
+<script type="text/javascript" src="{{ site.baseurl }}/assets/tutorials/2/js/FullSVMJS/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="{{ site.baseurl }}/assets/tutorials/2/js/FullSVMJS/jquery-ui-1.8.21.custom.min.js"></script>
+<script src="{{ site.baseurl }}/assets/tutorials/2/js/FullSVMJS/npgmain.js"></script>
+<script src="{{ site.baseurl }}/assets/tutorials/2/js/FullSVMJS/svm.js"></script>
+<script type="text/javascript" src="{{ site.baseurl }}/assets/tutorials/2/js/FullSVMJS/demo_full.js"></script>
+
+</body>
+
+|
+
+<center>
+<p> </p>
+<button id="btnFull" onclick="pauseSVM()">Start</button>
+</center>
+
+
+## Perceptrons
+
+<center>
+	<img src="{{ site.baseurl }}/assets/tutorials/2/image_5.png" width="400">
+</center>
+
+The ultimate goal of machine learning is to do what humans do and even surpass them. Thus, it makes sense to try and copy what makes humans so great at what they do--their brains. 
+
+The brain is composed of billions of interconnected neurons that are constantly firing, passing signals from one neuron to another. Together, they allow us to do incredible things such as recognize faces, patterns, and most importantly, think. 
+
+The job of an individual neuron is simple: if its inputs match certain criteria, it fires, sending a signal to other neurons connected to it. It's all very black and white. Of course, the actual explanation is much more complicated than this, but since we're using computers to simulate a brain, we only need to copy the idea of how a brain works
+
+<center>
+	<img src="{{ site.baseurl }}/assets/tutorials/2/image_6.png" width="400">
+</center>
+
+The perceptron mimics the function of neurons in machine learning algorithms. The perceptron is one of the oldest machine learning algorithms in existence. When it was first used in 1957 to perform rudimentary image recognition, the New York Times called it:
+
+>the embryo of an electronic computer that [the Navy] expects will be able to walk, talk, see, write, reproduce itself and be conscious of its existence.
+
+We're still a little far off from that, but the Times did recognize the potential of a perceptron, which now form the basis for much more complicated neural networks, which we’ll be talking about in the next post.
+
+Like a neuron, perceptrons take in several inputs and spits out an output. Perceptrons can be connected together to form a neural network, where the output of a perceptron is connected to the input of another perceptron. For example, a very simple perceptron might take as input temperature and try to answer the question, “Should I wear a sweater today?” If the input temperature is below a certain threshold (say, 70˚F), the perceptron will output 0 (no). If the temperature is above the threshold, the perceptron will output a 1 (yes).
+
+<center>
+	<img src="{{ site.baseurl }}/assets/tutorials/2/image_7.png" width="400">
+</center>
+
+Of course, we could consider more variables than just temperature when deciding whether or not to wear a sweater. Just like how a neuron typically can have more than one input electrical impulse, we can make our perceptrons have multiple inputs. In that case, we’ll have to also weight each input by a certain amount. If we were to use temperature, wind speed, and something completely random like the current population of Denmark as our inputs, we would want to use different weights for each input. Temperature would probably have a negative weight, because the lower the temperature the more you should probably wear a sweater. Wind speed should have a positive weight, because the higher the wind speeds the more likely you will need to put on a sweater. And as for the population of Denmark, the weight should probably be zero (unless you normally factor in the population of Denmark into your decision making).
+
+<center>
+	<img src="{{ site.baseurl }}/assets/tutorials/2/image_8.png" width="400">
+</center>
+
+But someone from Canada might be very used to the cold, so their threshold for wearing a sweater might be a lower temperature than someone from, say, Australia. To express this, we use a bias to specify the threshold for the Canadian and the Australian. You can think of the bias as a measure of how difficult it is for the perceptron to say 'yes' or 'no'. 
+
+<center>
+	<img src="{{ site.baseurl }}/assets/tutorials/2/image_9.png" width="400">
+</center>
+
+<center>
+	<img src="{{ site.baseurl }}/assets/tutorials/2/image_10.png" width="400">
+</center>
+
+## Logistic Regression
+
+However, life is not as black and white as perceptrons indicate. There is uncertainty in just about anything, even just choosing whether or not to put on a sweater. In reality, we don’t immediately put on a sweater the moment it drops below some predefined temperature. It’s more as if at any temperature we have a certain “chance” of putting on a sweater. Maybe at 45 F somebody will have a 95% chance of putting on a sweater, and at 60 F the same person will have a 30% chance of
+ putting on a sweater.
+
 
