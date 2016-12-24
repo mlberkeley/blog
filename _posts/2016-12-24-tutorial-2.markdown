@@ -205,6 +205,7 @@ $$ K(x, x') = (x^Tx'+c)^d $$
 <div style="width:230px; float: left; margin-top: 15px; margin-left: 10px;"><div id="slider3" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a class="ui-slider-handle ui-state-default ui-corner-all" href="http://cs.stanford.edu/people/karpathy/svmjs/demo/#" style="left: 50%;"></a></div><br><span id="polyCreport">Polynomial Kernel C = 0.0</span></div>
 <div style="width:230px; float: right; margin-top: 15px; margin-right: 10px;"><div id="slider4" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a class="ui-slider-handle ui-state-default ui-corner-all" href="http://cs.stanford.edu/people/karpathy/svmjs/demo/#" style="left: 50%;"></a></div><br><span id="polyDreport">Polynomial Kernel Degree = 2.0</span></div>
 
+
 </div>
 
 </center>
@@ -215,14 +216,17 @@ $$ K(x, x') = (x^Tx'+c)^d $$
 <script src="{{ site.baseurl }}/assets/tutorials/2/js/FullSVMJS/npgmain.js"></script>
 <script src="{{ site.baseurl }}/assets/tutorials/2/js/FullSVMJS/svm.js"></script>
 <script type="text/javascript" src="{{ site.baseurl }}/assets/tutorials/2/js/FullSVMJS/demo_full.js"></script>
-
+ 
 </body>
 
-
-
+| 
 
 ### Things to try with the simulator
 
 * Use the linear kernel and set the regularization parameter (C) to 1.0e+6. Put two red data points and two green data points. Can the SVM classify linearly inseperable data? How about for other values of C?
 * Try using the RBF kernel with different sigmas. Does the RBF kernel overfit or underfit the data?
 * Try using different degrees polynomial kernels. Does the shape for a second degree polynomial kernel look familiar?
+
+
+### Sources 
+[Andrew Ng's notes on SVMs](http://cs229.stanford.edu/notes/cs229-notes3.pdf)
