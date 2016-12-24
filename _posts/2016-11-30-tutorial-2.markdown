@@ -1,15 +1,12 @@
 ---
 layout: post
-title:  "Tutorial 2"
+title:  "Machine Learning Crash Course: Part 2"
 date:   2016-12-18
 author: Daniel Geng and Shannon Shih
 comments: true
 published: true
 ---
 
-Hey tutorial post 2! omg!!!
-
-<!-- break -->
 
 <style type="text/css">
 canvas { 
@@ -32,7 +29,80 @@ canvas {
 
 ## Supervised and Unsupervised Algorithms
 
-In machine learning, there are two general classes of algorithms. You’ll remember that in our last post, we discussed regression and classification. These two methods fall under the larger umbrella of _supervised_ learning algorithms, one of the two classes of machine learning algorithms. The other class of algorithms is called unsupervised algorithms. Supervised algorithms take their name from the fact that they take labeled training data. The algorithms are “supervised” because we know what the correct answer is. Given labeled training data on apples and oranges, by definition we know if a data point is an apple or an orange–the data is labeled. In the case of unsupervised algorithms, we don’t actually know what the correct answer is in our training data. We take unlabeled data and try to infer patterns from just the data itself. A common technique in unsupervised learning is clustering, which is exactly what it sounds like.
+In machine learning, there are two general classes of algorithms. You’ll remember that in our last post we discussed regression and classification. These two methods fall under the larger umbrella of supervised learning algorithms, one of two classes of machine learning algorithms. The other class of algorithms is called unsupervised algorithms. 
+
+<!-- break -->
+
+Supervised algorithms learn from labeled training data. The algorithms are “supervised” because we know what the correct answer is. If the algorithm receives a bunch of images labeled as [apples or oranges](https://ml.berkeley.edu/blog/2016/11/06/tutorial-1/) it can first guess the object in the image, then use the label to check if its guess is correct. 
+
+Unsupervised learning is a bit different in that it finds patterns in data. It works similarly to the way we humans observe patterns (or objects) in random phenomena. Unsupervised learning algorithms do the same thing by looking at unlabeled data. Just like we don't have a particular goal when looking at an object (other than identifying it), the algorithm doesn't have a particular goal other than inferring patterns from the data itself.
+
+We’ll talk about unsupervised algorithms in a later blog post. For now, let’s look at a very simple supervised algorithm, called the **perceptron** algorithm.
+
+## Perceptrons
+
+<center>
+	<img src="{{ site.baseurl }}/assets/tutorials/2/image_5.png" width="400">
+    <p style="font-size: 14px"> Model of a Perceptron</p>
+</center>
+
+One of the goals of machine learning and AI is to do what humans do and even surpass them. Thus, it makes sense to try and copy what makes humans so great at what they do--their brains. 
+
+The brain is composed of billions of interconnected neurons that are constantly firing, passing signals from one neuron to another. Together, they allow us to do incredible things such as recognize faces, patterns, and most importantly, think. 
+
+The job of an individual neuron is simple: if its inputs match certain criteria, it fires, sending a signal to other neurons connected to it. It's all very black and white. Of course, the actual explanation is much more complicated than this, but since we're using computers to simulate a brain, we only need to copy the idea of how a brain works.
+
+<center>
+	<img src="{{ site.baseurl }}/assets/tutorials/2/image_6.png" width="400">
+</center>
+
+The perceptron mimics the function of neurons in machine learning algorithms. The perceptron is one of the oldest machine learning algorithms in existence. When it was first used in 1957 to perform rudimentary image recognition, the New York Times called it:
+
+>the embryo of an electronic computer that [the Navy] expects will be able to walk, talk, see, write, reproduce itself and be conscious of its existence.
+
+We're still a little far off from that, but the Times did recognize the potential of a perceptron. Perceptrons now form the basis for more complicated neural networks, which we’ll be talking about in the next post.
+
+Like a neuron, perceptrons take in several inputs and spit out an output. For example, a perceptron might take as input temperature and try to answer the question, “Should I wear a sweater today?” If the input temperature is below a certain threshold (say, 70˚F), the perceptron will output 0 (no). If the temperature is above the threshold, the perceptron will output a 1 (yes).
+
+<center>
+	<img src="{{ site.baseurl }}/assets/tutorials/2/image_7.png" width="400">
+</center>
+
+Of course, we could consider more variables than just temperature when deciding whether or not to wear a sweater. Like how a biological neuron typically can have more than one input electrical impulse, we can make our perceptrons have multiple inputs. In that case, we’ll have to also weight each input by a certain amount. If we were to use temperature, wind speed, and something completely random like the number of people showering in Hong Kong as our inputs, we would want to use different weights for each input. Temperature would probably have a negative weight, because the lower the temperature the more you should probably wear a sweater. Wind speed should have a positive weight, because the higher the wind speeds the more likely you will need to put on a sweater. And as for the number of people showering in Hong Kong, the weight should probably be zero (unless you normally factor in the number of people taking showers in Hong Kong into your decision making).
+
+<center>
+	<img src="{{ site.baseurl }}/assets/tutorials/2/image_8.png" width="400">
+</center>
+
+But someone from Canada might be very used to the cold, so their threshold for wearing a sweater might be a lower temperature than someone from, say, Australia. To express this, we use a bias to specify the threshold for the Canadian and the Australian. You can think of the bias as a measure of how difficult it is for the perceptron to say 'yes' or 'no'. 
+
+<center>
+	<img src="{{ site.baseurl }}/assets/tutorials/2/image_9.png" width="400">
+    <p style="font-size: 14px">The Canadian is fairly insensitive to cold temperatures, and thus has a low bias</p>
+</center>
+
+<center>
+	<img src="{{ site.baseurl }}/assets/tutorials/2/image_10.png" width="400">
+    <p style="font-size: 14px">The Australian is biased towards hotter temperatures and thus has a higher threshold temperature</p>
+</center>
+
+## Logistic Regression
+
+However, life is not as black and white as perceptrons indicate. There is uncertainty in just about anything, even choosing whether or not to put on a sweater. In reality, we don’t immediately put on a sweater the moment it drops below some predefined temperature. It’s more as if at any temperature we have a certain “chance” of putting on a sweater. Maybe at 45 F somebody will have a 95% chance of putting on a sweater, and at 60 F the same person will have a 30% chance of putting on a sweater.
+
+To better model life's complexities, we use logistic regression to find these probabilities. This involves fitting a logistic curve (like the one below) to our data. To do this, we again use gradient descent to choose the best parameters for the model. That is, we find parameters that minimize some cost function.
+
+<center>
+	<img src="{{ site.baseurl }}/assets/tutorials/2/image_11.png" width="400">
+</center>
+
+The general form of the logistic model is 
+
+<center> $$ h(\theta) = \frac{1}{1+e^{\theta^Tx}} $$ </center>
+
+where $$ \theta $$ is a vector of parameters, $$ x $$ is the input variables, and $$ h $$ is the model probabilities. For more information, we suggest you check out Andrew Ng's notes on [logistic regression](https://see.stanford.edu/materials/aimlcs229/cs229-notes1.pdf).
+
+Logistic regression and the perceptron algorithm are very similar to each other. It's common to think of logistic regression as a kind of perceptron algorithm on steroids, in that a logistic model can predict probabilities while a perceptron can only predict yes or no. In fact, taking a logistic model and setting all values less than .5 to zero, and all values above .5 to one gives a very similar result to just the perceptron algorithm.
 
 ## Support Vector Machines
 
@@ -46,7 +116,7 @@ If you remember the section on classification from our last post, we classify da
 	<img src="{{ site.baseurl }}/assets/tutorials/2/image_1.png" width="400">
 </center>
 
-Once we’ve drawn a decision boundary, we can find the margin for each datapoint. The margin for a single data point is just the distance from that data point to the decision boundary. 
+Once we’ve drawn a decision boundary, we can find the **margin** for each datapoint. The margin for a single data point is the distance from that data point to the decision boundary. 
 
 <center>
 	<img src="{{ site.baseurl }}/assets/tutorials/2/image_2.png" width="400">
@@ -58,13 +128,13 @@ In a way, a margin is a way to determine how confident we are in our classificat
 	<img src="{{ site.baseurl }}/assets/tutorials/2/image_3.png" width="400">
 </center>
 
-Now that we’ve defined margins, we can talk about “support vectors.” A **support vector** is simply the data point whose margin is the smallest. In other words, it’s the data point that is closest to the decision boundary. The name vector comes from the fact that you can define a margin as a vector (in other words, an arrow) from the data point to the decision boundary. This vector, in fact, any margin, will be perpendicular to the decision boundary because the smallest distance between a point and a line is a perpendicular line.
+Now that we’ve defined margins, we can talk about **support vectors**. A support vector is a vector from the data point with the smallest margin to the decision boundary. In other words, it’s a vector between that data point that is closest to the decision boundary and the boundary itself. This vector, in fact, any margin, will be perpendicular to the decision boundary because the smallest distance between a point and a line is a perpendicular line.
 
 <center>
 	<img src="{{ site.baseurl }}/assets/tutorials/2/image_4.png" width="400">
 </center>
 
-The idea behind a support vector machine is to classify data by drawing a decision boundary such that it maximizes the support vectors. By maximizing the support vectors, we’re also maximizing the margins in a data set, and thus the decision boundary is as far away as possible from the data points. 
+The idea behind a support vector machine is to classify data by drawing a decision boundary such that it _maximizes_ the support vectors. By maximizing the support vectors, we’re also maximizing the margins in a data set, and thus the decision boundary is as far away as possible from the data points. 
 
 #### Linear Separability
 
@@ -72,11 +142,31 @@ If you’ve played around with the simulation enough, you’ll notice that somet
 
 So how do we deal with linear inseparability? Turns out we can reformulate our optimization problem. Before, we wanted _every single_ data point to be as far away (to the correct side) from the decision boundary as possible. Now, we’ll allow a data point to stray toward the wrong side of the boundary, but we’ll add a “cost” to that happening (remember cost functions from the last post?). This is something that happens very often in machine learning and is called **regularization**. It basically allows our model to be a bit more flexible when trying to classify the data. The cost of violating the decision boundaries can be as high or as low as we want it to be, and is controlled by something called the **regularization parameter**. 
 
+Mathematically, we implement regularization by adding a term to our cost function. For instance
+
+$$ C = C(\theta, x_i) + c\sum_{i} R_i(x_i) $$
+
+could be the regularized cost function, where C (the cost) is a function of all the parameters and all the training data, R is the regularization (or penalty) for each data point, and c is the regularization parameter. A large c would mean the penalty for violating the decision boundary would be very high, and vice versa.
+
 |
 
 {% capture kernels %}
 
-This part is a bit mathy, which is why it’s hidden, but it’s also very fascinating. Now the SVMs shown so far can only make straight decision boundaries. But what if we wanted to classify data using a different kind of boundary? Well, that’s where kernels come in. **Kernels** are (loosely speaking) just a fancy term for an inner product (and if you don’t know what inner products are, don’t worry about it. It’s a very elementary subject in linear algebra and there are tons of places to find out what it is. If you don’t have the time, then you can just think of an inner product as something that takes in two vectors and sorta kinda encodes their lengths and the angle between the two vectors.). So why do we need kernels? It turns out that the SVM algorithm never depends on a data point itself, but rather on the inner product between data points. For that reason, we never need to know the coordinates of a data point, we only need to know the inner products between all the data points! Using this fact, we can actually use data points that are unrepresentable in a computer. For example, we can use data points in infinite dimensional space. As long as we have a way of computing the inner product, or the kernel, quickly. And luckily, there are ways to do this! It’s actually possible to calculate the inner product between two vectors in an infinite dimensional space almost instantaneously.
+<p>This part is a bit mathy, which is why it’s hidden, but it’s also very fascinating. Now the SVMs shown so far can only make straight decision boundaries. But what if we wanted to classify data using a different kind of boundary? Well, that’s where kernels come in. Kernels are (loosely speaking) a fancy term for an inner product.</p>
+
+<p>So why do we need kernels? It turns out that the SVM algorithm never depends on just a data point itself, but rather it depends on the inner product <i>between</i> data points. For that reason, we never need to know the coordinates of a data point, we only need to know the inner products between all the data points.</p>
+
+<p>It turns out that for certain representations of data (or certain coordinate systems), it’s actually much easier to calculate the kernel than it is to calculate the actual data point. For example, we can use data points in an infinite dimensional space. As long as we have a way of computing the inner product, or the kernel, quickly. And luckily, there are ways to do this! One example of this is the <b>Radial Basis Function kernel</b>, which calculates the inner product for a certain infinite dimensional space. The form of the RBF kernel is</p>
+
+$$ K(x, x') = e^{-\frac{||x-x’||}{2\sigma^2}} $$
+
+<p>where x and x’ are the two data points in the original coordinate system, ||x-x’|| is the distance between the two points, and sigma is a parameter that controls the model’s behavior. The feature space for the RBF kernel is actually infinite, and would be completely unrepresentable completely in a computer, but using the kernel we can actually use SVMs in that feature space.</p>
+
+<p>Another example of a kernel is the polynomial kernel, which takes the form</p>
+
+$$ K(x, x') = (x^Tx'+c)^d $$
+
+<p>where x and x' are the two data points, and c and d are parameters for the kernel. In this case, the feature space is not actually infinite, but the kernel is still helpful because it allows us to change our representation of the data.</p>
 
 {% endcapture %}
 {% include collapsible.html content=kernels title="Kernels"%}
@@ -117,57 +207,15 @@ This part is a bit mathy, which is why it’s hidden, but it’s also very fasci
 
 <center>
 <p> </p>
-<button id="btnFull" onclick="pauseSVM()">Start</button>
+<button id="btnFull" style="background-color: #4CAF50; border: none; color: white; padding: 15px 32px; font-size: 16px;" onclick="pauseSVM()">Start</button>
 </center>
 
+<br>
 
-## Perceptrons
+<p style="border-style: solid; border-width: 1px; padding: 5px 10px"><b>Computationally intensive simulation! Press start to begin the simulation. </b>(Unfortunately doesn't work on mobile). Left click to add red data point, shift-left click to add green data point. Click and drag to move the data points around. Use the sliders to adjust the regularization parameter (C), the sigma of the RBF kernel (must be in RBF kernel mode), and the C and Degree for the polynomial kernel (must be in polynomial kernel mode). <b>Press 'k' to switch kernels.</b> Press 'r' to reset the data points.</p>
 
-<center>
-	<img src="{{ site.baseurl }}/assets/tutorials/2/image_5.png" width="400">
-</center>
+### Things to try with the simulator
 
-The ultimate goal of machine learning is to do what humans do and even surpass them. Thus, it makes sense to try and copy what makes humans so great at what they do--their brains. 
-
-The brain is composed of billions of interconnected neurons that are constantly firing, passing signals from one neuron to another. Together, they allow us to do incredible things such as recognize faces, patterns, and most importantly, think. 
-
-The job of an individual neuron is simple: if its inputs match certain criteria, it fires, sending a signal to other neurons connected to it. It's all very black and white. Of course, the actual explanation is much more complicated than this, but since we're using computers to simulate a brain, we only need to copy the idea of how a brain works
-
-<center>
-	<img src="{{ site.baseurl }}/assets/tutorials/2/image_6.png" width="400">
-</center>
-
-The perceptron mimics the function of neurons in machine learning algorithms. The perceptron is one of the oldest machine learning algorithms in existence. When it was first used in 1957 to perform rudimentary image recognition, the New York Times called it:
-
->the embryo of an electronic computer that [the Navy] expects will be able to walk, talk, see, write, reproduce itself and be conscious of its existence.
-
-We're still a little far off from that, but the Times did recognize the potential of a perceptron, which now form the basis for much more complicated neural networks, which we’ll be talking about in the next post.
-
-Like a neuron, perceptrons take in several inputs and spits out an output. Perceptrons can be connected together to form a neural network, where the output of a perceptron is connected to the input of another perceptron. For example, a very simple perceptron might take as input temperature and try to answer the question, “Should I wear a sweater today?” If the input temperature is below a certain threshold (say, 70˚F), the perceptron will output 0 (no). If the temperature is above the threshold, the perceptron will output a 1 (yes).
-
-<center>
-	<img src="{{ site.baseurl }}/assets/tutorials/2/image_7.png" width="400">
-</center>
-
-Of course, we could consider more variables than just temperature when deciding whether or not to wear a sweater. Just like how a neuron typically can have more than one input electrical impulse, we can make our perceptrons have multiple inputs. In that case, we’ll have to also weight each input by a certain amount. If we were to use temperature, wind speed, and something completely random like the current population of Denmark as our inputs, we would want to use different weights for each input. Temperature would probably have a negative weight, because the lower the temperature the more you should probably wear a sweater. Wind speed should have a positive weight, because the higher the wind speeds the more likely you will need to put on a sweater. And as for the population of Denmark, the weight should probably be zero (unless you normally factor in the population of Denmark into your decision making).
-
-<center>
-	<img src="{{ site.baseurl }}/assets/tutorials/2/image_8.png" width="400">
-</center>
-
-But someone from Canada might be very used to the cold, so their threshold for wearing a sweater might be a lower temperature than someone from, say, Australia. To express this, we use a bias to specify the threshold for the Canadian and the Australian. You can think of the bias as a measure of how difficult it is for the perceptron to say 'yes' or 'no'. 
-
-<center>
-	<img src="{{ site.baseurl }}/assets/tutorials/2/image_9.png" width="400">
-</center>
-
-<center>
-	<img src="{{ site.baseurl }}/assets/tutorials/2/image_10.png" width="400">
-</center>
-
-## Logistic Regression
-
-However, life is not as black and white as perceptrons indicate. There is uncertainty in just about anything, even just choosing whether or not to put on a sweater. In reality, we don’t immediately put on a sweater the moment it drops below some predefined temperature. It’s more as if at any temperature we have a certain “chance” of putting on a sweater. Maybe at 45 F somebody will have a 95% chance of putting on a sweater, and at 60 F the same person will have a 30% chance of
- putting on a sweater.
-
-
+* Use the linear kernel and set the regularization parameter (C) to 100. Can the SVM classify linearly inseperable data? How about for other values of C?
+* Try using the RBF kernel with different sigmas. Does the RBF kernel overfit or underfit the data?
+* Try using different degrees polynomial kernels. Does the shape for a second degree polynomial kernel look familiar?

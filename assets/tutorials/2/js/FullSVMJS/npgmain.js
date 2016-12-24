@@ -200,11 +200,13 @@ function NPGPause(FPS, id) {
         paused = true;
         myinit();
         NPGtick();
-        document.getElementById(id).innerHTML = "Start"
+        document.getElementById(id).innerHTML = "Start";
+        document.getElementById(id).style.backgroundColor = "#4CAF50";
     } else {
         intervalID = window.setInterval(NPGtick, 1000/FPS);
         paused = false;
-        document.getElementById(id).innerHTML = "Pause"
+        document.getElementById(id).innerHTML = "Pause";
+        document.getElementById(id).style.backgroundColor = "#ff4d4d";
     }
 }
 
