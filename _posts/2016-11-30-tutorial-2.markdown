@@ -62,7 +62,7 @@ The perceptron mimics the function of neurons in machine learning algorithms. Th
 
 We're still a little far off from that, but the Times did recognize the potential of a perceptron. Perceptrons now form the basis for more complicated neural networks, which we’ll be talking about in the next post.
 
-Like a neuron, perceptrons take in several inputs and spit out an output. For example, a perceptron might take as input temperature and try to answer the question, “Should I wear a sweater today?” If the input temperature is below a certain threshold (say, 70˚F), the perceptron will output 0 (no). If the temperature is above the threshold, the perceptron will output a 1 (yes).
+Like neurons, perceptrons take in several inputs and spit out an output. For example, a perceptron might take as input temperature and try to answer the question, “Should I wear a sweater today?” If the input temperature is below a certain threshold (say, 70˚F), the perceptron will output 0 (no). If the temperature is above the threshold, the perceptron will output a 1 (yes).
 
 <center>
 	<img src="{{ site.baseurl }}/assets/tutorials/2/image_7.png" width="400">
