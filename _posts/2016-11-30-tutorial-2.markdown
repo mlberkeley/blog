@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Machine Learning Crash Course: Part 2"
-date:   2016-12-18
+date:   2016-12-24
 author: Daniel Geng and Shannon Shih
 comments: true
 published: true
@@ -168,6 +168,8 @@ $$ K(x, x') = (x^Tx'+c)^d $$
 
 <p>where x and x' are the two data points, and c and d are parameters for the kernel. In this case, the feature space is not actually infinite, but the kernel is still helpful because it allows us to change our representation of the data.</p>
 
+<p>Intuitively, you can think of a kernel as mapping a set data from one coordinate system to another coordinate system. In the original coordinate system the data may not be linearly seperable at all, whereas in the new coordinate system if we choose the correct kernel, we should get a set a data set is very easily linearly seperable.</p>
+
 {% endcapture %}
 {% include collapsible.html content=kernels title="Kernels"%}
 
@@ -216,6 +218,6 @@ $$ K(x, x') = (x^Tx'+c)^d $$
 
 ### Things to try with the simulator
 
-* Use the linear kernel and set the regularization parameter (C) to 100. Can the SVM classify linearly inseperable data? How about for other values of C?
+* Use the linear kernel and set the regularization parameter (C) to 1.0e+6. Put two red data points and two green data points. Can the SVM classify linearly inseperable data? How about for other values of C?
 * Try using the RBF kernel with different sigmas. Does the RBF kernel overfit or underfit the data?
 * Try using different degrees polynomial kernels. Does the shape for a second degree polynomial kernel look familiar?
