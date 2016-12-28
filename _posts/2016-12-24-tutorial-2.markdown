@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Machine Learning Crash Course: Part 2"
-date:   2016-12-18
+date:   2016-12-24
 author: Daniel Geng and Shannon Shih
 comments: true
 published: true
@@ -27,11 +27,15 @@ canvas {
 }
 </style>
 
+***Perceptrons, Logistic Regression, and SVMs***
+
+In this post we'll talk about one of the most fundamental machine learning algorithms: the perceptron algorithm. This algorithm forms the basis for many modern day ML algorithms, most notably neural networks. In addition, we'll discuss the perceptron algorithm's cousin, logistic regression. And then we'll conclude with an introduction to SVMs, or support vector machines, which are perhaps one of the most flexible algorithms used today.
+
+<!-- break -->
 ## Supervised and Unsupervised Algorithms
 
 In machine learning, there are two general classes of algorithms. You’ll remember that in our last post we discussed regression and classification. These two methods fall under the larger umbrella of supervised learning algorithms, one of two classes of machine learning algorithms. The other class of algorithms is called unsupervised algorithms. 
 
-<!-- break -->
 
 Supervised algorithms learn from labeled training data. The algorithms are “supervised” because we know what the correct answer is. If the algorithm receives a bunch of images labeled as [apples or oranges](https://ml.berkeley.edu/blog/2016/11/06/tutorial-1/) it can first guess the object in the image, then use the label to check if its guess is correct. 
 
@@ -43,7 +47,7 @@ We’ll talk about unsupervised algorithms in a later blog post. For now, let’
 
 <center>
 	<img src="{{ site.baseurl }}/assets/tutorials/2/image_5.png" width="400">
-    <p style="font-size: 14px"> Model of a Perceptron</p>
+    <p style="font-size: 14px"> Model of a perceptron</p>
 </center>
 
 One of the goals of machine learning and AI is to do what humans do and even surpass them. Thus, it makes sense to try and copy what makes humans so great at what they do--their brains. 
@@ -168,10 +172,21 @@ $$ K(x, x') = (x^Tx'+c)^d $$
 
 <p>where x and x' are the two data points, and c and d are parameters for the kernel. In this case, the feature space is not actually infinite, but the kernel is still helpful because it allows us to change our representation of the data.</p>
 
+<p>Intuitively, you can think of a kernel as mapping a set data from one coordinate system to another coordinate system. In the original coordinate system the data may not be linearly seperable at all, whereas in the new coordinate system if we choose the correct kernel, we should get a set a data set is very easily linearly seperable.</p>
+
 {% endcapture %}
 {% include collapsible.html content=kernels title="Kernels"%}
 
+
+<div style="border-style: solid; border-width: 1px; padding: 5px 10px">
+<p><b>Computationally intensive simulation! Press start to begin the simulation. </b>(Unfortunately doesn't work on mobile). Left click to add red data point, shift-left click to add green data point. Click and drag to move the data points around. Use the sliders to adjust the regularization parameter (C), the sigma of the RBF kernel (must be in RBF kernel mode), and the C and Degree for the polynomial kernel (must be in polynomial kernel mode). <b>Press 'k' to switch kernels.</b> Press 'r' to reset the data points.</p>
+<p>This simulation is an adaptation of Andrej Karpathy's SVM simulator which can be found <a href="http://cs.stanford.edu/people/karpathy/svmjs/demo/">here</a></p>
+</div>
+<center>
+<p> </p>
 <center><h2 id="SVM simulation">SVM Simulation!</h2></center>
+<button id="btnFull" style="background-color: #4CAF50; border: none; color: white; padding: 15px 32px; font-size: 16px;" onclick="pauseSVM()">Start</button>
+</center>
 
 <link type="text/css" href="{{ site.baseurl }}/assets/tutorials/2/js/FullSVMJS/jquery-ui-1.8.21.custom.css" rel="Stylesheet">	
 
@@ -190,6 +205,7 @@ $$ K(x, x') = (x^Tx'+c)^d $$
 <div style="width:230px; float: left; margin-top: 15px; margin-left: 10px;"><div id="slider3" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a class="ui-slider-handle ui-state-default ui-corner-all" href="http://cs.stanford.edu/people/karpathy/svmjs/demo/#" style="left: 50%;"></a></div><br><span id="polyCreport">Polynomial Kernel C = 0.0</span></div>
 <div style="width:230px; float: right; margin-top: 15px; margin-right: 10px;"><div id="slider4" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a class="ui-slider-handle ui-state-default ui-corner-all" href="http://cs.stanford.edu/people/karpathy/svmjs/demo/#" style="left: 50%;"></a></div><br><span id="polyDreport">Polynomial Kernel Degree = 2.0</span></div>
 
+
 </div>
 
 </center>
@@ -200,22 +216,17 @@ $$ K(x, x') = (x^Tx'+c)^d $$
 <script src="{{ site.baseurl }}/assets/tutorials/2/js/FullSVMJS/npgmain.js"></script>
 <script src="{{ site.baseurl }}/assets/tutorials/2/js/FullSVMJS/svm.js"></script>
 <script type="text/javascript" src="{{ site.baseurl }}/assets/tutorials/2/js/FullSVMJS/demo_full.js"></script>
-
+ 
 </body>
 
-|
-
-<center>
-<p> </p>
-<button id="btnFull" style="background-color: #4CAF50; border: none; color: white; padding: 15px 32px; font-size: 16px;" onclick="pauseSVM()">Start</button>
-</center>
-
-<br>
-
-<p style="border-style: solid; border-width: 1px; padding: 5px 10px"><b>Computationally intensive simulation! Press start to begin the simulation. </b>(Unfortunately doesn't work on mobile). Left click to add red data point, shift-left click to add green data point. Click and drag to move the data points around. Use the sliders to adjust the regularization parameter (C), the sigma of the RBF kernel (must be in RBF kernel mode), and the C and Degree for the polynomial kernel (must be in polynomial kernel mode). <b>Press 'k' to switch kernels.</b> Press 'r' to reset the data points.</p>
+| 
 
 ### Things to try with the simulator
 
-* Use the linear kernel and set the regularization parameter (C) to 100. Can the SVM classify linearly inseperable data? How about for other values of C?
+* Use the linear kernel and set the regularization parameter (C) to 1.0e+6. Put two red data points and two green data points. Can the SVM classify linearly inseperable data? How about for other values of C?
 * Try using the RBF kernel with different sigmas. Does the RBF kernel overfit or underfit the data?
 * Try using different degrees polynomial kernels. Does the shape for a second degree polynomial kernel look familiar?
+
+
+### Sources 
+[Andrew Ng's notes on SVMs](http://cs229.stanford.edu/notes/cs229-notes3.pdf)

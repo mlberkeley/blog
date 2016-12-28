@@ -10,7 +10,7 @@
     border-radius: 25px;
   }
   
-  label {
+  #display {
     color: #0275d8;
     background-color: transparent;
     border-color: #0275d8;
@@ -23,7 +23,7 @@
     margin-top: 100px;
   }
   
-  label:hover {
+  #display:hover {
     background-color: #0275d8;
     border-color: #0275d8;
     color: white;
@@ -45,7 +45,7 @@
 </style>
 <div>
 <input class="toggle" id="{{ include.title | url_encode }}" type="checkbox">
-<label for="{{ include.title | url_encode }}">{{ include.title }}</label>
+<label id="display" for="{{ include.title | url_encode }}">{{ include.title }}</label>
 <div class="collapsible">
   <div class="inner-collapsible">
     {{ include.content }}

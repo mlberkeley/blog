@@ -251,8 +251,8 @@ $(function() {
 		$("#slider1").slider({
 			orientation: "horizontal",
 			slide: refreshC,
-			max: 2.0,
-			min: -2.0,
+			max: 6.0,
+			min: -1.0,
 			step: 0.1,
 			value: 0.0
 		});
