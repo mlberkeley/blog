@@ -62,7 +62,7 @@ The perceptron mimics the function of neurons in machine learning algorithms. Th
 
 We're still a little far off from that, but the Times did recognize the potential of a perceptron. Perceptrons now form the basis for more complicated neural networks, which we’ll be talking about in the next post.
 
-Like neurons, perceptrons take in several inputs and spit out an output. For example, a perceptron might take as input temperature and try to answer the question, “Should I wear a sweater today?” If the input temperature is below a certain threshold (say, 70˚F), the perceptron will output 0 (no). If the temperature is above the threshold, the perceptron will output a 1 (yes).
+Like neurons, perceptrons take in several inputs and spit out an output. For example, a perceptron might take as input temperature and try to answer the question, “Should I wear a sweater today?” If the input temperature is below a certain threshold (say, 70˚F), the perceptron will output 1 (yes). If the temperature is above the threshold, the perceptron will output a 0 (no).
 
 <center>
 	<img src="{{ site.baseurl }}/assets/tutorials/2/image_7.png" width="400">
@@ -98,7 +98,7 @@ To better model life's complexities, we use logistic regression to find these pr
 
 The general form of the logistic model is 
 
-<center> $$ h(\theta) = \frac{1}{1+e^{\theta^Tx}} $$ </center>
+<center> $$ h(\theta) = \frac{1}{1+e^{ \theta^Tx}} $$ </center>
 
 where $$ \theta $$ is a vector of parameters, $$ x $$ is the input variables, and $$ h $$ is the model probabilities. For more information, we suggest you check out Andrew Ng's notes on [logistic regression](https://see.stanford.edu/materials/aimlcs229/cs229-notes1.pdf).
 
