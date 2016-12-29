@@ -153,7 +153,7 @@ This equation is probably more recognizable in this form:
 $$y=mx+b$$
 
 
-$$y(x)$$ is our output, or in this case the price of a house, and $$x$$ is our feature, or in this case the size of the house. $$c_{1}$$ is the y intercept, to account for the base price of the house.
+$$y(x)$$ is our output, or in this case the price of a house, and $$x$$ is our feature, or in this case the size of the house. $$c_{0}$$ is the y intercept, to account for the base price of the house.
 
 
 Now the question becomes: How does a machine learning algorithm choose $$c_{2}$$ and $$c_{1}$$ so that the line best predicts house prices?
