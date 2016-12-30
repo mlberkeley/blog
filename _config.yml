@@ -20,8 +20,10 @@ author:
 
 # Custom vars
 version:             1.0.0
-future:             true 
+future:             true
 
 excerpt_separator:   <!-- break -->
 
-gems: [jekyll-paginate]
+gems:
+  - jekyll-paginate
+  - jekyll-feed
