@@ -102,7 +102,7 @@ To better model life's complexities, we use logistic regression to find these pr
 
 The general form of the logistic model is 
 
-<center> $$ h(\theta) = \frac{1}{1+e^{ \theta^Tx}} $$ </center>
+<center> $$ h(\theta) = \frac{1}{1+e^{ -\theta^Tx}} $$ </center>
 
 where $$ \theta $$ is a vector of parameters, $$ x $$ is the input variables, and $$ h $$ is the model probabilities. For more information, we suggest you check out Andrew Ng's notes on [logistic regression](https://see.stanford.edu/materials/aimlcs229/cs229-notes1.pdf).
 
