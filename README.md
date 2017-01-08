@@ -3,11 +3,9 @@ For ya bloggers
 
 To serve locally:
 
-1. [Install Jekyll](http://jekyllrb.com/docs/installation/)
-2. Install [bundler](http://bundler.io/): `gem install bundler`
-3. Clone
-4. cd to cloned dir then run:
-  * $ bundle install
+1. Install Jekyll
+2. Clone
+3. cd to cloned dir then run:
   * $ jekyll build
   * $ jekyll serve
 
