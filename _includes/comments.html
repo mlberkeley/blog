@@ -1,44 +1,4 @@
 {% if page.comments %}
-<!--Share buttons-->
-<style>
-ul.share-buttons{
-  list-style: none;
-  padding: 0;
-}
-
-ul.share-buttons li{
-  display: inline;
-}
-
-  ul.share-buttons img {
-    display: inline;
-  }
-
-ul.share-buttons .sr-only {
-  position: absolute;
-  clip: rect(1px 1px 1px 1px);
-  clip: rect(1px, 1px, 1px, 1px);
-  padding: 0;
-  border: 0;
-  height: 1px;
-  width: 1px;
-  overflow: hidden;
-}
-
-ul.share-buttons img{
-  width: 32px;
-}
-</style>
-<ul class="share-buttons">
-  <li><a href="https://www.facebook.com/sharer/sharer.php?u={{ site.url }}{{ page.url }}" title="Share on Facebook" target="_blank" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(document.URL) + '&t=' + encodeURIComponent(document.URL)); return false;"><img alt="Share on Facebook" src="{{ site.url }}/blog/assets/social_media_share_icons/Facebook.svg"></a></li>
-  <li><a href="https://twitter.com/intent/tweet?source={{ site.url }}{{ page.url }}text=:%20{{ site.url }}{{ page.url }}via=BerkeleyMl" target="_blank" title="Tweet" onclick="window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(document.title) + ':%20'  + encodeURIComponent(document.URL)); return false;"><img alt="Tweet" src="{{ site.url }}/blog/assets/social_media_share_icons/Twitter.svg"></a></li>
-  <li><a href="http://www.reddit.com/submit?url={{ site.url }}{{ page.url }}title=" target="_blank" title="Submit to Reddit" onclick="window.open('http://www.reddit.com/submit?url=' + encodeURIComponent(document.URL) + '&title=' +  encodeURIComponent(document.title)); return false;"><img alt="Submit to Reddit" src="{{ site.url }}/blog/assets/social_media_share_icons/Reddit.svg"></a></li>
-  <li><a href="http://www.linkedin.com/shareArticle?mini=true&url={{ site.url }}{{ page.url }}title=&summary=&source={{ site.url }}{{ page.url }}" target="_blank" title="Share on LinkedIn" onclick="window.open('http://www.linkedin.com/shareArticle?mini=true&url=' + encodeURIComponent(document.URL) + '&title=' +  encodeURIComponent(document.title)); return false;"><img alt="Share on LinkedIn" src="{{ site.url }}/blog/assets/social_media_share_icons/LinkedIn.svg"></a></li>
-  <li><a href="mailto:?subject=&body=:{{ site.url }}{{ page.url }}" target="_blank" title="Send email" onclick="window.open('mailto:?subject=' + encodeURIComponent(document.title) + '&body=' +  encodeURIComponent(document.URL)); return false;"><img alt="Send email" src="{{ site.url }}/blog/assets/social_media_share_icons/Email.svg"></a></li>
-</ul>
-
-
-
 
 <div class="fb-like"></div>
 <div id="fb-root"></div>
