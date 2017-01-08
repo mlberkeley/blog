@@ -39,23 +39,30 @@
       Reach out to us:
     </p>
 
-    {% if site.author.facebook %}
     <a href="https://www.facebook.com/{{ site.author.facebook }}">
       <i class="fa fa-facebook-square fa-lg"></i>
     </a>
-    {% endif %}
+    
+    <a href="https://www.twitter.com/{{ site.author.twitter }}">
+      <i class="fa fa-twitter-square fa-lg"></i>
+    </a>
 
-    {% if site.author.github %}
     <a href="https://www.github.com/{{ site.author.github }}">
       <i class="fa fa-github fa-lg"></i>
     </a>
-    {% endif %}
-
-    {% if site.author.email %}
+    
+<!--    change url when we get custom youtube URL     -->
+    <a href="https://www.youtube.com/channel/UCXweTmAk9K-Uo9R6SmfGtjg/"> 
+      <i class="fa fa-youtube fa-lg"></i>
+    </a>
+    
+    <a href="https://www.linkedin.com/company/{{ site.author.linkedin }}">
+      <i class="fa fa-linkedin-square fa-lg"></i>
+    </a>
+    
     <a href="mailto: {{ site.author.email }}">
       <i class="fa fa-envelope fa-lg"></i>
     </a>
-    {% endif %}
 
   </div>
 
