@@ -1,0 +1,34 @@
+---
+layout: post
+title:  "Machine Learning Crash Course: Part 3"
+date:   2017-1-11
+author: Daniel Geng and Shannon Shih
+comments: true
+published: true
+---
+
+<!-- break -->
+
+$$weight_{1}\times input_{1}+...+weight_{n}\times input_{n}+bias$$
+
+Let’s call the output of any neuron it’s activation, and the vector of all the activations in a layer $$ \textbf a^l $$. Now this vector will be a $$ 1 \times N $$ dimensional vector for a layer with N neurons. 
+
+PIC 1
+
+Now let’s figure out how to write the weights in matrix notation. Of course, we could just throw all the weights into some matrix and call it a day, but let’s be a bit more clever about it. In particular, let’s take advantage of the dot product. Let’s define a $$ N \times 1 $$ dimensional matrix to be the weights matrix from a previous layer to **a single neuron** in the next layer, where $$ N $$ would be the number of neurons in the **previous** layer (all of this seemingly arbitrary notation will pay off in the end, we promise). Let’s call this matrix $$ w^l_k $$ for the $$ k^{th} $$ neuron in the $$ l^{th} $$ layer.
+
+PIC 2
+
+Notice now that for the $$ k^{th} $$ neuron in the $$ l^{th} $$ layer, we can get the $$ k^{th} $$ weighted sum of its inputs, called $$ z^l_k $$ (where $$ l $$ is the layer and $$ k $$ is the $$ k^{th} $$ neuron, by simply taking the dot product between $$ w^l_k $$ and $$ a^{l-1} $$. 
+
+PIC 3
+
+What’s more, we can actually take advantage of the fact that multiplying a matrix by a vector gives a vector of all the horizontal rows of the matrix dotted with the vector:
+
+PIC 4
+
+and write out a weight matrix for each layer, where each row in the matrix is a $$ w^l_k $$. Call this matrix $$ w^l $$. Notice by multiplying the weight matrix by the activation of the previous layer, $$ a^{l-1} $$ we get a vector of the weighted inputs for each neuron, which we’ll call $$ z^l $$. 
+
+PIC 5
+
+Now let’s add the bias to our weighted sums. Call the vector of biases from layer $$ l $$, $$ b^l $$. This is a $$ N \times 1 $$ where $$ N $$ is the number of neurons in the $$ l^{th} $$ layer. The activation of the $$ l^{th} $$ layer is then $$ \sigma (w^l a^{l-1} + b^l) $$, where $$ sigma $$ applies the sigmoid function to each entry of its input.
