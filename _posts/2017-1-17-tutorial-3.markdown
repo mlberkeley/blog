@@ -4,8 +4,43 @@ title:  "Machine Learning Crash Course: Part 3"
 date:   2017-1-17
 author: Daniel Geng and Shannon Shih
 comments: true
-published: false
+published: true
 description: The third post in our intro to ML tutorial series! Learn all about neural networks!
 ---
 
-### Neural Networks!
+Neural networks are perhaps one of the most exciting recent developments in machine learning. Got a problem? Just throw a neural net at it. Want to make a self-driving car? Throw a neural net at it. Want to [fly a helicopter](http://hackaday.com/2014/04/22/self-learning-helicopter-uses-neural-network/)? Throw a neural net at it. Curious about the [digestive cycles of your sheep?](http://dl.acm.org/citation.cfm?id=901401)? Heck, throw a neural net at it. This extremely powerful algorithm holds much promise (but can also be a bit overhyped). In this article we’ll go through how a neural network actually works, and we’ll discuss some of the limitations of these seemingly magical tools.
+
+## The Biology
+
+The biological brain is perhaps the most powerful computer that we know of. Compared to our the complex organ, even our most powerful supercomputers are a joke. In 2014, Japanese researchers used a [supercomputer to simulate just one second of human brain activity](http://www.telegraph.co.uk/technology/10567942/Supercomputer-models-one-second-of-human-brain-activity.html). It took [40 minutes and 9.9 million watts](http://systems.closeupengineering.it/en/k-computer-fraction-of-the-human-brain/113/). As for the real thing? The little ball of grey matter in our skulls takes barely 20 watts to run, which translates to roughly one [McChicken](http://www.myfitnesspal.com/food/calories/mcdonalds-mcchicken-biscuit-61698140) a day. 
+
+Neglecting **a lot** of details, biological neurons are cells that send and receive electrical impulses from other neurons that they are connected to. A neuron will only fire an electrical impulse when it receives impulses from other neurons that together are stronger than a certain threshold. Anything lower than that threshold and the neuron won’t do anything. Just what that threshold is is dependent on the chemical properties of the neuron in question and varies from neuron to neuron. Upon firing, an electrical impulse shoots out of the neuron and into more neurons downstream and the process continues. In the brain, billions of these interconnected neurons communicating with each other form the basis for consciousness, thought, and McChicken cravings.
+
+## The History
+
+In the mid 1900’s, a [couple of researchers](https://en.wikipedia.org/wiki/Artificial_neuron#History) with particularly smart brains had the idea of creating a “mathematical model” that would be based on how the brain works. They first created a model for a single neuron which imitated a real neuron’s outputs, inputs, and thresholds. The outputs of these single artificial neurons were then fed into even more artificial neurons, creating an entire artificial neural network.
+
+There was just one problem, while researchers had created a model of the human brain they had no way of teaching it anything. The artificial brain could be wired in whatever way researchers wanted, but the vast majority of these wirings didn’t create a brain that had any logical output at all. What was needed was a learning algorithm for their artificial brain.
+
+It was not until the [1980’s](https://en.wikipedia.org/wiki/Backpropagation#History) that such an efficient learning algorithm was used on neural networks. The algorithm was called backpropagation, and finally allowed neural networks to be trained to do amazing things such as speech recognition or autopilots.
+
+## The Model Overview
+
+Now that we know the basics of how the brain works and the history of neural networks, let’s look at what a neural network actually does. First off, we’ll think of our neural network as a black box, some machine whose inner workings we don’t really know about yet. We want this machine to take in some set number of numerical inputs (that we can choose) and spit out a set number of numerical outputs (that we can also choose). 
+
+IMAGE OF BLACK BOX
+caption: A neural network takes in some inputs, math happens, and some number of outputs pop out.
+
+For example, if we want to classify images (say apples and oranges) then we’d want the number of inputs to be the number of pixels in our images, and the number of outputs to be the number of categories we have (two for the case of apples and oranges). If we were trying to model housing prices then the number of inputs would be the number of features we have, such as location, number of bathrooms, and square footage, and the number of outputs would be just one, for the price of the house.
+
+Our machine has inputs and outputs, but how do we control what inputs create what outputs? That is, how do we change the neural network so certain inputs (say an image of an apple) give the correct outputs (say a 0 for the probability of being an orange and a 1 for the probability of being an apple)? Well, we can add “knobs” to our machine to control the output for a given input. In machine learning lingo, these “knobs” are called the parameters of a neural network. If we tune these knobs to the correct place, then for any input we can get the output that we want.
+
+IMAGE????
+
+Going back to our apples and oranges example, if we give our machine an image of an apple but it tells us it thinks it’s an orange then we can go ahead and adjust the knobs of our machine (in other words tune the parameters) until the machine tells us it sees an apple. In essence, this is what it means to train a neural network and this is exactly what the backpropagation algorithm helps do.
+
+## The Model (Details)
+
+Now that we know what a neural network should do and roughly how we can get it to learn, let’s peer inside the black box and talk about what is happening inside the network. To start, we'll discuss what happens inside a single artificial neuron and build it up from there.
+
+
