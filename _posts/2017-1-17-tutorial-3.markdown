@@ -1,0 +1,10 @@
+---
+layout: post
+title:  "Machine Learning Crash Course: Part 3"
+date:   2017-1-17
+author: Daniel Geng and Shannon Shih
+comments: true
+published: true
+---
+
+### Neural Networks!
