@@ -5,6 +5,7 @@ date:   2016-11-06
 author: Daniel Geng and Shannon Shih
 comments: true
 published: true
+description: Our first post in a machine learning tutorial series. We talk about regression, cost functions, and gradient descent.
 ---
 **_Introduction, Regression/Classification, Cost Functions, and Gradient Descent_**
 

@@ -5,6 +5,7 @@ date:   2016-12-7
 author: Humza Iqbal
 comments: true
 published: true
+description: Our project team working with the healthcare company Grand Rounds has done some pretty cool ML work. Come check it out!
 ---
 
 Since our last demo day, the Grand Rounds team has been busy working on many aspects of the project. Grand Rounds provided our team a database of anonymous medicare information, including information about doctors visits. Associated with each visit were claim numbers, the total charge, the complication code (essentially the reason for the visit), and the NPI number (which indicates which physician was doing the procedure), as well as other information.

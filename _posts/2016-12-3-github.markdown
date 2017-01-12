@@ -5,6 +5,7 @@ date:   2016-12-3
 author: the Github Team 
 comments: true
 published: true
+description: Check out what our project team working for Github has done in programming language recognition!
 ---
 <meta property="og:image" content="https://ml.berkeley.edu/blog/assets/2016-12-2-github/github_team.jpg" />
 

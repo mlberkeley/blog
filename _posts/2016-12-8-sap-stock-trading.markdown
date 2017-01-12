@@ -5,6 +5,7 @@ date:   2016-12-8
 author: Raul Puri
 comments: true
 published: true 
+description: Machine Learning at Berkeley's SAP project team works with the big data engine Hana Vora to predict stocks!
 ---
 
 One crucial element that all statistical learning algorithms need is the ability to handle a tremendous amount of data very quickly. People have used different frameworks for querying, or fetching, data. Among these include Hadoop’s [MapReduce](https://en.wikipedia.org/wiki/MapReduce) framework and the Apache Spark framework. SAP Hana Vora’s (HV) unique in-memory Hadoop query engine for MapReduce frameworks is a promising new tool for big data and performing analysis in a distributed fashion on large databases of information. We demonstrate HV’s potential as a powerful resource for ML by examining its performance on tasks such as stock prediction on market data. We also contributed some additional functionality to the SAP HV library in the process.

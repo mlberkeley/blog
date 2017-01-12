@@ -5,6 +5,7 @@ date:   2016-10-14 12:30:17 -0700
 author: Daniel Geng and Shannon Shih
 comments: true
 published: true
+description: Overview of our October demo day. Check out what projects we're working on!
 ---
 
 One of our main goals here at ML@B is to help students understand how to use machine learning in real-world situations. This semester, we’ve teamed up with Github, Grand Rounds, SAP, and Intuit to work on solving some of their problems through machine learning. In addition, we have members working on their own independent research projects with groups such as the International Computer Science Institute.

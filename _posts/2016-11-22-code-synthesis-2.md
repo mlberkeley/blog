@@ -5,6 +5,7 @@ date:   2016-11-22
 author: Max Johansen
 comments: true
 published: true
+description: An inside look at one of our projects - Code Synthesis
 ---
 
 Imagine being able to just *tell* a computer what you want it to do, rather than programming it and having to deal with annoying syntax, semicolons and debugging. For the last few months, we, Code Synthesis team, have been working on just that. This is similar to the process of [automated theorem proving](https://en.wikipedia.org/wiki/Automated_theorem_proving), the process of using computers to solve proofs, which has recently experienced some [significant breakthroughs](https://github.com/tensorflow/deepmath) through the use of artificial neural networks. Automated theorem proving uses a description of the proof to derive a way to reach the desired end-product, This idea can be applied to our project where we use a description of a program to actually generate the code for that program.

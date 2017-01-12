@@ -5,6 +5,7 @@ date:   2016-10-04 12:30:17 -0700
 author: Daniel Geng and Shannon Shih
 comments: true
 published: true
+description: Machine Learning at Berkeley's says hi to the internet!
 ---
 
 One of the hottest and most exciting topics floating around these days is machine learning. People have created amazing things through machine learning, such as [self-driving cars](https://www.google.com/selfdrivingcar/), [mind-controlled prosthetics](http://www.popularmechanics.com/science/health/a17702/brain-controlled-prostheses-is-closer-than-you-think/), and [actual, readable dialogues in the style of Shakespeare](http://karpathy.github.io/2015/05/21/rnn-effectiveness/). But just what is machine learning? Surely it’s something obscure and esoteric. Right? And surely the subject is so entangled in computer science and mathematics that it would make any reasonable student run the other way. Right?
