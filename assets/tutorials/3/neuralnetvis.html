@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  
+  
+      <link rel="stylesheet" href="knobs.css">
+
+  <link rel="stylesheet" type="text/css" href="knobs.css">
+    <style>
+      circle.node:hover {
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+        transition: all 200ms ease-out;
+      }
+    </style>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+</head>
+
+<body>
+  <script> // sizing variables
+    var width = 960;
+    var height = 500;
+    var nodeSize = 25;
+    </script>
+    <script> // process nodes
+      
+      // works best if the layer indices start at 1
+      data = [
+        {"label": "input 1", "layer": 1, bias: 0},
+        {"label": "hidden 1", "layer": 2, bias: 0},
+        {"label": "hidden 2", "layer": 2, bias: 0},
+        {"label": "output 1", "layer": 3, bias: 0}
+      ];
+      
+      // refer to nodes by their labels. 
+      // if a weight isn't specified for a connection, default will be 1
+      weights = [
+        {"startLabel": "input 1", "endLabel": "hidden 1", "weight": 5},
+        {"startLabel": "hidden 1", "endLabel": "output 1", "weight": -3},
+        {"startLabel": "input 1", "endLabel": "hidden 2", "weight": 2}
+      ]
+      
+      function getStructure(data) {
+        var structure = {};
+        for(var i = 0; i < data.length; i++) {
+          var node = data[i];
+          if(node.layer in structure) {
+            structure[node.layer] += 1;
+          }
+          else {
+            structure[node.layer] = 1;
+          }
+        }
+        return structure;
+      }
+      
+      // dict containing how many nodes in each layer
+      // networkStructure[layer] = # of nodes
+      var networkStructure = getStructure(data); 
+      
+      // creates nodes with labels, layers, and position
+      function positionNodes(data, structure) {
+        var nodes = []; // contains newly created nodes
+        // sets width between layers
+        var layerwidth = width / (Object.keys(structure).length + 1);
+        // counts number of nodes drawn so far in each layer (inverse of structure)
+        var nodeCount = {};
+        for(var i = 0; i < data.length; i++) {
+          if(data[i].layer in nodeCount) {
+            nodeCount[data[i].layer] += 1;
+          }
+          else {
+            nodeCount[data[i].layer] = 1;
+          }
+          var node = {"label": data[i].label,
+                      "layer": data[i].layer,
+                      "bias": data[i].bias};
+          var x = layerwidth * node.layer;
+          var y = nodeCount[node.layer] * height / (structure[node.layer]+1);
+          node["x"] = x;
+          node["y"] = y;
+          nodes.push(node);
+        }
+        return nodes;
+      }
+      
+      var nodes = positionNodes(data, networkStructure);
+    </script>
+  
+    <script> // draw lines between nodes
+      var lines = [];
+      for(var start = 0; start < nodes.length; start++) {
+        var startNode = nodes[start];
+        for(var end = 0; end < nodes.length; end++) {
+          var endNode = nodes[end];
+          if(endNode.layer === startNode.layer + 1) {
+            // find weight for connection from weights array, if any
+            
+            lineweight = weights.find(function(x) {return x.startLabel === startNode.label
+                                                       && x.endLabel === endNode.label;});
+            if(lineweight) {
+              lineweight = lineweight.weight;
+            }
+            else {
+              lineweight = 1;
+            }
+              
+            lines.push({"x1": startNode.x, 
+                        "y1": startNode.y,
+                        "x2": endNode.x, 
+                        "y2": endNode.y, 
+                        "weight": lineweight,
+                        // id format: index_of_startNode_in_nodes-index_of_endNode_in_nodes
+                        "id": start.toString() + "-" + end.toString()}); 
+          }
+        }
+      }  
+    </script>
+  
+    <script>
+      var startX, startY;
+      var selected = null;
+      function getCoords(event) {
+        startX = event.pageX;
+        startY = event.pageY;
+        selected = event.target;
+      }
+      function adjustWeight(event) {
+        if(selected !== null && selected.hasAttribute('stroke-width')) {
+         var weight = document.getElementById(selected.getAttribute('data-line'));
+         strokewidth = weight.getAttribute('stroke-width');
+
+            if(startY > event.pageY && strokewidth < 20) {
+              weight.setAttribute('stroke-width', Math.abs(strokewidth+1));
+            }
+            else if(startY < event.pageY && strokewidth > -20) {
+              weight.setAttribute('stroke-width', Math.abs(strokewidth-1));
+            }
+    //        document.getElementById(event.target.getAttribute('data-line')).setAttribute('stroke-width', 1); 
+          document.querySelectorAll('[data-line=' + selected.getAttribute('data-line') + ']')[0].innerHTML = strokewidth;
+          
+        }
+      }
+      function stopmousedown(event) {
+        selected = null;
+      }
+    </script>
+  
+    <script>
+      var svg = d3.select("body").append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("onmousedown", "getCoords(event)")
+        .attr("onmousemove", "adjustWeight(event)")
+        .attr("onmouseup", "stopmousedown(event)");
+      
+      var line = svg.selectAll("lines")
+                    .data(lines).enter()
+                    .append("path")
+                      .attr("d", function(d) { return "M " + d.x1 + " " + d.y1 + " L " + d.x2 + " " + d.y2;})
+                      .attr("stroke", "black")
+                      .attr("stroke-width", function(d) { return Math.abs(d.weight); })
+                      .attr("id", function(d) {return d.id;});
+      var selectable = svg.selectAll("selectable")
+                    .data(lines).enter()
+                    .append("path")
+                      .attr("d", function(d) { return "M " + d.x1 + " " + d.y1 + " L " + d.x2 + " " + d.y2;})
+//                      .attr("stroke", "red")
+                      .attr("stroke-width", "20px")
+                      .attr("data-line", function(d) {return d.id;})
+                      .attr("pointer-events", "visible");
+      
+      var weightlabels = svg.selectAll("weights")
+                    .data(lines).enter()
+                    .append("text")
+                      .attr("style", "text-anchor: middle;")
+                      .attr("dy", -12)
+      weightlabels.append("textPath")
+                      .attr("xlink:href", function(d) {return "#" + d.id})
+                      .attr("startOffset", "50%")
+                      .text(function(d) {return d.weight;});
+      
+      var node = svg.selectAll("node")
+        .data(nodes)
+        .enter()
+        .append("g")
+          .attr("transform", function(d) {
+            return "translate(" + d.x + ", " + d.y + ")";});
+      
+      var circle = node.append("circle")
+          .attr("r", nodeSize)
+          .attr("class", "node");
+      
+      var text = node.append("text")
+          .attr("style", "text-anchor: middle; alignment-baseline: middle;")
+          .attr("dx", 0)
+          .attr("dy", 0)
+          .attr("fill", "white")
+          .text("bias");
+      
+      
+    </script>
+
+
+    <div class="a-knob">
+      <label class="a-knob-handle" for="knob-1"></label>
+      <input class="a-knob-input" type="number" id="knob-1" name="knob1" min="0" max="1000" value="115" step="1">
+      <div class="a-knob-indicator"></div>
+      <div class="a-knob-label"></div>
+    </div>
+
+
+  
+    <script src="knobs.js"></script>
+
+</body>
+</html>
