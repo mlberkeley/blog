@@ -5,7 +5,7 @@ layout: null
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Machine Learning at Berkeley Blog - Articles</title>
-    <description>The going ons at Berkeley's largest undergraduate ML club</description>
+    <description>The going ons at UC Berkeley's largest ML club</description>
     <link>{{ site.url }}</link>
     {% for post in site.posts %}
       {% unless post.draft %}
