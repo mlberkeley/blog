@@ -35,8 +35,6 @@ For example, if we want to classify images (say apples and oranges) then we’d 
 
 Our machine has inputs and outputs, but how do we control what inputs create what outputs? That is, how do we change the neural network so certain inputs (say an image of an apple) give the correct outputs (say a 0 for the probability of being an orange and a 1 for the probability of being an apple)? Well, we can add “knobs” to our machine to control the output for a given input. In machine learning lingo, these “knobs” are called the parameters of a neural network. If we tune these knobs to the correct place, then for any input we can get the output that we want.
 
-IMAGE????
-
 Going back to our apples and oranges example, if we give our machine an image of an apple but it tells us it thinks it’s an orange then we can go ahead and adjust the knobs of our machine (in other words tune the parameters) until the machine tells us it sees an apple. In essence, this is what it means to train a neural network and this is exactly what the backpropagation algorithm helps do.
 
 ## The Model (Details)
@@ -45,18 +43,18 @@ Now that we know what a neural network should do and roughly how we can get it t
 
 For those who have read our post on perceptrons [[[[[ LINK TO POST!!!! ]]]]], this will be very familiar material. That’s because a neuron in a neural network is basically a perceptron on steroids. Similarly to a perceptron, a neuron takes in any number of numerical inputs and has just one output. To get to this output, the neuron calculates an intermediate value called \( s \) by multiplying each input by a different weight, adding them all together, and adding an additional number called the bias. In math: \( s = weight_{1}\times input_{1}+...+weight_{n}\times input_{n}+bias \)
 
-IMAGE OF NERUON CALCULATION
+IMAGE OF NERUON CALCULATIOn
 
 Now each neuron could simply output \( s \), but that would be a bit boring as \( s \) is just a linear function, which makes it rather inflexible for modeling real-world data. What we want to do instead is to add one more step, called an activation function. An activation function is any function that takes in our \( s \) and gives the output of our neuron. The perceptron that we described in the last post gave definitive yes/no answers using a blocky step function as its activation function.
 
-IMAGE OF HEAVESIDE ACTIVATION FUNCTION
+IMAGE OF HEAVESIDE ACTIVATION FUNCTION WITH ANT ON VERY LEFT/RIGHT
 Caption: For the step function, there is no way to tell how close you are to a “yes” or a “no”
 
 However, using a step function makes training very difficult because there's no way to tell whether the neural network is getting closer or farther from the correct answer. As an analogy, imagine you are an ant that can only see things very close to you. You are on the lower part of the step function trying to get to the higher part of the step function. But because everything is so flat, you wouldn’t know how far away the “step” part of the step function is, or even in which direction it is (the step function can be mirrored, with a value of 1 on the left and 0 on the right). It’s more or less because of this that makes the step function a bad activation function for training.
 
 To make it easier to train a network, we’ll use a function that is smooth (in other words, a differentiable function). In particular, we’ll use the sigmoid function, which looks something like this:
 
-IMAGE SIGMOID ACTIVATION FUNCTION
+IMAGE SIGMOID ACTIVATION FUNCTION WITH ANT KNOWING WHICH DIRECTION TO GO
 Caption: A sigmoid function is a nice activation function because it is smooth everywhere, making it easier to figure out if you're getting closer to the top
 
 Going back to our ant analogy, an ant could figure out exactly which direction to go and how far to go just by checking in which direction and how much the graph slopes at its current location. Despite the fact that the ant can’t see the high part of the sigmoid function, it can tell in which direction it is and roughly how far away it is.
@@ -65,11 +63,11 @@ Going back to our ant analogy, an ant could figure out exactly which direction t
 
 We wouldn't have much of a network if we just had one neuron, would we? The secret to a neural network's ability to make complex decisions lies in its internal structure of interconnected neurons. Just like how neurons in the brain are connected to each other, the output of one neuron becomes the input of another neuron, allowing the neurons to work together to come up with the correct answer.
 
-IMAGE OF NEURON FEEDING ANOTHER NEURON
+IMAGE OF NEURON FEEDING ANOTHER NEURON (ALREADY EXISTS, LOOKS SEX C AF)
 
 Of course, we can't just randomly connect neurons to each other and expect everything to work perfectly. The design of a neural network is based on the way our brains process data by structuring neurons into groups of computational “units.” For example, the human visual cortex consists of 5 distinct sections called [V1, V2, V3, V4, and V5](https://en.wikipedia.org/wiki/Visual_cortex). Visual stimuli travels from the retina to V1 where low-level details such as edges and colors are picked out. The information generated by V1 then travels to V2, and then V3 and so on, with each cortex processing progressively more and more complicated information.
 
-IMAGE OF NEURAL NETWORK WITH LAYERS
+IMAGE OF NEURAL NETWORK WITH LAYERS (ANN DIAGRAM)
 
 In a similar way, artificial neural network are composed of layers of artificial neurons. In general, there are three types of layers: an input layer, hidden layers, and an output layer. The input layer (on the very left) will take on values of whatever the input is to the the neural network. Notice that we can have our network take any number of inputs by changing the number of neurons in the input layer. Neat! 
 
@@ -83,7 +81,7 @@ D3JS EXAMPLE!!!
 
 ## How a Neural Network “Works”
 
-DOGE!!!
+DOGE!!! (ALREADY GOT IT)
 
 Say you're trying to recognize Doge. Do the pink spots (flowers) in the background matter when trying to identify the main object in the picture? Probably not, so that information can probably be discarded. 
 
@@ -92,7 +90,7 @@ So what information is relevant? Well, the object has lines of dark and white pi
 Many people will probably immediately recognize the object as a dog, but what gives it away? Fur, eyes, ears, and nose are all indications, but they must be considered together in order to figure out that the object is a dog. 
 We can visualize this thought process with various neurons tasked with identifying increasingly abstract objects in the image:
 
-LABELED NETWORK PICTURE
+LABELED NETWORK PICTURE (ALREADY EXISTS)
 How someone might identify a dog. Important inputs that are given a lot of weight are highlighted in red.
 
 
@@ -106,20 +104,28 @@ At its very core, training a neural network just means adjusting the parameters 
 
 For example, if we feed some random neural network an image of an apple and it tells us it sees an orange, then the cost for that particular example would be high. The term “cost” comes from the fact that you can think of a neural network with a high cost (and therefore many wrong answers) as bad, or expensive, and vice versa. To ensure that a neural network getting a correct answer isn’t just some fluke, networks are typically trained on thousands upon thousands of training examples. Once we have a cost function and many training examples, we can then perform gradient descent to minimize the cost function by adjusting our parameters.
 
+GRADIENT DESCENT IMAGE (CONVEX FUNCTION WITH LINES, LIKE FIRST POST)
+
 To review, gradient descent is a way to find the minimum of a function. In the case of a neural network, the function that we want to minimize is the cost function. Gradient descent does this by adjusting the parameters of the network such that we get a lower cost function than before. In a sense, gradient descent "moves" downhill whenever possible like an ant feeling out the slope of the terrain. And each time it moves downhill, the gradient descent "saves" its progress by updating the weights and biases in each neuron. Eventually, gradient descent will have found the very bottom of the cost function.
 
 ## Backpropagation
 
 Of course, gradient descent needs to know which direction is “downhill” in order to work. Using our ant analogy, an ant sitting on the cost function knows which to go only because of the slope of the cost function. Remember, it can’t see very far, and certainly not far enough to see where the minimum actually is. The ant’s best bet is to go the direction that is sloping downhill the most.
 
+COUNTOUR PLOT OF COST FUNCTION, SHOWING DIFF BETWEEN GD AND OMNISCIENCE
+
 In math terms, these slopes are derivatives. Now if suddenly felt a panic attack settling in upon reading the word “derivative” (or if you have absolutely no idea what a derivative is) don’t worry. This whole section is completely understandable through intuition and third grade math. On the other hand, if you suddenly felt a rush of exhilaration we encourage you to go tackle the collapsible sections at the end of this article where we derive the backpropagation formulas.
 
-The whole point of backpropagation is to find these slopes to help gradient descent work. There is in fact a different slope we need for each of our parameters. That is, going back to our machine analogy, you can imagine yourself turning the knob for single parameter and watching the cost function go up or down. The slope for a particular parameter will tell you which way to turn the knob to make the cost function go down. Once we find out which way to turn each of the knobs (in other words, once we have the derivative of the cost with respect to each of the parameters, both weights and biases) we can turn each of the knobs in the correct direction a tiny bit. We should only turn each of the knobs a tiny bit because turning one knob might affect other knobs’ slopes. 
+The whole point of backpropagation is to find these slopes to help gradient descent work. There is in fact a different slope we need for each of our parameters. That is, going back to our machine analogy, you can imagine yourself turning the knob for single parameter and watching the cost function go up or down. The slope for a particular parameter will tell you which way to turn the knob to make the cost function go down. Once we find out which way to turn each of the knobs (in other words, once we have the derivative of the cost with respect to each of the parameters, both weights and biases) we can turn each of the knobs in the correct direction a tiny bit. We should only turn each of the knobs a tiny bit because turning one knob might affect other knobs’ slopes.
+
+GRAPH VARYING ONE PARAMETER AGAINST COST, ALSO MAYBE HAVE DIAGRAM OF TURNING JUST ONE KNOB ON THE BLACK BOX 
 
 Now as it turns out, a cost function is related most directly to what the outputs of a neural network are. So it should make sense that the slopes of parameters associated with the output layer are easiest to calculate while slopes of parameters associated with the input layer are hardest to calculate. The output layer is closest to the cost function after all. 
 
 Moreover, it turns out that once we calculate the slopes of a given layer, we can easily find the slopes of a previous layer. Intuitively, this makes sense because changing the parameters in one layer will affect the next layer which will affect the next layer, and so on until the cost function itself is affected. Therefore we need to know how all future layers will affect the cost function before we know how a specific layer will affect the cost function.
 
 Thus, we easily calculate the slopes of the last layer, and then the second to last layer, and end up working backwards until we reach the first, input layer. This is why the algorithm to find slopes is called “backpropagation.” We calculate slopes by starting from the back and propagating our algorithm backwards through the neural network until we get all the slopes for gradient descent.
+
+IMAGE OF HOW BACKPROPAGATION ACTUALLY BACK PROPAGATES
 
 That, in a nutshell, is the backpropagation algorithm—the very reason cars can drives themselves, Siri can recognize your voice, and computers can read your checks. Don’t worry if you don’t understand everything immediately. For most people it takes more than a few read-throughs to fully understand what is happening. For those of you who feel affronted that the math has been skipped over, feel free to check out the next two sections. The first is an introduction to notation we’re using and a way to describe neural networks in an elegant way using matrices. The first section is also pretty much required reading before reading the second, which is a derivation of the rules of backpropagation. Cheers!
