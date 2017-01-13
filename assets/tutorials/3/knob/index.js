@@ -48,7 +48,7 @@ var max_rotations = speed_to_rotations(99);
 var min_rotations = speed_to_rotations(-99);
 
 function set_rotations(rotations) {
-  var elems = document.getElementById('foobar').getElementsByClassName('knob');
+  var elems = document.getElementsByClassName('knob');
   
   if(knob_being_dragged) {
     var cur_speed = parseFloat(knob_being_dragged.getAttribute("data-speed"));
@@ -89,8 +89,8 @@ function set_rotations(rotations) {
     
     cur_speed = rotations_to_speed(rotations);
 
-    foobar.getElementsByClassName('knob_number')[i].textContent = format_number(cur_speed);
-    foobar.getElementsByClassName('knob_gfx')[i].style.transform = 'rotate(' + (cur_rotations * 360) + 'deg)';
+    document.getElementsByClassName('knob_number')[i].textContent = format_number(cur_speed);
+    document.getElementsByClassName('knob_gfx')[i].style.transform = 'rotate(' + (cur_rotations * 360) + 'deg)';
     
     elems[i].setAttribute("data-speed", cur_speed);
     elems[i].setAttribute("data-rotations", cur_rotations);
@@ -187,9 +187,9 @@ function drag_rotate(e) {
 
 
 function set_event_listeners() {
-  var elems = document.getElementById('foobar').getElementsByClassName('knob');
+  var elems = document.getElementsByClassName('knob');
   for(var i = 0; i < elems.length; i++) {
-    var elem = document.getElementById('foobar').getElementsByClassName('knob')[i];
+    var elem = document.getElementsByClassName('knob')[i];
     elem.addEventListener('mousedown', start_dragging);
     
     elem.addEventListener('touchstart', start_dragging);
