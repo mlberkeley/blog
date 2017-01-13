@@ -1,0 +1,37 @@
+svg.dial {
+  width: 256px;
+  height: 256px;
+  border: 1px gray dotted;
+}
+
+.dial .knob {
+  /*transition: 500ms transform;*/
+}
+.dial .knob circle {
+  stroke: gray;
+  stroke-width: 0.25px;
+  fill: url(#knobgradient);
+}
+.dial .knob line {
+  stroke: gray;
+  stroke-width: 0.5px;
+  stroke-linecap: round;
+}
+.dial .knob_number {
+  fill: white;
+  stroke: gray;
+  stroke-width: 0.0625px;
+  font-size: 6px;
+  font-family: "Helvetica", "Arial", sans-serif;
+  letter-spacing: -0.5px;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+  
+  /* https://stackoverflow.com/questions/826782/css-rule-to-disable-text-selection-highlighting */
+  -webkit-touch-callout: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}

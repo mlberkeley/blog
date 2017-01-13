@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<!--
+Required for browsers that do not yet support the latest technologies.
+http://webcomponents.org/
+https://github.com/webcomponents/webcomponentsjs/releases
+-->
+<script type="text/javascript">
+if (!document.registerElement) {
+	document.writeln(decodeURI('%3Cscript%20src=%22https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/0.7.12/webcomponents.min.js%22%20type=%22text/javascript%22%3E%3C/script%3E'));
+}
+</script>
+
+<script src="xknob.js" type="text/javascript" async></script>
+<link href="xknob.css" type="text/css" rel="stylesheet">
+
+
+
+<style type="text/css" shim-shadowdom>
+/* Requires shim-shadowdom and webcomponentsjs in Firefox (due to lack of ::shadow support). https://github.com/Polymer/docs/issues/269 */
+#transition x-knob::shadow .knob_gfx { transition: 125ms transform; }
+</style>
+
+</head>
+<body>
+<!-- I'm sorry I'm using a table for layout. But my intent is to demonstrate the knob, not the table. -->
+<table id="bigdemo">
+	<tr>
+		<td rowspan="9" id="big_container">
+			<!-- Just a background. -->
+			<svg id="big_bg" viewBox="0 0 1 1"></svg>
+			<!-- This is the main element! -->
+			<x-knob id="big"></x-knob>
+		</td>
+	</tr>
+	
+</table>
+  
+  
+
+</body>
+</html>

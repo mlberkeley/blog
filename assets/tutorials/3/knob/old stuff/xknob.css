@@ -1,0 +1,109 @@
+@charset "utf-8";
+
+/* This CSS file contains some default styling. */
+
+x-knob {
+	display: inline-block;
+	width: 2em;
+	height: 2em;
+
+	/* An internal element is target of pointer-events, but not this external x-knob element. */
+	pointer-events: none;
+}
+
+
+html, body {
+	background: white;
+	color: black;
+}
+h2 {
+	border-top: 1px solid black;
+	margin: 2em 0 1ex;
+}
+:target {
+	background: #eeeeec;
+}
+
+table#bigdemo {
+	border-collapse: collapse;
+}
+table#bigdemo td > label {
+	display: block;
+}
+table#bigdemo th {
+	text-align: right;
+	font: inherit;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+}
+#big_container {
+	position: relative;
+	padding: 0;
+}
+#big_bg {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
+}
+.big {
+	display: block;
+	position: relative;
+	width: 13em;
+	height: 13em;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center center;
+}
+
+#sizes x-knob {
+	outline: 1px blue dotted;
+}
+#sizes x-knob:nth-child(1) { width: 1em; height: 1em; }
+#sizes x-knob:nth-child(2) { width: 2em; height: 2em; }
+#sizes x-knob:nth-child(3) { width: 4em; height: 2em; }
+#sizes x-knob:nth-child(4) { width: 2em; height: 4em; }
+#sizes x-knob:nth-child(5) { width: 4em; height: 4em; }
+
+#clock-example {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	align-items: center;
+}
+#clock-block {
+	width: 16em;
+	height: 16em;
+	position: relative;
+	flex: 0 0 auto;
+	margin-right: 2em;
+}
+#clock-output {
+	flex: 1 1 auto;
+	font-size: 3em;
+	width: 5em;
+}
+#clock-block > svg,
+#clock-block > x-knob {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
+}
+
+
+/*
+This only looks good if divisions >= 2.
+x-knob::shadow .knob_gfx {
+	transition: 200ms transform;
+}
+*/
