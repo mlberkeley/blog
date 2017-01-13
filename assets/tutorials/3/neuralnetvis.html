@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html >
+
+<html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width">
@@ -174,13 +174,13 @@ if (!document.registerElement) {
     </script>
 -->
     <script type='text/template' id='defs'>
-        <defs>
-        <link id="knobstyle" href="knob/style.css" type="text/css" rel="stylesheet">
+
+        <link id="knobstyle" href="knob/style.css" type="text/css" rel="stylesheet"></link>
           <radialGradient id="knobgradient">
             <stop offset="0" stop-color="gray"/>
             <stop offset="1" stop-color="silver"/>
           </radialGradient>
-        </defs>
+
       </script>
   
       <script type='text/template' id='knob'>
@@ -202,6 +202,17 @@ if (!document.registerElement) {
 //        .attr("onmousedown", "getCoords(event)")
 //        .attr("onmousemove", "adjustWeight(event)")
 //        .attr("onmouseup", "stopmousedown(event)");
+      
+      var knobgradient = d3.select('#defs').html();
+      var gradient = svg.append(function() {
+        var g = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+        g.innerHTML = knobgradient;
+        return g;
+      });
+      
+      var style = svg.append(function() {
+        return document.getElementById('knobstyle');
+      });
       
       var line = svg.selectAll("lines")
                     .data(lines).enter()
@@ -258,21 +269,13 @@ if (!document.registerElement) {
         .data(nodes)
         .enter()
         .append("g")
+//          .attr("class", "dial")
           .attr("transform", function(d) {
             return "translate(" + d.x + ", " + d.y + ")";});
       
 
       
-      var knobgradient = d3.select('#defs').html();
-      var gradient = svg.append(function() {
-        var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        g.innerHTML = knobgradient;
-        return g;
-      });
       
-      var style = svg.append(function() {
-        return document.getElementById('knobstyle');
-      });
       
       var knobcode = d3.select('#knob').html();
       var knobs = node.append(function() {
@@ -281,7 +284,7 @@ if (!document.registerElement) {
         g.innerHTML = knobcode;
         g.setAttribute("viewBox", "-6 -6 24 24");
         g.setAttribute("style", "transform: scale(5)");
-        g.setAttribute('class', 'node');
+        g.setAttribute('class', 'node dial');
         return g;
       })
 
