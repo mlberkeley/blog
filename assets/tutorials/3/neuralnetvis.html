@@ -381,7 +381,7 @@
     </script>
   
   <script>
-    var layercount = 2;
+    var layercount = 1;
     function moveText() {
       var label = d3.selectAll("[data-nodes='" + layercount.toString() + "-" + (layercount+1).toString() + "']");
       var pos = 0;
@@ -402,8 +402,11 @@
             })
           
         }
+        
       }
-      
+      if(layercount < outputlayer) {
+          layercount++;
+        }
     }
   </script>
   
