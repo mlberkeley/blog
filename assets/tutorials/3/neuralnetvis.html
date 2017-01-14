@@ -142,6 +142,7 @@
                         "x2": endNode.x, 
                         "y2": endNode.y, 
                         "weight": lineweight,
+                        "connection": startNode.layer.toString() + "-" + endNode.layer.toString(),
                         // id format: index_of_startNode_in_nodes-index_of_endNode_in_nodes
                         "id": start.toString() + "-" + end.toString()}); 
           }
@@ -269,9 +270,14 @@
                       .attr("dy", -12)
       weightlabels.append("textPath")
                       .attr("xlink:href", function(d) {return "#" + d.id})
+                      .attr("data-weight", function(d) {return d.id})
                       .attr("startOffset", "50%")
                       .text(function(d) {return d.weight;});
-      
+      weightlabels.append("textPath")
+                      .attr("xlink:href", function(d) {return "#" + d.id})
+                      .attr("data-nodes", function(d) {return d.connection;})
+                      .attr("startOffset", "60%")
+                      .text();
 
       var node = svg.selectAll("node")
         .data(nodes)
@@ -291,10 +297,10 @@
       function changeInput() {
         var i = this.getAttribute('data-node');
         d3.selectAll('.nodetext')[0][i].innerHTML = d3.selectAll('.input_slider')[0][i].value;
-          }
+      }
       
-      var knobcode = d3.select('#knob').html();
-      var knobs = node.append(function(d, i) {
+        var knobcode = d3.select('#knob').html();
+        var knobs = node.append(function(d, i) {
         // make this if statement, check data if 1 < layer < max and draw sliders for input output layers
         if(d.layer === inputlayer) {
           var g = document.createElementNS("http://www.w3.org/2000/svg", "circle");
@@ -311,6 +317,9 @@
               .attr("y", d.y - 2*nodeSize)
               .append("xhtml:form").append("xhtml:input") // xhtml tells d3.js it's HTML, not SVG
                   .attr("class", "input_slider")
+                  .attr("value", 0)
+                  .attr("min", -100)
+                  .attr("max", 100)
                   .attr("type", "range")
                   .attr("style", "height: " + (nodeSize*4-10).toString())
                   .attr("orient", "vertical")
@@ -335,6 +344,7 @@
           g.setAttribute("r", nodeSize);
           g.setAttribute("class", "node");
           g.setAttribute("fill", outputcolor);
+          g.setAttribute("data-layers", i);
           // display output
           
         }
@@ -345,6 +355,7 @@
           g.setAttribute("viewBox", "-6 -6 24 24");
           g.setAttribute("style", "transform: scale(5)");
           g.setAttribute('class', 'node dial');
+          g.getElementsByClassName('knob_number')[0].setAttribute('data-layers', i);
         }
         return g;
       });
@@ -356,6 +367,7 @@
           .attr("dx", 0)
           .attr("dy", 0)
           .attr("fill", "white")
+          .attr("data-layers", function(d, i) {return i;})
           .text(function addSlider(d, i) {
             if(d.layer === inputlayer) {
               return d3.selectAll(".input_slider")[0][i].value;
@@ -368,7 +380,34 @@
       
     </script>
   
-
+  <script>
+    var layercount = 2;
+    function moveText() {
+      var label = d3.selectAll("[data-nodes='" + layercount.toString() + "-" + (layercount+1).toString() + "']");
+      var pos = 0;
+      var interval = setInterval(move, 10);
+      function move() {
+        if(pos === 70) {
+          clearInterval(interval);
+        }
+        else {
+          pos++;
+          label.attr("startOffset", pos.toString() + "%");
+          label.each(function(p, j) {
+              var start = parseInt(this.getAttribute('href').slice(1)); // idk wtf I'm doing
+              var value = d3.select("[data-layers='" + start + "']")[0][0].innerHTML;
+              var sign = "+ ";
+              if(parseInt(value) < 0) {sign = "- ";}
+              this.innerHTML = sign + value;
+            })
+          
+        }
+      }
+      
+    }
+  </script>
   
+
+  <button onclick="moveText.apply(this)">next</button>
 </body>
 </html>
