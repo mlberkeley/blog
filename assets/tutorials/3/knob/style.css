@@ -35,3 +35,11 @@
   -webkit-user-select: none;
   user-select: none;
 }
+
+
+.input_slider {
+  -webkit-appearance: slider-vertical;
+  position: relative;
+  top: 5px;
+  width: 10px;
+}

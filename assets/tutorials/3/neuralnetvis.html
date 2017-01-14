@@ -20,10 +20,10 @@
   
   
   <script type="text/javascript" async>
-if (!document.registerElement) {
-	document.writeln(decodeURI('%3Cscript%20src=%22https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/0.7.12/webcomponents.min.js%22%20type=%22text/javascript%22%3E%3C/script%3E'));
-}
-</script>
+    if (!document.registerElement) {
+        document.writeln(decodeURI('%3Cscript%20src=%22https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/0.7.12/webcomponents.min.js%22%20type=%22text/javascript%22%3E%3C/script%3E'));
+    }
+  </script>
 
 <script src="knob/index.js" type="text/javascript" async></script>
 <link id="knobstyle" href="knob/style.css" type="text/css" rel="stylesheet">
@@ -41,10 +41,13 @@ if (!document.registerElement) {
   <?xml version="1.0" encoding="UTF-8"?>
   <?xml-stylesheet href="knob/style.css" type="text/css"?>
   <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-  <script> // sizing variables
-    var width = 960;
-    var height = 500;
-    var nodeSize = 25;
+    <script> // sizing variables
+      var width = 960;
+      var height = 500;
+      var nodeSize = 25;
+
+      var inputcolor = "green";
+      var outputcolor = "blue";
     </script>
     <script> // process nodes
       
@@ -64,6 +67,8 @@ if (!document.registerElement) {
         {"startLabel": "input 1", "endLabel": "hidden 2", "weight": 2}
       ]
       
+      // creates a dict containing the number of nodes in each layer
+      // structure[layer] = # of nodes
       function getStructure(data) {
         var structure = {};
         for(var i = 0; i < data.length; i++) {
@@ -81,6 +86,9 @@ if (!document.registerElement) {
       // dict containing how many nodes in each layer
       // networkStructure[layer] = # of nodes
       var networkStructure = getStructure(data); 
+      
+      var inputlayer = Math.min.apply(null, Object.keys(networkStructure));
+      var outputlayer = Math.max.apply(null, Object.keys(networkStructure));
       
       // creates nodes with labels, layers, and position
       function positionNodes(data, structure) {
@@ -176,7 +184,7 @@ if (!document.registerElement) {
     <script type='text/template' id='defs'>
 
         <link id="knobstyle" href="knob/style.css" type="text/css" rel="stylesheet"></link>
-          <radialGradient id="knobgradient">
+          <radialGradient id="knobgradient"> <!-- referenced in CSS -->
             <stop offset="0" stop-color="gray"/>
             <stop offset="1" stop-color="silver"/>
           </radialGradient>
@@ -227,7 +235,7 @@ if (!document.registerElement) {
                     .append("path")
                       .attr("d", function(d) { return "M " + d.x1 + " " + d.y1 + " L " + d.x2 + " " + d.y2;})
 //                      .attr("stroke", "red")
-                      .attr("stroke-width", "20px")
+                      .attr("stroke-width", nodeSize)
                       .attr("data-line", function(d) {return d.id;})
                       .attr("pointer-events", "visible");
       
@@ -276,28 +284,86 @@ if (!document.registerElement) {
 
       
       
-      
-      var knobcode = d3.select('#knob').html();
-      var knobs = node.append(function() {
-        // make this if statement, check data if 1 < layer < max and draw sliders for input output layers
-        var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        g.innerHTML = knobcode;
-        g.setAttribute("viewBox", "-6 -6 24 24");
-        g.setAttribute("style", "transform: scale(5)");
-        g.setAttribute('class', 'node dial');
-        return g;
-      })
-
 //      var circle = node.append("circle")
 //          .attr("r", nodeSize)
 //          .attr("class", "node");
 
+      function changeInput() {
+        var i = this.getAttribute('data-node');
+        d3.selectAll('.nodetext')[0][i].innerHTML = d3.selectAll('.input_slider')[0][i].value;
+          }
+      
+      var knobcode = d3.select('#knob').html();
+      var knobs = node.append(function(d, i) {
+        // make this if statement, check data if 1 < layer < max and draw sliders for input output layers
+        if(d.layer === inputlayer) {
+          var g = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          g.setAttribute("r", nodeSize);
+          g.setAttribute("class", "node");
+          g.setAttribute("fill", inputcolor);
+          
+          
+          // add slider
+          svg.append("foreignObject")
+              .attr("width", nodeSize)
+              .attr("height", nodeSize*4)
+              .attr("x", d.x - 2*nodeSize)
+              .attr("y", d.y - 2*nodeSize)
+              .append("xhtml:form").append("xhtml:input") // xhtml tells d3.js it's HTML, not SVG
+                  .attr("class", "input_slider")
+                  .attr("type", "range")
+                  .attr("style", "height: " + (nodeSize*4-10).toString())
+                  .attr("orient", "vertical")
+                  .attr("data-node", function(d, i) {return i;})
+                  .attr("oninput", "changeInput.apply(this)");
+//          var g = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
+//          g.setAttribute("width", "25");
+//          g.setAttribute("height", "100");
+//          
+//          // because of browser bugs, translated svg elements cause foreignObject elements
+//          // to be offset: 
+//          // http://stackoverflow.com/questions/32960248/svg-transformtranslate-breaks-input-range-offset
+//          node[0][i].setAttribute("transform", ""); // untransform parent node
+//          // transform this individual node instead
+//          g.setAttribute("x", d.x);
+//          g.setAttribute("y", d.y);
+//          g.innerHTML = "<body><form><input style='-webkit-appearance: slider-vertical' type='range' orient='vertical'/></form></body>";
+        }
+        else if(d.layer === outputlayer) {
+          // create dud node that doesn't do anything
+          var g = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          g.setAttribute("r", nodeSize);
+          g.setAttribute("class", "node");
+          g.setAttribute("fill", outputcolor);
+          // display output
+          
+        }
+        else {
+          // create knobs that allow users to adjust bias
+          var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+          g.innerHTML = knobcode;
+          g.setAttribute("viewBox", "-6 -6 24 24");
+          g.setAttribute("style", "transform: scale(5)");
+          g.setAttribute('class', 'node dial');
+        }
+        return g;
+      });
+
+      
       var text = node.append("text")
+          .attr("class", "nodetext")
           .attr("style", "text-anchor: middle; alignment-baseline: middle;")
           .attr("dx", 0)
           .attr("dy", 0)
           .attr("fill", "white")
-          .text("bias");
+          .text(function addSlider(d, i) {
+            if(d.layer === inputlayer) {
+              return d3.selectAll(".input_slider")[0][i].value;
+            }
+            else {
+              return "";
+            }
+          });
       
       
     </script>
