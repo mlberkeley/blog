@@ -149,39 +149,6 @@
         }
       }  
     </script>
-  
-<!--
-    <script>
-      var startX, startY;
-      var selected = null;
-      function getCoords(event) {
-        startX = event.pageX;
-        startY = event.pageY;
-        selected = event.target;
-      }
-      function adjustWeight(event) {
-        if(selected !== null && selected.hasAttribute('stroke-width')) {
-         var weight = document.getElementById(selected.getAttribute('data-line'));
-         strokewidth = weight.getAttribute('stroke-width');
-
-            if(startY > event.pageY && strokewidth < nodeSize) {
-              weight.setAttribute('stroke-width', Math.abs(strokewidth+1));
-            }
-            else if(startY < event.pageY && strokewidth > -nodeSize) {
-              weight.setAttribute('stroke-width', Math.abs(strokewidth-1));
-            }
-    //        document.getElementById(event.target.getAttribute('data-line')).setAttribute('stroke-width', 1); 
-          var weightlabel = document.querySelectorAll('[*|href="#' + selected.getAttribute('data-line') + '"]')[0]
-          weightlabel.innerHTML = strokewidth;
-          weightlabel.parentElement.setAttribute("dy", (-strokewidth-12).toString());
-          
-        }
-      }
-      function stopmousedown(event) {
-        selected = null;
-      }
-    </script>
--->
     <script type='text/template' id='defs'>
 
         <link id="knobstyle" href="knob/style.css" type="text/css" rel="stylesheet"></link>
@@ -240,7 +207,7 @@
                       .attr("data-line", function(d) {return d.id;})
                       .attr("pointer-events", "visible");
       
-      
+      // known bug: horizontal lines don't thicken when dragged (drag event isn't even triggered)
       var drag = d3.behavior.drag()
           .on("drag", function(d, i) {
             
@@ -257,6 +224,8 @@
                 weight.setAttribute('stroke-width', Math.abs(strokewidth));
               }
               weightlabel.innerHTML = strokewidth;
+            
+              // adjust weight text as line thickens
               weightlabel.parentElement.setAttribute("dy", (-Math.abs(strokewidth)/2-12).toString());
           
           }
@@ -266,17 +235,17 @@
       var weightlabels = svg.selectAll("weights")
                     .data(lines).enter()
                     .append("text")
-                      .attr("style", "text-anchor: middle;")
+                      .attr("style", "text-anchor: left;")
                       .attr("dy", -12)
       weightlabels.append("textPath")
                       .attr("xlink:href", function(d) {return "#" + d.id})
-                      .attr("data-weight", function(d) {return d.id})
-                      .attr("startOffset", "50%")
+                      .attr("data-node-to-node-index", function(d) {return d.id})
+                      .attr("startOffset", "20%")
                       .text(function(d) {return d.weight;});
       weightlabels.append("textPath")
                       .attr("xlink:href", function(d) {return "#" + d.id})
-                      .attr("data-nodes", function(d) {return d.connection;})
-                      .attr("startOffset", "60%")
+                      .attr("data-layer-to-layer", function(d) {return d.connection;})
+                      .attr("startOffset", "0%")
                       .text();
 
       var node = svg.selectAll("node")
@@ -323,7 +292,7 @@
                   .attr("type", "range")
                   .attr("style", "height: " + (nodeSize*4-10).toString())
                   .attr("orient", "vertical")
-                  .attr("data-node", function(d, i) {return i;})
+                  .attr("data-node", i)
                   .attr("oninput", "changeInput.apply(this)");
 //          var g = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
 //          g.setAttribute("width", "25");
@@ -381,36 +350,81 @@
     </script>
   
   <script>
-    var layercount = 1;
+    var layercount = inputlayer;
     function moveText() {
-      var label = d3.selectAll("[data-nodes='" + layercount.toString() + "-" + (layercount+1).toString() + "']");
-      var pos = 0;
-      var interval = setInterval(move, 10);
-      function move() {
-        if(pos === 70) {
-          clearInterval(interval);
+      // select all weights between layercount and layercount + 1
+      var label = d3.selectAll("[data-layer-to-layer='" + layercount.toString() + "-" + (layercount+1).toString() + "']");
+      label.attr("startOffset", "0%");
+      label.style("opacity", 1);
+      label.each(function(d, i) { // figure out where and what text to display 
+        // get index of starting node
+        var start = parseInt(this.getAttribute('href').slice(1)); 
+        
+        // get value displayed on starting node
+        var value = d3.select("[data-layers='" + start + "']")[0][0].innerHTML;
+        
+        // input node is special; it simply outputs its value
+        if(layercount === inputlayer) {
+          var operation = "• ";
+          
+          // if value negative, wrap it in parentheses
+          if(parseInt(value) < 0) {value = "(" + value + ")";}
+        }
+        else if(parseInt(value) > 0){
+          var operation = "+ ";
         }
         else {
-          pos++;
-          label.attr("startOffset", pos.toString() + "%");
-          label.each(function(p, j) {
-              var start = parseInt(this.getAttribute('href').slice(1)); // idk wtf I'm doing
-              var value = d3.select("[data-layers='" + start + "']")[0][0].innerHTML;
-              var sign = "+ ";
-              if(parseInt(value) < 0) {sign = "- ";}
-              this.innerHTML = sign + value;
-            })
-          
+          var operation = "- ";
+          value = value.slice(1); // remove negative sign on value
         }
+        this.innerHTML = operation + value;
         
-      }
-      if(layercount < outputlayer) {
+        
+        /* figure out where text should be moved to 
+           so that it aligns with existing text */
+        var weightlabelwidth = d3.selectAll("[*|href='" + this.getAttribute('href') + "']")[0][0].getBBox().width;
+        var linewidth = document.getElementById(this.getAttribute('href').slice(1)).getBBox().width;
+        d.startOffset = weightlabelwidth/linewidth*100;
+      });
+      label.transition().attr("startOffset", function(d, i) {
+        return d.startOffset.toString() + "%";
+      }).duration(1000).delay(100);
+//      var pos = 0;
+//      var interval = setInterval(move, 10);
+//      function move() {
+//        if(pos === 30) {
+//          clearInterval(interval);
+//        }
+//        else {
+//          pos++;
+//          label.attr("startOffset", pos.toString() + "%");
+//          label.each(function(p, j) {
+//              var start = parseInt(this.getAttribute('href').slice(1)); // idk wtf I'm doing
+//              var value = d3.select("[data-layers='" + start + "']")[0][0].innerHTML;
+//              var sign = "+ ";
+//              if(parseInt(value) < 0) {sign = "- "; value = value.slice(1);}
+//              this.innerHTML = sign + value;
+//            })
+//          
+//        }
+        if(layercount < outputlayer) {
           layercount++;
         }
+      }
+      
+    
+    // bug that I'm too lazy to fix: clicking 'next' right after 'reset' button
+    // results in half-formed transitions
+    function resetSim() {
+      layercount = inputlayer;
+      var label = d3.selectAll("[data-layer-to-layer]");
+      label.transition().style("opacity", 0).duration(500).delay(100);
+      
     }
   </script>
   
 
   <button onclick="moveText.apply(this)">next</button>
+  <button onclick="resetSim.apply(this)">reset</button>
 </body>
 </html>
