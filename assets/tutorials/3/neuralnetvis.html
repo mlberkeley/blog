@@ -1,4 +1,8 @@
-
+<!-- 
+Author: Shannon Shih 
+Created: 1/2017
+Organization: Machine Learning at Berkeley
+-->
 <html>
 <head>
   <meta charset="UTF-8">
@@ -48,6 +52,11 @@
 
       var inputcolor = "green";
       var outputcolor = "blue";
+      
+      activation_fn = sigmoid;
+      function sigmoid(t) {
+        return 1/(1+Math.pow(Math.E, -t));
+      }
     </script>
     <script> // process nodes
       
@@ -240,11 +249,35 @@
       weightlabels.append("textPath")
                       .attr("xlink:href", function(d) {return "#" + d.id})
                       .attr("data-node-to-node-index", function(d) {return d.id})
-                      .attr("startOffset", "20%")
+                      .attr("startOffset", "15%")
                       .text(function(d) {return d.weight;});
+      
+      /* animated text */
+      // bias 
       weightlabels.append("textPath")
+                      .attr("class", "animatedtext")
                       .attr("xlink:href", function(d) {return "#" + d.id})
                       .attr("data-layer-to-layer", function(d) {return d.connection;})
+                      .attr("data-node-to-node-index", function(d) {return d.id})
+                      .attr("data-phase", "bias")
+                      .attr("startOffset", "0%")
+                      .text();
+      // output
+      weightlabels.append("textPath")
+                      .attr("class", "animatedtext")
+                      .attr("xlink:href", function(d) {return "#" + d.id})
+                      .attr("data-layer-to-layer", function(d) {return d.connection;})
+                      .attr("data-node-to-node-index", function(d) {return d.id})
+                      .attr("data-phase", "output")
+                      .attr("startOffset", "0%")
+                      .text();
+      // result
+      weightlabels.append("textPath")
+                      .attr("class", "animatedtext")
+                      .attr("xlink:href", function(d) {return "#" + d.id})
+                      .attr("data-layer-to-layer", function(d) {return d.connection;})
+                      .attr("data-node-to-node-index", function(d) {return d.id})
+                      .attr("data-phase", "result")
                       .attr("startOffset", "0%")
                       .text();
 
@@ -349,67 +382,134 @@
       
     </script>
   
+<!--  the actual simulation -->
   <script>
     var layercount = inputlayer;
+    var phases = ["output", "bias", "result", "activation"];
+    var phaseindex = 0;
+    var currentphase = phases[phaseindex];
+    
+    /* all operations are output * weight (already displayed) + bias = result */
     function moveText() {
       // select all weights between layercount and layercount + 1
-      var label = d3.selectAll("[data-layer-to-layer='" + layercount.toString() + "-" + (layercount+1).toString() + "']");
+      var label = d3.selectAll("[data-layer-to-layer='" + layercount.toString() + "-" + (layercount+1).toString() + "'][data-phase='" + currentphase + "']");
       label.attr("startOffset", "0%");
       label.style("opacity", 1);
       label.each(function(d, i) { // figure out where and what text to display 
         // get index of starting node
         var start = parseInt(this.getAttribute('href').slice(1)); 
+        // get weight of connection
+        var weight = d3.selectAll("[*|href='" + this.getAttribute('href') + "']")[0][0];
         
-        // get value displayed on starting node
-        var value = d3.select("[data-layers='" + start + "']")[0][0].innerHTML;
         
         // input node is special; it simply outputs its value
-        if(layercount === inputlayer) {
-          var operation = "• ";
+//        if(layercount === inputlayer) {
+//          if(currentphase == "output") {
+//            // get value displayed on starting node
+//            var value = d3.select("[data-layers='" + start + "']")[0][0].innerHTML;
+//            var operation = "• ";
+//            // save calculation in data for retrieval during "result" phase
+//            d.result = parseInt(weight.innerHTML) * parseInt(value);
+//            // if value negative, wrap it in parentheses
+//            if(parseInt(value) < 0) {value = "(" + value + ")";}
+//            this.innerHTML = operation + value;
+//          }
+//          else if(currentphase == "bias") {
+//            label = null; // input node has no bias, so do nothing
+//          }
+//          else if(currentphase == "result") {
+//            this.innerHTML = d.result;
+//          }
+//        }
+        if(currentphase == "output") {
+          if (layercount === inputlayer) {
+            // get value displayed on starting node
+            var value = d3.select("[data-layers='" + start + "']")[0][0].innerHTML;
+          }
+          else {
+            // get all inputs of starting node
+            var inputs = d3.selectAll("[data-node-to-node-index$='-" + start + "'][data-phase='result']");
+            
+            // idk why reduce doesn't work
+            var value = 0;
+            for(var i = 0; i < inputs[0].length; i++) {
+              value += parseInt(inputs[0][i].innerHTML.slice(1)); // slice off '=' sign
+            }
+//            var value = inputs.reduce(function(a, b) {
+//              result = parseInt(a.innerHTML) + parseInt(b.innerHTML);
+//            });
+          }
           
+          // save calculation in data for retrieval during "result" phase
+          d.result = parseInt(weight.innerHTML) * parseInt(value);
+
+          // format multiplication properly
+          var operation = "• ";
           // if value negative, wrap it in parentheses
           if(parseInt(value) < 0) {value = "(" + value + ")";}
+          this.innerHTML = operation + value;
+          
+          d.equation = "fn(" + weight.innerHTML + operation + value;
         }
-        else if(parseInt(value) > 0){
+        else if(currentphase == "bias") {
+
+          // get value displayed on starting node
+          var value = d3.select("[data-layers='" + start + "']")[0][0].innerHTML;
+
+          // format addition/subtraction
           var operation = "+ ";
+          if(parseInt(value) < 0) {
+            var operation = "- ";
+            value = value.slice(1); // remove negative sign on value
+          }
+          this.innerHTML = operation + value;
+
+          // save calculation in data for retrieval during "result" phase
+          d.result = d.result + parseInt(value);
+          d.equation += " " + operation + value;
+
+        }
+        else if(currentphase == "result") {
+          d.equation += ") = fn(" + d.result.toString() + ")";
+          this.innerHTML = "= " + d.result.toString();
+          
+        }
+        else if(currentphase == "activation") {
+          this.innerHTML = d.equation + " = " + activation_fn(d.result).toString();
+          console.log('hi');
+        }
+        
+        
+        
+          /* figure out where text should be moved to 
+           so that it aligns with existing text */
+          var weightlabelwidth = weight.getBBox().width;
+          var linewidth = document.getElementById(this.getAttribute('href').slice(1)).getBBox().width;
+          d.startOffset = weightlabelwidth/linewidth*100;
+
+          
+        
+      });
+       
+        label.transition().attr("startOffset", function(d, i) {
+            return d.startOffset.toString() + "%";
+          }).duration(1000).delay(100);
+      
+        // skip bias of input layer
+        if(layercount === inputlayer && currentphase == "output") {
+          phaseindex += 2;
         }
         else {
-          var operation = "- ";
-          value = value.slice(1); // remove negative sign on value
+          phaseindex++;
         }
-        this.innerHTML = operation + value;
+        currentphase = phases[phaseindex];
+          if(phaseindex == phases.length && layercount < outputlayer) {
+            layercount++;
+            phaseindex = 0;
+            currentphase = phases[phaseindex];
+          }
         
         
-        /* figure out where text should be moved to 
-           so that it aligns with existing text */
-        var weightlabelwidth = d3.selectAll("[*|href='" + this.getAttribute('href') + "']")[0][0].getBBox().width;
-        var linewidth = document.getElementById(this.getAttribute('href').slice(1)).getBBox().width;
-        d.startOffset = weightlabelwidth/linewidth*100;
-      });
-      label.transition().attr("startOffset", function(d, i) {
-        return d.startOffset.toString() + "%";
-      }).duration(1000).delay(100);
-//      var pos = 0;
-//      var interval = setInterval(move, 10);
-//      function move() {
-//        if(pos === 30) {
-//          clearInterval(interval);
-//        }
-//        else {
-//          pos++;
-//          label.attr("startOffset", pos.toString() + "%");
-//          label.each(function(p, j) {
-//              var start = parseInt(this.getAttribute('href').slice(1)); // idk wtf I'm doing
-//              var value = d3.select("[data-layers='" + start + "']")[0][0].innerHTML;
-//              var sign = "+ ";
-//              if(parseInt(value) < 0) {sign = "- "; value = value.slice(1);}
-//              this.innerHTML = sign + value;
-//            })
-//          
-//        }
-        if(layercount < outputlayer) {
-          layercount++;
-        }
       }
       
     
@@ -417,9 +517,11 @@
     // results in half-formed transitions
     function resetSim() {
       layercount = inputlayer;
-      var label = d3.selectAll("[data-layer-to-layer]");
-      label.transition().style("opacity", 0).duration(500).delay(100);
-      
+      phaseindex = 0;
+      currentphase = phases[phaseindex];
+      var label = d3.selectAll(".animatedtext");
+      label.transition().style("opacity", 0).duration(500).delay(100)
+        .each("end", function() {this.innerHTML = "";});
     }
   </script>
   
