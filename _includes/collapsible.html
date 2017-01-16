@@ -48,7 +48,9 @@
 <label id="display" for="{{ include.title | url_encode }}">{{ include.title }}</label>
 <div class="collapsible">
   <div class="inner-collapsible">
-    {{ include.content }}
+
+    {{ include.content | markdownify}}
+
   </div>
   
   </div>
