@@ -45,7 +45,7 @@ For those who have read our post on perceptrons [[[[[ LINK TO POST!!!! ]]]]], th
 
 IMAGE OF NERUON CALCULATIOn
 
-Now each neuron could simply output \( s \), but that would be a bit boring as \( s \) is just a linear function, which makes it rather inflexible for modeling real-world data. What we want to do instead is to add one more step, called an activation function. An activation function is any function that takes in our \( s \) and gives the output of our neuron. The perceptron that we described in the last post gave definitive yes/no answers using a blocky step function as its activation function.
+Now each neuron could simply output \( s \), but that would be a bit boring as \( s \) is just a linear function, which makes it rather inflexible for modeling real-world data. What we want to do instead is to add one more step, called an activation function. An activation function is any function that takes in our \( s \) and gives the output of our neuron, called the **activation**. The perceptron that we described in the last post gave definitive yes/no answers using a blocky step function as its activation function.
 
 IMAGE OF HEAVESIDE ACTIVATION FUNCTION WITH ANT ON VERY LEFT/RIGHT
 Caption: For the step function, there is no way to tell how close you are to a “yes” or a “no”
