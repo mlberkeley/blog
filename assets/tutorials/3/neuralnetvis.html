@@ -43,11 +43,13 @@ Organization: Machine Learning at Berkeley
 
 <body>
   <?xml version="1.0" encoding="UTF-8"?>
-  <?xml-stylesheet href="knob/style.css" type="text/css"?>
   <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+  
+  
+
     <script> // sizing variables
-      var width = 960;
-      var height = 500;
+      var width = 800;
+      var height = 600;
       var nodeSize = 25;
 
       var inputcolor = "green";
@@ -57,6 +59,23 @@ Organization: Machine Learning at Berkeley
       function sigmoid(t) {
         return 1/(1+Math.pow(Math.E, -t));
       }
+      
+      /* functionality settings */
+      var transitionDuration = 300;
+      var transitionDelay = 10;
+      
+      // commentary
+      var directions = "Drag the slider to change the input <br>" + 
+                       "Click and drag the lines to change the weights <br>" + 
+                       "Turn the knobs to change the bias.";
+      var inputlayer_outputphase = "The input node(s) only outputs its given value";
+      var inputlayer_resultphase = "The hidden neuron multiplies its inputs by the weight of its connection(s) to the input neuron(s).";
+      var inputlayer_activationphase = "The hidden neuron applies its activation function to the result.";
+      
+      var hiddenlayer_outputphase = "The receiving neuron receives the calculated result and multiplies its inputs by the weight of its connection(s) to the sender neuron.";
+      var hiddenlayer_biasphase = "After multiplying all of its inputs by their respective weights, the receiving neuron sums up the results and adds its bias";
+      var hiddenlayer_resultphase = "After multiplying all of its inputs by their respective weights, the receiving neuron sums up the results and adds its bias";
+      var hiddenlayer_activationphase = "The receiving neuron applies its activation function to the result.";
     </script>
     <script> // process nodes
       
@@ -103,7 +122,7 @@ Organization: Machine Learning at Berkeley
       function positionNodes(data, structure) {
         var nodes = []; // contains newly created nodes
         // sets width between layers
-        var layerwidth = width / (Object.keys(structure).length + 1);
+        var layerwidth = (width-nodeSize) / (Object.keys(structure).length);
         // counts number of nodes drawn so far in each layer (inverse of structure)
         var nodeCount = {};
         for(var i = 0; i < data.length; i++) {
@@ -117,7 +136,7 @@ Organization: Machine Learning at Berkeley
                       "layer": data[i].layer,
                       "bias": data[i].bias};
           var x = layerwidth * node.layer;
-          var y = nodeCount[node.layer] * height / (structure[node.layer]+1);
+          var y = nodeCount[node.layer] * (height - 2*nodeSize) / (structure[node.layer] + 1);
           node["x"] = x;
           node["y"] = y;
           nodes.push(node);
@@ -160,7 +179,6 @@ Organization: Machine Learning at Berkeley
     </script>
     <script type='text/template' id='defs'>
 
-        <link id="knobstyle" href="knob/style.css" type="text/css" rel="stylesheet"></link>
           <radialGradient id="knobgradient"> <!-- referenced in CSS -->
             <stop offset="0" stop-color="gray"/>
             <stop offset="1" stop-color="silver"/>
@@ -179,14 +197,12 @@ Organization: Machine Learning at Berkeley
         </g>
       </script>
   
-    <script>
+    <script async>
       var svg = d3.select("body").append("svg")
         .attr("xmlns", "http://www.w3.org/2000/svg")
+//        .attr("viewBox", "0 50 800 800") // I would scale, but foreignObject bug doesn't let me
         .attr("width", width)
         .attr("height", height);
-//        .attr("onmousedown", "getCoords(event)")
-//        .attr("onmousemove", "adjustWeight(event)")
-//        .attr("onmouseup", "stopmousedown(event)");
       
       var knobgradient = d3.select('#defs').html();
       var gradient = svg.append(function() {
@@ -247,9 +263,14 @@ Organization: Machine Learning at Berkeley
                       .attr("style", "text-anchor: left;")
                       .attr("dy", -12)
       weightlabels.append("textPath")
+                      .attr("class", "weight")
                       .attr("xlink:href", function(d) {return "#" + d.id})
+                      .attr("data-layer-to-layer", function(d) {return d.connection;})
                       .attr("data-node-to-node-index", function(d) {return d.id})
                       .attr("startOffset", "15%")
+//                      .attr("textLength", function() {
+//                        return document.getElementById(this.getAttribute('href').slice(1)).getBBox().width - nodeSize;
+//                      })
                       .text(function(d) {return d.weight;});
       
       /* animated text */
@@ -279,6 +300,16 @@ Organization: Machine Learning at Berkeley
                       .attr("data-node-to-node-index", function(d) {return d.id})
                       .attr("data-phase", "result")
                       .attr("startOffset", "0%")
+                      .text();
+      // activation
+      weightlabels.append("textPath")
+                      .attr("class", "animatedtext")
+                      .attr("xlink:href", function(d) {return "#" + d.id})
+                      .attr("data-layer-to-layer", function(d) {return d.connection;})
+                      .attr("data-node-to-node-index", function(d) {return d.id})
+                      .attr("data-phase", "activation")
+                      .attr("startOffset", "0%")
+                      .style("opacity", 0)
                       .text();
 
       var node = svg.selectAll("node")
@@ -327,18 +358,7 @@ Organization: Machine Learning at Berkeley
                   .attr("orient", "vertical")
                   .attr("data-node", i)
                   .attr("oninput", "changeInput.apply(this)");
-//          var g = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
-//          g.setAttribute("width", "25");
-//          g.setAttribute("height", "100");
-//          
-//          // because of browser bugs, translated svg elements cause foreignObject elements
-//          // to be offset: 
-//          // http://stackoverflow.com/questions/32960248/svg-transformtranslate-breaks-input-range-offset
-//          node[0][i].setAttribute("transform", ""); // untransform parent node
-//          // transform this individual node instead
-//          g.setAttribute("x", d.x);
-//          g.setAttribute("y", d.y);
-//          g.innerHTML = "<body><form><input style='-webkit-appearance: slider-vertical' type='range' orient='vertical'/></form></body>";
+
         }
         else if(d.layer === outputlayer) {
           // create dud node that doesn't do anything
@@ -346,7 +366,7 @@ Organization: Machine Learning at Berkeley
           g.setAttribute("r", nodeSize);
           g.setAttribute("class", "node");
           g.setAttribute("fill", outputcolor);
-          g.setAttribute("data-layers", i);
+          g.setAttribute("data-index", i);
           // display output
           
         }
@@ -357,7 +377,7 @@ Organization: Machine Learning at Berkeley
           g.setAttribute("viewBox", "-6 -6 24 24");
           g.setAttribute("style", "transform: scale(5)");
           g.setAttribute('class', 'node dial');
-          g.getElementsByClassName('knob_number')[0].setAttribute('data-layers', i);
+          g.getElementsByClassName('knob_number')[0].setAttribute('data-index', i);
         }
         return g;
       });
@@ -369,7 +389,8 @@ Organization: Machine Learning at Berkeley
           .attr("dx", 0)
           .attr("dy", 0)
           .attr("fill", "white")
-          .attr("data-layers", function(d, i) {return i;})
+          .attr("data-index", function(d, i) {return i;})
+          .attr("data-layer", function(d, i) {return d.layer;})
           .text(function addSlider(d, i) {
             if(d.layer === inputlayer) {
               return d3.selectAll(".input_slider")[0][i].value;
@@ -379,11 +400,17 @@ Organization: Machine Learning at Berkeley
             }
           });
       
-      
     </script>
   
 <!--  the actual simulation -->
   <script>
+    
+    function insertDirections() {  
+      var commentary = document.getElementById("commentary");
+      // put directions in commentary
+      commentary.innerHTML = directions;
+    }
+    
     var layercount = inputlayer;
     var phases = ["output", "bias", "result", "activation"];
     var phaseindex = 0;
@@ -400,44 +427,23 @@ Organization: Machine Learning at Berkeley
         var start = parseInt(this.getAttribute('href').slice(1)); 
         // get weight of connection
         var weight = d3.selectAll("[*|href='" + this.getAttribute('href') + "']")[0][0];
-        
-        
-        // input node is special; it simply outputs its value
-//        if(layercount === inputlayer) {
-//          if(currentphase == "output") {
-//            // get value displayed on starting node
-//            var value = d3.select("[data-layers='" + start + "']")[0][0].innerHTML;
-//            var operation = "• ";
-//            // save calculation in data for retrieval during "result" phase
-//            d.result = parseInt(weight.innerHTML) * parseInt(value);
-//            // if value negative, wrap it in parentheses
-//            if(parseInt(value) < 0) {value = "(" + value + ")";}
-//            this.innerHTML = operation + value;
-//          }
-//          else if(currentphase == "bias") {
-//            label = null; // input node has no bias, so do nothing
-//          }
-//          else if(currentphase == "result") {
-//            this.innerHTML = d.result;
-//          }
-//        }
+
         if(currentphase == "output") {
           if (layercount === inputlayer) {
             // get value displayed on starting node
-            var value = d3.select("[data-layers='" + start + "']")[0][0].innerHTML;
+            var value = d3.select("[data-index='" + start + "']")[0][0].innerHTML;
+            commentary.innerHTML = inputlayer_outputphase;
           }
           else {
             // get all inputs of starting node
-            var inputs = d3.selectAll("[data-node-to-node-index$='-" + start + "'][data-phase='result']");
+            var inputs = d3.selectAll("[data-node-to-node-index$='-" + start + "'][data-phase='activation']");
             
             // idk why reduce doesn't work
             var value = 0;
             for(var i = 0; i < inputs[0].length; i++) {
-              value += parseInt(inputs[0][i].innerHTML.slice(1)); // slice off '=' sign
+              value += parseFloat(inputs[0][i].getAttribute("data-result")); // slice off '=' sign
             }
-//            var value = inputs.reduce(function(a, b) {
-//              result = parseInt(a.innerHTML) + parseInt(b.innerHTML);
-//            });
+            commentary.innerHTML = hiddenlayer_outputphase;
           }
           
           // save calculation in data for retrieval during "result" phase
@@ -454,7 +460,7 @@ Organization: Machine Learning at Berkeley
         else if(currentphase == "bias") {
 
           // get value displayed on starting node
-          var value = d3.select("[data-layers='" + start + "']")[0][0].innerHTML;
+          var value = d3.select("[data-index='" + start + "']")[0][0].innerHTML;
 
           // format addition/subtraction
           var operation = "+ ";
@@ -467,16 +473,69 @@ Organization: Machine Learning at Berkeley
           // save calculation in data for retrieval during "result" phase
           d.result = d.result + parseInt(value);
           d.equation += " " + operation + value;
-
+          
+          commentary.innerHTML = hiddenlayer_biasphase;
         }
         else if(currentphase == "result") {
           d.equation += ") = fn(" + d.result.toString() + ")";
           this.innerHTML = "= " + d.result.toString();
-          
+          if(currentphase === inputlayer) {
+            commentary.innerHTML = inputlayer_resultphase;
+          }
+          else {
+            commentary.innerHTML = hiddenlayer_resultphase;
+          }
         }
         else if(currentphase == "activation") {
-          this.innerHTML = d.equation + " = " + activation_fn(d.result).toString();
-          console.log('hi');
+          // save result so next layer can access it
+          this.setAttribute("data-result", Math.round(activation_fn(d.result) * 100)/100);
+          // make all text on connection disappear
+          d3.selectAll("[data-node-to-node-index='" + this.getAttribute('href').slice(1) + "']").transition().style("opacity", 0).duration(transitionDuration).delay(transitionDelay).each('end', function() {
+            // get text node displaying weight and replace it with equation
+            // using weight node because it is the leftmost node, so has space
+            var label = d3.select("[data-node-to-node-index='" + this.getAttribute('href').slice(1) + "'][class='weight']");
+            
+            var equation = d.equation + " = " + Math.round(activation_fn(d.result) * 100)/100;
+            label.text(equation);
+            if(equation.length > 25) {
+              var linewidth = document.getElementById(this.getAttribute('href').slice(1)).getBBox().width - nodeSize;
+              label.attr("textLength", linewidth-50);
+            }
+            label.transition().style("opacity", 1).duration(transitionDuration).each("end", function() { // display output
+              if(layercount == outputlayer) {
+                var outputs = d3.selectAll("[data-layer='" + outputlayer + "']");
+                outputs.style("opacity", 0);
+                outputs.text(function(d, i) {
+                  var start = this.getAttribute("data-index");
+                  // get all inputs of starting node
+                  var inputs = d3.selectAll("[data-node-to-node-index$='-" + start + "'][data-phase='activation']");
+
+                  // idk why reduce doesn't work
+                  var value = 0;
+                  for(var i = 0; i < inputs[0].length; i++) {
+                    value += parseFloat(inputs[0][i].getAttribute("data-result")); 
+                  }
+                  commentary.innerHTML = hiddenlayer_outputphase;
+
+                  return value;
+                });
+                outputs.transition().style("opacity", 1).duration(transitionDuration);
+              }
+            });
+            
+            
+            if(currentphase === inputlayer) {
+              commentary.innerHTML = inputlayer_activationphase;
+            }
+            else {
+              commentary.innerHTML = hiddenlayer_activationphase;
+            }
+            
+          });
+          
+//          var label = d3.select("[data-node-to-node-index='" + this.getAttribute('href').slice(1) + "'][class='weight']");
+//          label.text(d.equation + " = " + activation_fn(d.result).toString());
+//          label.transition().style("opacity", 1).duration(500);
         }
         
         
@@ -510,6 +569,7 @@ Organization: Machine Learning at Berkeley
           }
         
         
+        
       }
       
     
@@ -519,14 +579,34 @@ Organization: Machine Learning at Berkeley
       layercount = inputlayer;
       phaseindex = 0;
       currentphase = phases[phaseindex];
-      var label = d3.selectAll(".animatedtext");
-      label.transition().style("opacity", 0).duration(500).delay(100)
-        .each("end", function() {this.innerHTML = "";});
+      var label = d3.selectAll(".animatedtext, .weight");
+      label.transition().style("opacity", 0).duration(transitionDuration).delay(transitionDelay)
+        .each("end", function(d, i) {
+        if(this.getAttribute("class") === "weight") {
+          this.innerHTML = d.weight;
+          this.setAttribute("textLength", ""); // reset textLength
+          d3.selectAll(".weight").transition().style("opacity", 1).duration(transitionDuration);
+        }
+        else {
+          this.innerHTML = "";
+        }
+        
+      });
+      
+      // transition output text
+      var outputs = d3.selectAll("[data-layer='" + outputlayer + "']");
+      outputs.transition().style("opacity", 0).duration(transitionDuration).delay(transitionDelay).each("end", function(d, i) {
+        this.innerHTML = "";
+      })
+      
     }
+    
+    
   </script>
-  
-
   <button onclick="moveText.apply(this)">next</button>
   <button onclick="resetSim.apply(this)">reset</button>
+    <p id="commentary"></p>
+  <script>insertDirections();</script>
+  
 </body>
 </html>
