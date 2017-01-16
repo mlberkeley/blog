@@ -129,3 +129,54 @@ Thus, we easily calculate the slopes of the last layer, and then the second to l
 IMAGE OF HOW BACKPROPAGATION ACTUALLY BACK PROPAGATES
 
 That, in a nutshell, is the backpropagation algorithm—the very reason cars can drives themselves, Siri can recognize your voice, and computers can read your checks. Don’t worry if you don’t understand everything immediately. For most people it takes more than a few read-throughs to fully understand what is happening. For those of you who feel affronted that the math has been skipped over, feel free to check out the next two sections. The first is an introduction to notation we’re using and a way to describe neural networks in an elegant way using matrices. The first section is also pretty much required reading before reading the second, which is a derivation of the rules of backpropagation. Cheers!
+
+{% capture matrixmath %}
+To use gradient descent we need to find the derivatives of the cost function with respect to each of the parameters. In order to do this, let’s formalize our picture of a neural network in the language of matrices and vectors. In particular, our goals is to write down the **feedforward step**, that is, turning one layer’s outputs into the next layer’s outputs.
+
+Why matrices and vectors though? Why go through all the trouble? Well, in a sense, matrices and vectors give us a “global” view of what is happening in a neural network. That’s because whole layers can be represented by vectors, and operations on layers (such as applying weights and summing) can be represented with matrices. This global view of looking at all the neurons in a layer at once, as opposed to a “local” view looking at only the individual neurons in each layer, allows us to write equations in a very concise, and arguably elegant manner.
+
+
+Let’s begin by writing our inputs as a column vector, called \( a^1 \). So if we have \( n \) inputs, then our input vector would essentially be a \( 1 \times n \) dimensional matrix. Something like this:
+
+$$ a^1 = \begin{bmatrix} i_1 \\ i_2 \\ \vdots \\ i_n \end{bmatrix} $$
+
+Now be careful. The superscript \( 1 \) is not an exponent (if it were it be quite redundant). Rather it is used to indicate that the vector is associated with the first layer of our network, in other words, the input layer. We choose the letter \( a \) because we can think of the inputs as being the activations (aka the outputs) of the first layer of neurons. You may have already guessed, but we’re going to be calling the vector of activations for the \( l^{th} \) layer \( a^l \). And if we have \( L \) layers, then \( a^L \) (that is, the activations of the very last layer, the output layer) will be the output of our entire neural network. Every \( a^l \) will have a different dimension depending on how many neurons are in each layer.
+
+PIC 1
+
+Now let’s figure out how to write the weights in matrix notation. Of course, we could just throw all the weights into some matrix and call it a day, but let’s be a bit more clever about it. In particular, let’s take advantage of matrix multiplication. We’ll define a \( N \times 1 \) dimensional matrix to be the weights matrix from a previous layer to **a single neuron** in the next layer, where \( N \) would be the number of neurons in the **previous** layer (all of this seemingly arbitrary notation will pay off in the end, we promise). Let’s call this matrix \( w^l_k \) for the \( k^{th} \) neuron in the \( l^{th} \) layer.
+
+PIC 2
+
+Notice now that for the \( k^{th} \) neuron in the \( l^{th} \) layer, we can get its weighted sum of its inputs, called \( z^l_k \) (where \( l \) is the layer and \( k \) is the \( k^{th} \) neuron) by simply taking the [dot product](http://mathinsight.org/dot_product_matrix_notation) between \( a^{l-1} \) and \( w^l_k \).
+
+PIC 3
+
+What’s more, we can actually write out a weight matrix for each layer, where each row in the matrix is a \( w^l_k \). Call this matrix \( w^l \):
+
+$$ w^l = \begin{bmatrix} \cdots w^l_1 \cdots \\ \cdots w^l_2 \cdots \\ \vdots \\ \cdots w^l_n \cdots \end{bmatrix} $$
+
+Notice that this takes advantage of the [definition](https://www.mathsisfun.com/algebra/matrix-multiplying.html) of matrix multiplication in that \( w^la^{l-1} \) gives a vector of the weighted inputs for each neuron, which we’ll call \( z^l \).
+
+$$ w^la^{l-1} = \begin{bmatrix} \cdots w^l_1 \cdots \\ \cdots w^l_2 \cdots \\ \vdots \\ \cdots w^l_n \cdots \end{bmatrix} \begin{bmatrix} a^l_1 \\ \vdots \\ a^l_m \end{bmatrix}= \begin{bmatrix} w^l_1 \cdot a^{l-1} \\ w^l_2 \cdot a^{l-1} \\ \vdots \\ w^l_n \cdot a^{l-1} \end{bmatrix} = \begin{bmatrix} z^l_1 \\ z^l_2 \\ \vdots \\ z^l_n \end{bmatrix} = z^l $$ 
+
+(where there’s \( n \) neurons in the \( l^{th} \) layer and \( m \) neurons in the \( (l-1)^{th} \) layer)
+
+Each layer \( l \), with \( n \) neurons, also has a bias vector:
+
+$$ b^l = \begin{bmatrix} b^l_1 \\ b^l_2 \\ \vdots \\ b^l_n \end{bmatrix} $$
+
+We can add this vector to our weighted sums vector, \( z^l \), which should also be \( 1 \times n \) dimensional, to get \( s^l \). \( s^l \) here can be interpreted as the “layer-level” view of the “neuron-level” statement \( s = weight_{1}\times input_{1}+...+weight_{n}\times input_{n}+bias \) from above.
+
+Now that we have \( s^l \), we can apply our activation function to it. Above, we introduced the sigmoid function as our activation function, but in fact any differentiable function can be used as our activation function, granted some are better than others (common ones include ReLU, tanh, and arctan). To account for this, we’ll use \( f \) to represent our activation function.
+
+So to apply \( f \) to our \( s^l \) vector, we simply write \( f(s^l) \), which means applying \( f \) to each of the elements in the \( s^l \) vector.
+
+PIC 6 (show feed forward with matrix operations)
+
+Caption: To do a feedforward step, we first multiply the output of a layer by the weight matrix, add the bias vector, and then apply the activation funciton
+
+{% endcapture %}
+
+{% include collapsible.html content=matrixmath title="Matrix Math"%}
+
