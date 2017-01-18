@@ -10,6 +10,8 @@ description: The third post in our intro to ML tutorial series! Learn all about 
 
 Neural networks are perhaps one of the most exciting recent developments in machine learning. Got a problem? Just throw a neural net at it. Want to make a self-driving car? Throw a neural net at it. Want to [fly a helicopter](http://hackaday.com/2014/04/22/self-learning-helicopter-uses-neural-network/)? Throw a neural net at it. Curious about the [digestive cycles of your sheep?](http://dl.acm.org/citation.cfm?id=901401)? Heck, throw a neural net at it. This extremely powerful algorithm holds much promise (but can also be a bit overhyped). In this article we’ll go through how a neural network actually works, and we’ll discuss some of the limitations of these seemingly magical tools.
 
+<!-- break -->
+
 ## The Biology
 
 The biological brain is perhaps the most powerful computer that we know of. Compared to our the complex organ, even our most powerful supercomputers are a joke. In 2014, Japanese researchers used a [supercomputer to simulate just one second of human brain activity](http://www.telegraph.co.uk/technology/10567942/Supercomputer-models-one-second-of-human-brain-activity.html). It took [40 minutes and 9.9 million watts](http://systems.closeupengineering.it/en/k-computer-fraction-of-the-human-brain/113/). As for the real thing? The little ball of grey matter in our skulls takes barely 20 watts to run, which translates to roughly one [McChicken](http://www.myfitnesspal.com/food/calories/mcdonalds-mcchicken-biscuit-61698140) a day. 
@@ -35,29 +37,29 @@ For example, if we want to classify images (say apples and oranges) then we’d 
 
 Our machine has inputs and outputs, but how do we control what inputs create what outputs? That is, how do we change the neural network so certain inputs (say an image of an apple) give the correct outputs (say a 0 for the probability of being an orange and a 1 for the probability of being an apple)? Well, we can add “knobs” to our machine to control the output for a given input. In machine learning lingo, these “knobs” are called the parameters of a neural network. If we tune these knobs to the correct place, then for any input we can get the output that we want.
 
-Going back to our apples and oranges example, if we give our machine an image of an apple but it tells us it thinks it’s an orange then we can go ahead and adjust the knobs of our machine (in other words tune the parameters) until the machine tells us it sees an apple. In essence, this is what it means to train a neural network and this is exactly what the backpropagation algorithm helps do.
+Going back to our apples and oranges example, if we give our machine an image of an apple but it tells us it thinks it’s an orange then we can go ahead and adjust the knobs of our machine (in other words, tune the parameters) until the machine tells us it sees an apple. In essence, this is what it means to train a neural network and this is exactly what the backpropagation algorithm helps do.
 
 ## The Model (Details)
 
 Now that we know what a neural network should do and roughly how we can get it to learn, let’s peer inside the black box and talk about what is happening inside the network. To start, we'll discuss what happens inside a single artificial neuron and build it up from there.
 
-For those who have read our post on perceptrons [[[[[ LINK TO POST!!!! ]]]]], this will be very familiar material. That’s because a neuron in a neural network is basically a perceptron on steroids. Similarly to a perceptron, a neuron takes in any number of numerical inputs and has just one output. To get to this output, the neuron calculates an intermediate value called \( s \) by multiplying each input by a different weight, adding them all together, and adding an additional number called the bias. In math: \( s = weight_{1}\times input_{1}+...+weight_{n}\times input_{n}+bias \)
+For those who have read our post on perceptrons [[[[[ LINK TO POST!!!! ]]]]], this will be very familiar material. That’s because a neuron in a neural network is basically a perceptron on steroids. Similarly to a perceptron, a neuron takes in any number of numerical inputs and has just one output. To get to this output, the neuron calculates an intermediate value called $$ s $$ by multiplying each input by a different weight, adding them all together, and adding an additional number called the bias. In math: $$ s = weight_{1}\times input_{1}+...+weight_{n}\times input_{n}+bias $$
 
 IMAGE OF NERUON CALCULATIOn
 
-Now each neuron could simply output \( s \), but that would be a bit boring as \( s \) is just a linear function, which makes it rather inflexible for modeling real-world data. What we want to do instead is to add one more step, called an activation function. An activation function is any function that takes in our \( s \) and gives the output of our neuron, called the **activation**. The perceptron that we described in the last post gave definitive yes/no answers using a blocky step function as its activation function.
+Now each neuron could simply output $$ s $$, but that would be a bit boring as $$ s $$ is just a linear function, which makes it rather inflexible for modeling real-world data. What we want to do instead is to add one more step, called an activation function. An activation function is any function that takes in our $$ s $$ and gives the output of our neuron, called the **activation**. The perceptron that we described in the last post gave definitive yes/no answers using a blocky step function as its activation function.
 
 IMAGE OF HEAVESIDE ACTIVATION FUNCTION WITH ANT ON VERY LEFT/RIGHT
 Caption: For the step function, there is no way to tell how close you are to a “yes” or a “no”
 
-However, using a step function makes training very difficult because there's no way to tell whether the neural network is getting closer or farther from the correct answer. As an analogy, imagine you are an ant that can only see things very close to you. You are on the lower part of the step function trying to get to the higher part of the step function. But because everything is so flat, you wouldn’t know how far away the “step” part of the step function is, or even in which direction it is (the step function can be mirrored, with a value of 1 on the left and 0 on the right). It’s more or less because of this that makes the step function a bad activation function for training.
+However, using a step function makes training very difficult because there's no way to tell whether the neural network is getting closer or farther from the correct answer. As an analogy, imagine you are an ant that can only see things very close to you. You are on the higher part of the step function trying to get to the lower part of the step function. But because everything is so flat, you wouldn’t know how far away the “step” part of the step function is, or even in which direction it is. The "blocky" structure makes the step function a bad activation function for neural networks.
 
-To make it easier to train a network, we’ll use a function that is smooth (in other words, a differentiable function). In particular, we’ll use the sigmoid function, which looks something like this:
+To make it easier to train a network, we’ll use a function that is _smooth_ (in other words, a differentiable function). In particular, we’ll use the sigmoid function, which looks something like this:
 
 IMAGE SIGMOID ACTIVATION FUNCTION WITH ANT KNOWING WHICH DIRECTION TO GO
 Caption: A sigmoid function is a nice activation function because it is smooth everywhere, making it easier to figure out if you're getting closer to the top
 
-Going back to our ant analogy, an ant could figure out exactly which direction to go and how far to go just by checking in which direction and how much the graph slopes at its current location. Despite the fact that the ant can’t see the high part of the sigmoid function, it can tell in which direction it is and roughly how far away it is.
+Going back to our ant analogy, an ant could figure out exactly which direction to go and how far to go just by checking in which direction and how much the graph slopes at its current location. Despite the fact that the ant can’t see the low part of the sigmoid function, it can tell in which direction it is and roughly how far away it is.
 
 ## Linking it all together
 
@@ -88,13 +90,16 @@ Say you're trying to recognize Doge. Do the pink spots (flowers) in the backgrou
 So what information is relevant? Well, the object has lines of dark and white pixels that indicate fur, ovals that indicate eyes, triangular things that are probably ears, and a big dark triangle-oval patch that seems to be a nose. 
 
 Many people will probably immediately recognize the object as a dog, but what gives it away? Fur, eyes, ears, and nose are all indications, but they must be considered together in order to figure out that the object is a dog. 
+
 We can visualize this thought process with various neurons tasked with identifying increasingly abstract objects in the image:
 
 LABELED NETWORK PICTURE (ALREADY EXISTS)
 How someone might identify a dog. Important inputs that are given a lot of weight are highlighted in red.
 
 
-Notice how the neurons are organized into layers, where the further right the neurons are, the more abstract the input? Trained neural networks function in a very similar way, although they arrive at this conclusion after training with a lot of data. No one explicitly tells the network to identify dogs in the fashion described above. In fact, most of the time it'll accomplish the same thing with a different method that may not make sense to a human. The above example just provides a rough, slightly inaccurate but conceptual understanding of what's really happening under the hood to make the reasons behind the design of a neural network more clear. You can see some examples of what neurons "actually" see [here](http://playground.tensorflow.org). It takes raw data and refines it with math until it has the answer that it needs.
+Notice how the neurons are organized into layers, where the further right the neurons are, the more abstract the input? Trained neural networks function in a very similar way, although they arrive at this conclusion after training with a lot of data. No one explicitly tells the network to identify dogs in the fashion described above. 
+
+The above example just provides a rough, slightly inaccurate but conceptual understanding of what's really happening under the hood to make the reasons behind the design of a neural network more clear. You can see some examples of what neurons "actually" see [here](http://playground.tensorflow.org). It takes raw data and refines it with math until it has the answer that it needs.
 
 ## Training
 
@@ -106,7 +111,7 @@ For example, if we feed some random neural network an image of an apple and it t
 
 GRADIENT DESCENT IMAGE (CONVEX FUNCTION WITH LINES, LIKE FIRST POST)
 
-To review, gradient descent is a way to find the minimum of a function. In the case of a neural network, the function that we want to minimize is the cost function. Gradient descent does this by adjusting the parameters of the network such that we get a lower cost function than before. In a sense, gradient descent "moves" downhill whenever possible like an ant feeling out the slope of the terrain. And each time it moves downhill, the gradient descent "saves" its progress by updating the weights and biases in each neuron. Eventually, gradient descent will have found the very bottom of the cost function.
+To review, gradient descent is a way to find the minimum of a function. In the case of a neural network, the function that we want to minimize is the cost function. Gradient descent does this by adjusting the parameters of the network such that we get a lower value from the cost function than before. In a sense, gradient descent "moves" downhill whenever possible like an ant feeling out the slope of the terrain. And each time it moves downhill, the gradient descent "saves" its progress by updating the weights and biases in each neuron. Eventually, gradient descent will have found the very bottom of the cost function.
 
 ## Backpropagation
 
@@ -114,9 +119,9 @@ Of course, gradient descent needs to know which direction is “downhill” in o
 
 COUNTOUR PLOT OF COST FUNCTION, SHOWING DIFF BETWEEN GD AND OMNISCIENCE
 
-In math terms, these slopes are derivatives. Now if suddenly felt a panic attack settling in upon reading the word “derivative” (or if you have absolutely no idea what a derivative is) don’t worry. This whole section is completely understandable through intuition and third grade math. On the other hand, if you suddenly felt a rush of exhilaration we encourage you to go tackle the collapsible sections at the end of this article where we derive the backpropagation formulas.
+In math terms, these slopes are derivatives. Now if you suddenly felt a panic attack settling in upon reading the word “derivative” (or if you have absolutely no idea what a derivative is) don’t worry. We’ve tried our best to make this whole section completely understandable through just intuition. On the other hand, if you suddenly felt a rush of exhilaration we encourage you to go tackle the collapsible sections at the end of this article where we derive the backpropagation formulas.
 
-The whole point of backpropagation is to find these slopes to help gradient descent work. There is in fact a different slope we need for each of our parameters. That is, going back to our machine analogy, you can imagine yourself turning the knob for single parameter and watching the cost function go up or down. The slope for a particular parameter will tell you which way to turn the knob to make the cost function go down. Once we find out which way to turn each of the knobs (in other words, once we have the derivative of the cost with respect to each of the parameters, both weights and biases) we can turn each of the knobs in the correct direction a tiny bit. We should only turn each of the knobs a tiny bit because turning one knob might affect other knobs’ slopes.
+The whole point of backpropagation is to find these slopes to help gradient descent work. There is in fact a different slope we need for each of our parameters. That is, going back to our machine analogy you can imagine yourself turning the knob for single parameter and watching the cost function go up or down. The slope for a particular parameter will tell you which way to turn the knob to make the cost function go down. Once we find out which way to turn each of the knobs (in other words, once we have the derivative of the cost with respect to each of the parameters: the weights and biases) we can turn each of the knobs in the correct direction a tiny bit.
 
 GRAPH VARYING ONE PARAMETER AGAINST COST, ALSO MAYBE HAVE DIAGRAM OF TURNING JUST ONE KNOB ON THE BLACK BOX 
 
@@ -136,41 +141,41 @@ To use gradient descent we need to find the derivatives of the cost function wit
 Why matrices and vectors though? Why go through all the trouble? Well, in a sense, matrices and vectors give us a “global” view of what is happening in a neural network. That’s because whole layers can be represented by vectors, and operations on layers (such as applying weights and summing) can be represented with matrices. This global view of looking at all the neurons in a layer at once, as opposed to a “local” view looking at only the individual neurons in each layer, allows us to write equations in a very concise, and arguably elegant manner.
 
 
-Let’s begin by writing our inputs as a column vector, called \( a^1 \). So if we have \( n \) inputs, then our input vector would essentially be a \( 1 \times n \) dimensional matrix. Something like this:
+Let’s begin by writing our inputs as a column vector, called $$ a^1 $$. So if we have $$ n $$ inputs, then our input vector would essentially be a $$ 1 \times n $$ dimensional matrix. Something like this:
 
 $$ a^1 = \begin{bmatrix} i_1 \\ i_2 \\ \vdots \\ i_n \end{bmatrix} $$
 
-Now be careful. The superscript \( 1 \) is not an exponent (if it were it be quite redundant). Rather it is used to indicate that the vector is associated with the first layer of our network, in other words, the input layer. We choose the letter \( a \) because we can think of the inputs as being the activations (aka the outputs) of the first layer of neurons. You may have already guessed, but we’re going to be calling the vector of activations for the \( l^{th} \) layer \( a^l \). And if we have \( L \) layers, then \( a^L \) (that is, the activations of the very last layer, the output layer) will be the output of our entire neural network. Every \( a^l \) will have a different dimension depending on how many neurons are in each layer.
+Now be careful. The superscript $$ 1 $$ is not an exponent (if it were it would be quite redundant). Rather it is used to indicate that the vector is associated with the first layer of our network, in other words, the input layer. We choose the letter $$ a $$ because we can think of the inputs as being the activations (aka the outputs) of the first layer of neurons. You may have already guessed, but we’re going to be calling the vector of activations for the $$ l^{th} $$ layer $$ a^l $$. And if we have $$ L $$ layers, then $$ a^L $$ (that is, the activations of the very last layer, the output layer) will be the output of our entire neural network. Every $$ a^l $$ will have a different dimension depending on how many neurons are in each layer.
 
 PIC 1
 
-Now let’s figure out how to write the weights in matrix notation. Of course, we could just throw all the weights into some matrix and call it a day, but let’s be a bit more clever about it. In particular, let’s take advantage of matrix multiplication. We’ll define a \( N \times 1 \) dimensional matrix to be the weights matrix from a previous layer to **a single neuron** in the next layer, where \( N \) would be the number of neurons in the **previous** layer (all of this seemingly arbitrary notation will pay off in the end, we promise). Let’s call this matrix \( w^l_k \) for the \( k^{th} \) neuron in the \( l^{th} \) layer.
+Now let’s figure out how to write the weights in matrix notation. Of course, we could just throw all the weights into some matrix and call it a day, but let’s be a bit more clever about it. In particular, let’s take advantage of matrix multiplication. We’ll define a $$ N \times 1 $$ dimensional matrix to be the weights matrix from a previous layer to **a single neuron** in the next layer, where $$ N $$ would be the number of neurons in the **previous** layer (all of this seemingly arbitrary notation will pay off in the end, we promise). Let’s call this matrix $$ w^l_k $$ for the $$ k^{th} $$ neuron in the $$ l^{th} $$ layer.
 
 PIC 2
 
-Notice now that for the \( k^{th} \) neuron in the \( l^{th} \) layer, we can get its weighted sum of its inputs, called \( z^l_k \) (where \( l \) is the layer and \( k \) is the \( k^{th} \) neuron) by simply taking the [dot product](http://mathinsight.org/dot_product_matrix_notation) between \( a^{l-1} \) and \( w^l_k \).
+Notice now that for the $$ k^{th} $$ neuron in the $$ l^{th} $$ layer, we can get its weighted sum of its inputs, called $$ z^l_k $$ (where $$ l $$ is the layer and $$ k $$ is the $$ k^{th} $$ neuron) by simply taking the [dot product](http://mathinsight.org/dot_product_matrix_notation) between $$ a^{l-1} $$ and $$ w^l_k $$.
 
 PIC 3
 
-What’s more, we can actually write out a weight matrix for each layer, where each row in the matrix is a \( w^l_k \). Call this matrix \( w^l \):
+What’s more, we can actually write out a weight matrix for each layer, where each row in the matrix is a $$ w^l_k $$. Call this matrix $$ w^l $$:
 
 $$ w^l = \begin{bmatrix} \cdots w^l_1 \cdots \\ \cdots w^l_2 \cdots \\ \vdots \\ \cdots w^l_n \cdots \end{bmatrix} $$
 
-Notice that this takes advantage of the [definition](https://www.mathsisfun.com/algebra/matrix-multiplying.html) of matrix multiplication in that \( w^la^{l-1} \) gives a vector of the weighted inputs for each neuron, which we’ll call \( z^l \).
+Notice that this takes advantage of the [definition](https://www.mathsisfun.com/algebra/matrix-multiplying.html) of matrix multiplication in that $$ w^la^{l-1} $$ gives a vector of the weighted inputs for each neuron, which we’ll call $$ z^l $$.
 
 $$ w^la^{l-1} = \begin{bmatrix} \cdots w^l_1 \cdots \\ \cdots w^l_2 \cdots \\ \vdots \\ \cdots w^l_n \cdots \end{bmatrix} \begin{bmatrix} a^l_1 \\ \vdots \\ a^l_m \end{bmatrix}= \begin{bmatrix} w^l_1 \cdot a^{l-1} \\ w^l_2 \cdot a^{l-1} \\ \vdots \\ w^l_n \cdot a^{l-1} \end{bmatrix} = \begin{bmatrix} z^l_1 \\ z^l_2 \\ \vdots \\ z^l_n \end{bmatrix} = z^l $$ 
 
-(where there’s \( n \) neurons in the \( l^{th} \) layer and \( m \) neurons in the \( (l-1)^{th} \) layer)
+(where there’s $$ n $$ neurons in the $$ l^{th} $$ layer and $$ m $$ neurons in the $$ (l-1)^{th} $$ layer)
 
-Each layer \( l \), with \( n \) neurons, also has a bias vector:
+Each layer $$ l $$, with $$ n $$ neurons, also has a bias vector:
 
 $$ b^l = \begin{bmatrix} b^l_1 \\ b^l_2 \\ \vdots \\ b^l_n \end{bmatrix} $$
 
-We can add this vector to our weighted sums vector, \( z^l \), which should also be \( 1 \times n \) dimensional, to get \( s^l \). \( s^l \) here can be interpreted as the “layer-level” view of the “neuron-level” statement \( s = weight_{1}\times input_{1}+...+weight_{n}\times input_{n}+bias \) from above.
+We can add this vector to our weighted sums vector, $$ z^l $$, which should also be $$ 1 \times n $$ dimensional, to get $$ s^l $$. $$ s^l $$ here can be interpreted as the “layer-level” view of the “neuron-level” statement $$ s = weight_{1}\times input_{1}+...+weight_{n}\times input_{n}+bias $$ from above.
 
-Now that we have \( s^l \), we can apply our activation function to it. Above, we introduced the sigmoid function as our activation function, but in fact any differentiable function can be used as our activation function, granted some are better than others (common ones include ReLU, tanh, and arctan). To account for this, we’ll use \( f \) to represent our activation function.
+Now that we have $$ s^l $$, we can apply our activation function to it. Above, we introduced the sigmoid function as our activation function, but in fact any differentiable function can be used as our activation function, granted some are better than others (common ones include ReLU, tanh, and arctan). To account for this, we’ll use $$ f $$ to represent our activation function.
 
-So to apply \( f \) to our \( s^l \) vector, we simply write \( f(s^l) \), which means applying \( f \) to each of the elements in the \( s^l \) vector.
+So to apply $$ f $$ to our $$ s^l $$ vector, we simply write $$ f(s^l) $$, which means applying $$ f $$ to each of the elements in the $$ s^l $$ vector.
 
 PIC 6 (show feed forward with matrix operations)
 
