@@ -183,6 +183,8 @@ PIC 6 (show feed forward with matrix operations)
 
 Caption: To do a feedforward step, we first multiply the output of a layer by the weight matrix, add the bias vector, and then apply the activation funciton
 
+## Backpropagation
+
 The whole point of backpropagation is to find the derivatives of the cost function with respect to all of the weights and biases in a neural network. In mathematical notation, we want:
 
 $$ \frac{\partial J}{\partial w^l}, \frac{\partial J}{\partial b^l} $$
