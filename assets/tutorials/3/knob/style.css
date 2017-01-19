@@ -55,5 +55,12 @@ text {
   width: 10px;
 }
 
+#controls {
+  position: relative;
+  left: 200px;
+}
+#commentary {
+  position: relative;
+left: 200px;
 
-
+}
