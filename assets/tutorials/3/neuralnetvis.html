@@ -124,8 +124,8 @@ Organization: Machine Learning at Berkeley
       // creates nodes with labels, layers, and position
       function positionNodes(data, structure) {
         var nodes = []; // contains newly created nodes
-        // sets width between layers
-        var layerwidth = (width-nodeSize) / (Object.keys(structure).length);
+        // sets width between layers. Subtracting nodeSize to make space for output display
+        var layerwidth = (width-2*nodeSize) / (Object.keys(structure).length);
         // counts number of nodes drawn so far in each layer (inverse of structure)
         var nodeCount = {};
         for(var i = 0; i < data.length; i++) {
@@ -594,7 +594,7 @@ Organization: Machine Learning at Berkeley
         else {
           this.innerHTML = "";
         }
-        
+        commentary.innerHTML = directions;
       });
       
       // transition output text
