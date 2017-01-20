@@ -51,13 +51,16 @@ Organization: Machine Learning at Berkeley
       var width = 800;
       var height = 600;
       var nodeSize = 25;
+      var inputrange = 4; // goes from -inputrange to inputrange
+      var inputprecision = 0.01; // step size
+      var weightSize = 5;
 
       var inputcolor = "green";
       var outputcolor = "blue";
       
       activation_fn = sigmoid;
       function sigmoid(t) {
-        return 1/(1+Math.pow(Math.E, -t));
+        return 10/(1+Math.pow(Math.E, -t));
       }
       
       /* functionality settings */
@@ -65,9 +68,9 @@ Organization: Machine Learning at Berkeley
       var transitionDelay = 10;
       
       // commentary
-      var directions = "Drag the slider to change the input <br>" + 
+      var directions = "Drag the slider on the left to change the input <br>" + 
                        "Click and drag the lines to change the weights <br>" + 
-                       "Turn the knobs to change the bias.";
+                       "Turn the knobs in the hidden layer to change the bias.";
       var inputlayer_outputphase = "The input node(s) only outputs its given value";
       var inputlayer_resultphase = "The hidden neuron multiplies its inputs by the weight of its connection(s) to the input neuron(s).";
       var inputlayer_activationphase = "The hidden neuron applies its activation function to the result.";
@@ -201,8 +204,8 @@ Organization: Machine Learning at Berkeley
       var svg = d3.select("body").append("svg")
         .attr("xmlns", "http://www.w3.org/2000/svg")
 //        .attr("viewBox", "0 50 800 800") // I would scale, but foreignObject bug doesn't let me
-        .attr("width", width)
-        .attr("height", height);
+        .attr("width", width+2*nodeSize)
+        .attr("height", height*2/3);
       
       var knobgradient = d3.select('#defs').html();
       var gradient = svg.append(function() {
@@ -240,11 +243,11 @@ Organization: Machine Learning at Berkeley
               var weightlabel = document.querySelectorAll('[*|href="#' + this.getAttribute('data-line') + '"]')[0];
               strokewidth = parseInt(document.querySelectorAll('[*|href="#' + this.getAttribute('data-line') + '"]')[0].innerHTML);
 
-              if(d3.event.dy > 0 && strokewidth < nodeSize) {
+              if(d3.event.dy > 0 && strokewidth < weightSize) {
                 strokewidth = strokewidth+1;
                 weight.setAttribute('stroke-width', Math.abs(strokewidth));
               }
-              else if(d3.event.dy <= 0 && strokewidth > -nodeSize) {
+              else if(d3.event.dy <= 0 && strokewidth > -weightSize) {
                 strokewidth = strokewidth-1;
                 weight.setAttribute('stroke-width', Math.abs(strokewidth));
               }
@@ -351,8 +354,9 @@ Organization: Machine Learning at Berkeley
               .append("xhtml:form").append("xhtml:input") // xhtml tells d3.js it's HTML, not SVG
                   .attr("class", "input_slider")
                   .attr("value", 0)
-                  .attr("min", -100)
-                  .attr("max", 100)
+                  .attr("min", -inputrange)
+                  .attr("max", inputrange)
+                  .attr("step", inputprecision)
                   .attr("type", "range")
                   .attr("style", "height: " + (nodeSize*4-10).toString())
                   .attr("orient", "vertical")
@@ -360,16 +364,16 @@ Organization: Machine Learning at Berkeley
                   .attr("oninput", "changeInput.apply(this)");
 
         }
-        else if(d.layer === outputlayer) {
-          // create dud node that doesn't do anything
-          var g = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-          g.setAttribute("r", nodeSize);
-          g.setAttribute("class", "node");
-          g.setAttribute("fill", outputcolor);
-          g.setAttribute("data-index", i);
-          // display output
-          
-        }
+//        else if(d.layer === outputlayer) {
+//          // create dud node that doesn't do anything
+//          var g = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+//          g.setAttribute("r", nodeSize);
+//          g.setAttribute("class", "node");
+//          g.setAttribute("fill", outputcolor);
+//          g.setAttribute("data-index", i);
+//          // display output
+//          
+//        }
         else {
           // create knobs that allow users to adjust bias
           var g = document.createElementNS("http://www.w3.org/2000/svg", "g");

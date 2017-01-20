@@ -44,8 +44,8 @@ function rotations_to_speed(rotations) {
 }
 
 
-var max_rotations = speed_to_rotations(99);
-var min_rotations = speed_to_rotations(-99);
+var max_rotations = speed_to_rotations(2);
+var min_rotations = speed_to_rotations(-2);
 
 function set_rotations(rotations) {
   var elems = document.getElementsByClassName('knob');
