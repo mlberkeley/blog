@@ -99,27 +99,20 @@ Finally, each layer is **fully connected** to the one before it and after it. Th
 
 <style>
 #mydiv{
-    margin:30px;
     position:relative;
     overflow:hidden;
-    height:650px;
+    height:500px;
     width:100%;
-    background: red;
-}
-@media screen and (min-width: 480px) {
-    #mydiv {
-        background-color: lightgreen;
-    }
 }
 #myframe{
     position:absolute;
     top:-164px;
-    left:-170px;
+    left:-200px;
 }
 </style>
 
 <div id="mydiv">
-    <iframe id="myframe" height="1000px" scrolling="no" src="/blog/assets/tutorials/3/neuralnetvis.html" width="1000px">
+    <iframe id="myframe" height="600px" scrolling="no" src="/blog/assets/tutorials/3/neuralnetvis.html" width="1000px">
     </iframe>
 </div>
 
