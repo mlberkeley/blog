@@ -33,7 +33,7 @@ It was not until the [1980’s](https://en.wikipedia.org/wiki/Backpropagation#Hi
 Now that we know the basics of how the brain works and the history of neural networks, let’s look at what a neural network actually does. First off, we’ll think of our neural network as a black box, some machine whose inner workings we don’t really know about yet. We want this machine to take in some set number of numerical inputs (that we can choose) and spit out a set number of numerical outputs (that we can also choose). 
 
 <center>
-<img src='{{ site.baseurl }}/assets/tutorials/3/black box.png'/>
+<img src='{{ site.baseurl }}/assets/tutorials/3/black box.png' width="400">
 <p>A neural network takes in some inputs, math happens, and some number of outputs pop out.</p>
 </center>
 
@@ -50,13 +50,13 @@ Now that we know what a neural network should do and roughly how we can get it t
 For those who have read our post on [perceptrons](https://ml.berkeley.edu/blog/2016/12/24/tutorial-2/), this will be very familiar material. That’s because a neuron in a neural network is basically a perceptron on steroids. Similar to a perceptron, a neuron takes in any number of numerical inputs and spits out just one output. To get to this output, the neuron calculates an intermediate value called $$ s $$ by multiplying each input by a different weight, adding them all together, and adding an additional number called the bias. In math: $$ s = weight_{1}\times input_{1}+...+weight_{n}\times input_{n}+bias $$
 
 <center>
-  <img src='{{ site.baseurl }}/assets/tutorials/3/neuron.png'/>
+  <img src='{{ site.baseurl }}/assets/tutorials/3/neuron.png' width="400">
 </center>
 
 Now each neuron could simply output $$ s $$, but that would be a bit boring as $$ s $$ is just a linear function, which makes it rather inflexible for modeling real-world data. What we want to do instead is to add one more step, called an activation function. An activation function is any function that takes in our $$ s $$ and gives the output of our neuron, called the **activation**. The perceptron that we described in the last post gave definitive yes/no answers using a blocky step function as its activation function.
 
 <center>
-<img src='{{ site.baseurl }}/assets/tutorials/3/nondifferentiable ant analogy.png'/>
+<img src='{{ site.baseurl }}/assets/tutorials/3/nondifferentiable ant analogy.png' width="400">
 <p>For the step function, there is no way to tell how close you are to a “yes” or a “no”</p>
 </center>
 
@@ -65,7 +65,7 @@ However, using a step function makes training very difficult because there's no 
 To make it easier to train a network, we’ll use a function that is *smooth* (in other words, a differentiable function). For example, we can use the **sigmoid function**, which looks something like this:
 
 <center>
-<img src='{{ site.baseurl }}/assets/tutorials/3/differentiable ant analogy.png'/>
+<img src='{{ site.baseurl }}/assets/tutorials/3/differentiable ant analogy.png' width="400">
 <p>A sigmoid function is a nice activation function because it is smooth everywhere, making it easier to figure out if you're getting closer to the top</p>
 </center>
 
@@ -77,7 +77,7 @@ Going back to our ant analogy, an ant could figure out exactly which direction t
 We wouldn't have much of a network if we just had one neuron, would we? The secret to a neural network's ability to make complex decisions lies in its internal structure of interconnected neurons. Just like how neurons in the brain are connected to each other, the output of one neuron becomes the input of another neuron, allowing the neurons to work together to come up with the correct answer.
 
 <center>
-<img src='{{ site.baseurl }}/assets/tutorials/3/output to input.png'/>
+<img src='{{ site.baseurl }}/assets/tutorials/3/output to input.png' width="400">
 <p>The output of neuron 1 (blue) becomes the input of neuron 2 (green)
 </p>
 </center>
@@ -86,7 +86,7 @@ Of course, we can't just randomly connect neurons to each other and expect every
 
 
 <center>
-<img src='{{ site.baseurl }}/assets/tutorials/3/neural network.png'/>
+<img src='{{ site.baseurl }}/assets/tutorials/3/neural network.png' width="400">
 </center>
 
 Artificial neural network are composed of **layers** of artificial neurons in a similar way. In general, there are three types of layers: an input layer, one or more hidden layers, and an output layer. The input layer (on the very left) will take on values of whatever the input is to the the neural network. Notice that we can have our network take any number of inputs by changing the number of neurons in the input layer. Neat! 
@@ -126,7 +126,7 @@ Finally, each layer is **fully connected** to the one before it and after it. Th
 ## How a Neural Network “Works”
 
 <center>
-<img src='{{ site.baseurl }}/assets/tutorials/3/dogeml.jpeg'/>
+<img src='{{ site.baseurl }}/assets/tutorials/3/dogeml.jpeg' width="400">
 </center>
 
 Say you're trying to recognize Doge. Do the pink and green blobs(flowers) in the background matter when trying to identify the main object in the picture? Probably not, so that information can probably be discarded. 
@@ -138,7 +138,7 @@ Many people will probably immediately recognize the object as a dog, but what gi
 We can visualize this thought process with various neurons tasked with identifying increasingly abstract objects in the image:
 
 <center>
-<img src='{{ site.baseurl }}/assets/tutorials/3/recognize dog neural network.png'/>
+<img src='{{ site.baseurl }}/assets/tutorials/3/recognize dog neural network.png' width="400">
 <p style="color:red;">How someone might identify a dog. Important inputs that are given a lot of weight are highlighted in red.</p>
 </center>
 
@@ -168,13 +168,13 @@ The whole point of backpropagation is to find these slopes to help gradient desc
 To introduce backpropagation, let’s start with another analogy. Don’t worry if you can’t see how this has anything to do with backpropagation (trust us, it does). Let's say you want to push a marble off a table with a line of dominos. During your first try, you discover that the dominos were placed too far from the marble so that the last domino falls short of the marble. What do you do to fix this? You can't move the marble, since it needs to fall off the table, so you take the domino closest to the marble and place it closer. Subsequently, you'll need to take the second to last domino and place it closer to the one you just moved, and so on until you move the entire line of dominos closer to the marble, *starting with the domino closest to the marble*. 
 
 <center>
-<img src='{{ site.baseurl }}/assets/tutorials/3/marble backprop analogy.png'/>
+<img src='{{ site.baseurl }}/assets/tutorials/3/marble backprop analogy.png' width="400">
 </center>
 
 Backpropagation works in a similar way. When the neural network outputs the wrong answer (doesn't push the marble off the table), you find the slopes of the output layer (the domino closest to the marble) first because it was the direct cause of the incorrect answer. And since the output layer depends on the hidden layer, you'll have to fix that too by finding the slopes and using gradient descent. Eventually you’ll work your way back to the hidden layer closest to the input layer. 
 
 <center>
-<img src='{{ site.baseurl }}/assets/tutorials/3/backprop order.png'/>
+<img src='{{ site.baseurl }}/assets/tutorials/3/backprop order.png' width="400">
 </center>
 
 It turns out that once we calculate the slopes of a given layer, we can easily find the slopes of a previous layer. Intuitively, this makes sense because changing the parameters in one layer will affect the outputs of the next layer which will affect the outputs of the next layer, and so on until the cost function itself is affected. Therefore we need to know how all future layers will affect the cost function before we know how a specific layer will affect the cost function.
@@ -182,7 +182,7 @@ It turns out that once we calculate the slopes of a given layer, we can easily f
 Thus, we easily calculate the slopes of the last layer, and then the second to last layer, and end up working backwards until we reach the first, input layer. This is the namesake for our algorithm: “backpropagation.” We calculate slopes by starting from the back and propagating our algorithm backwards through the neural network until we get all the slopes for gradient descent.
 
 <center>
-<img src='{{ site.baseurl }}/assets/tutorials/3/backprop slope.png'/>
+<img src='{{ site.baseurl }}/assets/tutorials/3/backprop slope.png' width="400">
 </center>
 
 That, in a nutshell, is the backpropagation algorithm—the very reason cars can drive themselves, Siri can recognize your voice, and computers can read your checks. Don’t worry if you don’t understand everything immediately. For most people it takes more than a few read-throughs to fully understand what is happening. For those of you who feel affronted that the math has been skipped over, feel free to check out the next section. We first introduce notation to describe neural networks in an elegant way using matrices. Then we derive the rules of backpropagation. Cheers!
@@ -203,20 +203,20 @@ $$ a^1 = \begin{bmatrix} i_1 \\ i_2 \\ \vdots \\ i_n \end{bmatrix} $$
 Now be careful. The superscript $$ 1 $$ is not an exponent (if it were it would be quite redundant). Rather it is used to indicate that the vector is associated with the first layer of our network, in other words, the input layer. We choose the letter $$ a $$ because we can think of the inputs as being the activations (aka the outputs) of the first layer of neurons. You may have already guessed, but we’re going to be calling the vector of activations for the $$ l^{th} $$ layer $$ a^l $$. And if we have $$ L $$ layers, then $$ a^L $$ (that is, the activations of the very last layer, the output layer) will be the output of our entire neural network. Every $$ a^l $$ will have a different dimension depending on how many neurons are in each layer.
 
 <center>
-<img src='{{ site.baseurl }}/assets/tutorials/3/layer vector notation.png'/>
+<img src='{{ site.baseurl }}/assets/tutorials/3/layer vector notation.png' width="400">
 </center>
 
 Now let’s figure out how to write the weights in matrix notation. Of course, we could just throw all the weights into some matrix and call it a day, but let’s be a bit more clever about it. In particular, let’s take advantage of matrix multiplication. We’ll define a $$ N \times 1 $$ dimensional vector to be the weights vector from a previous layer to **a single neuron** in the next layer, where $$ N $$ would be the number of neurons in the **previous** layer (all of this seemingly arbitrary notation will pay off in the end, we promise). Let’s call this vector $$ w^l_k $$ for the $$ k^{th} $$ neuron in the $$ l^{th} $$ layer.
 
 <center>
-<img src='{{ site.baseurl }}/assets/tutorials/3/weight notation.png'/>
+<img src='{{ site.baseurl }}/assets/tutorials/3/weight notation.png' width="400">
 </center>
 The weights of the vectors pointing to the red neuron would be referred to as $$w^3_1$$, where $$ w^3_1 = \begin{bmatrix} w^3_{11} \\ w^3_{12} \\ w^3_{13} \end{bmatrix} $$
 
 Notice now that for the $$ k^{th} $$ neuron in the $$ l^{th} $$ layer, we can get its weighted sum of its inputs, called $$ z^l_k $$ (where $$ l $$ is the layer and $$ k $$ is the $$ k^{th} $$ neuron) by taking the [dot product](http://mathinsight.org/dot_product_matrix_notation) between $$ a^{l-1} $$ and $$ w^l_k $$.
 
 <center>
-<img src='{{ site.baseurl }}/assets/tutorials/3/dot product.png'/>
+<img src='{{ site.baseurl }}/assets/tutorials/3/dot product.png' width="400">
 </center>
 
 What’s more, we can actually write out a **weight matrix** for each layer, where each row in the matrix is a $$ w^l_k $$. Call this matrix $$ w^l $$:
@@ -240,7 +240,7 @@ Now that we have $$ s^l $$, we can apply our activation function to it. Above, w
 So to apply $$ f $$ to our $$ s^l $$ vector, we simply write $$ f(s^l) $$, which means applying $$ f $$ to each of the elements in the $$ s^l $$ vector.
 
 <center>
-<img src='{{ site.baseurl }}/assets/tutorials/3/slideshow.gif'/>
+<img src='{{ site.baseurl }}/assets/tutorials/3/slideshow.gif' width="400">
 <p>To do a feedforward step, we first multiply the output of a layer by the weight matrix, add the bias vector, and then apply the activation function</p></center>
 
 ## Backpropagation
@@ -278,7 +278,7 @@ $$ \delta^l_j = \frac{\partial J}{\partial a^l_j} \sigma’(s^l_j) $$
 Now for the actual “backpropagation” part of the algorithm. We’ll use chain rule to derive an expression for $$ \delta^l $$ from $$ \delta^{l+1} $$. In words, this means we will have a way of finding deltas in one layer from the deltas in the next layer. Once we figure out how to do this, we can just start from the very end layer of a neural network and work our way backwards finding all the deltas.
 
 <center>
-<img src='{{ site.baseurl }}/assets/tutorials/3/backprop slope.png'/>
+<img src='{{ site.baseurl }}/assets/tutorials/3/backprop slope.png' width="400">
 </center>
 
 Alright, let’s chain rule this guy out. We start with
