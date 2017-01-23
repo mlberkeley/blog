@@ -135,10 +135,11 @@ Organization: Machine Learning at Berkeley
           else {
             nodeCount[data[i].layer] = 1;
           }
-          var node = {"label": data[i].label,
+          var node = {"id": i,
+                      "label": data[i].label,
                       "layer": data[i].layer,
                       "bias": data[i].bias};
-          var x = layerwidth * node.layer;
+          var x = (layerwidth) * (node.layer - 1) + nodeSize*2;
           var y = nodeCount[node.layer] * (height - 2*nodeSize) / (structure[node.layer] + 1);
           node["x"] = x;
           node["y"] = y;
@@ -328,7 +329,38 @@ Organization: Machine Learning at Berkeley
       
       
 
+      // add output arrow
+//      <marker id="arrow" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+//            <path d="M0,0 L0,6 L9,3 z" fill="#f00" />
+//          </marker>
+      var outputnodes = node.filter(function(d) {return d.layer == outputlayer;});
       
+      outputnodes.append("svg:defs").append("svg:marker")
+        .attr("id", "arrow")
+        .attr("refX", 2)
+        .attr("refY", 2)
+        .attr("markerWidth", 60)
+        .attr("markerHeight", 60)
+        .attr("orient", "auto")
+        .append("path")
+        .attr("d", "M 0 0 4 2 0 4 1 2")
+        .style("fill", outputcolor);
+            
+      
+        outputnodes.append("line")
+          .attr("x1", function(d){return 0;})
+          .attr("y1", function(d){return 0;})
+          .attr("x2", function(d){return nodeSize*4;})
+          .attr("y2", function(d){return 0;})
+          .attr("stroke", outputcolor)
+          .attr("stroke-width", "5")
+          .attr("marker-end", "url(#arrow)");
+      
+        outputnodes.append("text")
+          .attr("dx", nodeSize*4 + 10)
+          .attr("style", "text-anchor: left; alignment-baseline: middle;")
+          .attr("data-output-index", function(d){return d.id;})
+          .text("");
       
 //      var circle = node.append("circle")
 //          .attr("r", nodeSize)
@@ -399,33 +431,6 @@ Organization: Machine Learning at Berkeley
               return "";
             }
           });
-      
-      // add output arrow
-//      <marker id="arrow" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
-//            <path d="M0,0 L0,6 L9,3 z" fill="#f00" />
-//          </marker>
-      var outputnodes = node.filter(function(d) {return d.layer == outputlayer;});
-      
-      outputnodes.append("svg:defs").append("svg:marker")
-        .attr("id", "arrow")
-        .attr("refX", 6)
-        .attr("refY", 6)
-        .attr("markerWidth", 120)
-        .attr("markerHeight", 60)
-        .attr("orient", "auto")
-        .append("path")
-        .attr("d", "M 0 0 12 6 0 12 3 6")
-        .style("fill", "black");
-            
-      
-        outputnodes.append("line")
-          .attr("x1", function(d){return 0;})
-          .attr("y1", function(d){return 0;})
-          .attr("x2", function(d){return nodeSize*4;})
-          .attr("y2", function(d){return 0;})
-          .attr("stroke", "#000")
-          .attr("stroke-width", "5")
-          .attr("marker-end", "url(#arrow)");
       
       
     </script>
@@ -536,19 +541,25 @@ Organization: Machine Learning at Berkeley
               if(layercount == outputlayer) {
                 var outputs = d3.selectAll("[data-layer='" + outputlayer + "']");
                 outputs.style("opacity", 0);
-                outputs.text(function(d, i) {
-                  var start = this.getAttribute("data-index");
+                outputs.text(function(d) {
+                  
+
+                  // adds up inputs. idk why reduce doesn't work
                   // get all inputs of starting node
                   var inputs = d3.selectAll("[data-node-to-node-index$='-" + start + "'][data-phase='activation']");
-
-                  // idk why reduce doesn't work
                   var value = 0;
                   for(var i = 0; i < inputs[0].length; i++) {
                     value += parseFloat(inputs[0][i].getAttribute("data-result")); 
                   }
+                  
+                  // display output at end of arrow
+                  // find text element next to current output node, which should have the same index number
+                  var outputText = d3.selectAll("[data-output-index='" + d.id + "']")[0][0];
+                  outputText.innerHTML = value;
+                  
                   commentary.innerHTML = hiddenlayer_outputphase;
 
-                  return value;
+                  return "";
                 });
                 outputs.transition().style("opacity", 1).duration(transitionDuration);
               }
@@ -620,7 +631,7 @@ Organization: Machine Learning at Berkeley
       });
       
       // transition output text
-      var outputs = d3.selectAll("[data-layer='" + outputlayer + "']");
+      var outputs = d3.selectAll("[data-output-index]");
       outputs.transition().style("opacity", 0).duration(transitionDuration).delay(transitionDelay).each("end", function(d, i) {
         this.innerHTML = "";
       })

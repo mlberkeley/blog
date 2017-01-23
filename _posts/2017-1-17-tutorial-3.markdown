@@ -107,7 +107,7 @@ Finally, each layer is **fully connected** to the one before it and after it. Th
 #myframe{
     position:absolute;
     top:-164px;
-    left:-200px;
+    left:-10px;
 }
 </style>
 
