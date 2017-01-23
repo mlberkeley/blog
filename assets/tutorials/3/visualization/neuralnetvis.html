@@ -722,7 +722,12 @@ Organization: Machine Learning at Berkeley
       label.transition().style("opacity", 0).duration(transitionDuration).delay(transitionDelay)
         .each("end", function(d, i) {
         if(this.getAttribute("class") === "weight") {
-          this.innerHTML = d.weight;
+          if(parseInt(d.connection) == outputlayer) {
+            this.innerHTML = "";
+          }
+          else {
+            this.innerHTML = d.weight;
+          }
           this.setAttribute("textLength", ""); // reset textLength
           d3.selectAll(".weight").transition().style("opacity", 1).duration(transitionDuration);
         }
