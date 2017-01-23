@@ -179,8 +179,22 @@ Organization: Machine Learning at Berkeley
                         // id format: index_of_startNode_in_nodes-index_of_endNode_in_nodes
                         "id": start.toString() + "-" + end.toString()}); 
           }
+          
+          
         }
-      }  
+        // also include output arrows
+          if(startNode.layer == outputlayer) {
+            lines.push({"x1": endNode.x,
+                        "y1": endNode.y,
+                        "x2": endNode.x + nodeSize*4, 
+                        "y2": endNode.y, 
+                        "weight": 5,
+                        "connection": "output",
+                        // id format: index_of_startNode_in_nodes-index_of_endNode_in_nodes
+                        "id": end.toString()});
+          }
+      }
+
     </script>
     <script type='text/template' id='knobgradient'>
 
@@ -225,11 +239,20 @@ Organization: Machine Learning at Berkeley
                     .data(lines).enter()
                     .append("path")
                       .attr("d", function(d) { return "M " + d.x1 + " " + d.y1 + " L " + d.x2 + " " + d.y2;})
-                      .attr("stroke", "black")
+                      .attr("stroke", function(d) {
+                        if(d.connection == "output"){return outputcolor;}
+                        else{return "black";}})
                       .attr("stroke-width", function(d) { return Math.abs(d.weight); })
-                      .attr("id", function(d) {return d.id;});
+                      .attr("id", function(d) {return d.id;})
+                      .attr("marker-end", function(d){if(d.connection == "output") {return "url(#arrow)";}});
       
-
+//          .append("path")
+//          .attr("d", function(d) { return "M " + 0 + " " + 0 + " L " + nodeSize*4 + " " + 0;})
+//          .attr("stroke", outputcolor)
+//          .attr("stroke-width", "5")
+//          .attr("id", function(d){return d.id;})
+//          .attr("marker-end", "url(#arrow)");
+      
       // an invisible line that is thicker than the actual line for ease of interaction
       var selectable = svg.selectAll("selectable")
                     .data(lines).enter()
@@ -248,11 +271,11 @@ Organization: Machine Learning at Berkeley
               var weightlabel = document.querySelectorAll('[*|href="#' + this.getAttribute('data-line') + '"]')[0];
               strokewidth = parseInt(document.querySelectorAll('[*|href="#' + this.getAttribute('data-line') + '"]')[0].innerHTML);
 
-              if(d3.event.dy > 0 && strokewidth < weightSize) {
+              if(d3.event.dy > 2 && strokewidth < weightSize) {
                 strokewidth = strokewidth+1;
                 weight.setAttribute('stroke-width', Math.abs(strokewidth));
               }
-              else if(d3.event.dy <= 0 && strokewidth > -weightSize) {
+              else if(d3.event.dy < -2 && strokewidth > -weightSize) {
                 strokewidth = strokewidth-1;
                 weight.setAttribute('stroke-width', Math.abs(strokewidth));
               }
@@ -334,6 +357,14 @@ Organization: Machine Learning at Berkeley
 //      <marker id="arrow" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
 //            <path d="M0,0 L0,6 L9,3 z" fill="#f00" />
 //          </marker>
+      
+//      var line = svg.selectAll("lines")
+//                    .data(lines).enter()
+//                    .append("path")
+//                      .attr("d", function(d) { return "M " + d.x1 + " " + d.y1 + " L " + d.x2 + " " + d.y2;})
+//                      .attr("stroke", "black")
+//                      .attr("stroke-width", function(d) { return Math.abs(d.weight); })
+//                      .attr("id", function(d) {return d.id;});
       var outputnodes = node.filter(function(d) {return d.layer == outputlayer;});
       
       outputnodes.append("svg:defs").append("svg:marker")
@@ -347,12 +378,30 @@ Organization: Machine Learning at Berkeley
         .attr("d", "M 0 0 4 2 0 4 1 2")
         .style("fill", outputcolor);
             
+//      // failed project
+//        svg.selectAll("something").data(nodes).append((function(d, i) {
+//          if(d.layer != outputlayer) {return;}
+//          var outputarrow = document.createElementNS("http://www.w3.org/2000/svg", "path");
+//          outputarrow.setAttribute("d", "M " + d.x + " " + d.y + " L " + (d.x+nodeSize*4) + " " + d.y);
+//          outputarrow.setAttribute("stroke", outputcolor);
+//          outputarrow.setAttribute("stroke-width", "5");
+//          outputarrow.setAttribute("id", d.id);
+//          outputarrow.setAttribute("marker-end", "url(#arrow)");
+//          return outputarrow;
+//        }));
       
-        outputnodes.append("path")
-          .attr("d", function(d) { return "M " + 0 + " " + 0 + " L " + nodeSize*4 + " " + 0;})
-          .attr("stroke", outputcolor)
-          .attr("stroke-width", "5")
-          .attr("marker-end", "url(#arrow)");
+
+      
+
+        var animatedoutput = svg.selectAll("animatedoutputs").data(nodes).enter().append("text")
+        .filter(function(d) {return d.layer == outputlayer;})
+          .attr("class", "test")
+          .attr("style", "text-anchor: left")
+          .attr("dy", "-12")
+          .append("textpath")
+            .attr("xlink:href", "#3")
+            .text("hi");
+
       
         outputnodes.append("text")
           .attr("dx", nodeSize*4 + 10)
@@ -360,9 +409,6 @@ Organization: Machine Learning at Berkeley
           .attr("data-output-index", function(d){return d.id;})
           .text("");
       
-//      var circle = node.append("circle")
-//          .attr("r", nodeSize)
-//          .attr("class", "node");
 
       function changeInput() {
         var i = this.getAttribute('data-node');
@@ -412,7 +458,7 @@ Organization: Machine Learning at Berkeley
         }
         return g;
       });
-
+      
       var text = node.append("text")
           .attr("class", "nodetext")
           .attr("style", "text-anchor: middle; alignment-baseline: middle;")
@@ -429,8 +475,6 @@ Organization: Machine Learning at Berkeley
               return "";
             }
           });
-      
-      
     </script>
   
 <!--  the actual simulation -->
@@ -509,6 +553,10 @@ Organization: Machine Learning at Berkeley
           d.equation += " " + operation + value;
           
           commentary.innerHTML = hiddenlayer_biasphase;
+          
+          if(layercount == outputlayer-1) {
+            
+          }
         }
         else if(currentphase == "result") {
           d.equation += ") = fn(" + d.result.toString() + ")";
