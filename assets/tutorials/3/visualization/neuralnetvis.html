@@ -58,6 +58,7 @@ Organization: Machine Learning at Berkeley
 
       var inputcolor = "green";
       var outputcolor = "blue";
+      var outputArrowLength = nodeSize*10;
       
       activation_fn = sigmoid;
       function sigmoid(t) {
@@ -186,12 +187,12 @@ Organization: Machine Learning at Berkeley
           if(startNode.layer == outputlayer) {
             lines.push({"x1": endNode.x,
                         "y1": endNode.y,
-                        "x2": endNode.x + nodeSize*4, 
+                        "x2": endNode.x + outputArrowLength, 
                         "y2": endNode.y, 
                         "weight": 5,
-                        "connection": "output",
+                        "connection": endNode.layer.toString() + "-" + (endNode.layer+1).toString(),
                         // id format: index_of_startNode_in_nodes-index_of_endNode_in_nodes
-                        "id": end.toString()});
+                        "id": start.toString() + "-" + (start+1).toString()});
           }
       }
 
@@ -240,18 +241,12 @@ Organization: Machine Learning at Berkeley
                     .append("path")
                       .attr("d", function(d) { return "M " + d.x1 + " " + d.y1 + " L " + d.x2 + " " + d.y2;})
                       .attr("stroke", function(d) {
-                        if(d.connection == "output"){return outputcolor;}
+                        if(d.connection == outputlayer.toString() + "-" + (outputlayer+1).toString()){return outputcolor;}
                         else{return "black";}})
                       .attr("stroke-width", function(d) { return Math.abs(d.weight); })
                       .attr("id", function(d) {return d.id;})
-                      .attr("marker-end", function(d){if(d.connection == "output") {return "url(#arrow)";}});
+                      .attr("marker-end", function(d){if(d.connection == outputlayer.toString() + "-" + (outputlayer+1).toString()) {return "url(#arrow)";}});
       
-//          .append("path")
-//          .attr("d", function(d) { return "M " + 0 + " " + 0 + " L " + nodeSize*4 + " " + 0;})
-//          .attr("stroke", outputcolor)
-//          .attr("stroke-width", "5")
-//          .attr("id", function(d){return d.id;})
-//          .attr("marker-end", "url(#arrow)");
       
       // an invisible line that is thicker than the actual line for ease of interaction
       var selectable = svg.selectAll("selectable")
@@ -292,17 +287,34 @@ Organization: Machine Learning at Berkeley
                     .data(lines).enter()
                     .append("text")
                       .attr("style", "text-anchor: left;")
-                      .attr("dy", -12)
+                      .attr("dy", function(d) { // draw text above or below line
+                        if(d.connection.includes("-" + outputlayer)) {
+                          if((d.y1-d.y2)/(d.x1-d.x2) > 0) {
+                            return "-12";
+                          }
+                          else {
+                            return "15";
+                          }
+                        }
+                        if((d.y1-d.y2)/(d.x1-d.x2) <= 0) {
+                          return "-12";
+                        }
+                        else {
+                          return "15";
+                        }
+                      })
       weightlabels.append("textPath")
                       .attr("class", "weight")
                       .attr("xlink:href", function(d) {return "#" + d.id})
                       .attr("data-layer-to-layer", function(d) {return d.connection;})
                       .attr("data-node-to-node-index", function(d) {return d.id})
-                      .attr("startOffset", "15%")
+                      .attr("startOffset", "10%")
 //                      .attr("textLength", function() {
 //                        return document.getElementById(this.getAttribute('href').slice(1)).getBBox().width - nodeSize;
 //                      })
-                      .text(function(d) {return d.weight;});
+                      .text(function(d) {
+                            if(d.connection == outputlayer.toString() + "-" + (outputlayer+1).toString()) {return "";}
+                            else {return d.weight;}});
       
       /* animated text */
       // bias 
@@ -404,7 +416,7 @@ Organization: Machine Learning at Berkeley
 
       
         outputnodes.append("text")
-          .attr("dx", nodeSize*4 + 10)
+          .attr("dx", outputArrowLength + 10)
           .attr("style", "text-anchor: left; alignment-baseline: middle;")
           .attr("data-output-index", function(d){return d.id;})
           .text("");
@@ -499,8 +511,8 @@ Organization: Machine Learning at Berkeley
       label.style("opacity", 1);
       label.each(function(d, i) { // figure out where and what text to display 
         // get index of starting node
-        var start = parseInt(this.getAttribute('href').slice(1)); 
-        var endNode = parseInt(this.getAttribute('href').slice(-1));
+        var start = parseInt(this.getAttribute('data-node-to-node-index')); 
+        var end = parseInt(this.getAttribute('data-node-to-node-index').slice(-1));
         // get weight of connection
         var weight = d3.selectAll("[*|href='" + this.getAttribute('href') + "']")[0][0];
 
@@ -509,6 +521,19 @@ Organization: Machine Learning at Berkeley
             // get value displayed on starting node
             var value = d3.select("[data-index='" + start + "']")[0][0].innerHTML;
             commentary.innerHTML = inputlayer_outputphase;
+          }
+          else if(layercount === outputlayer) {
+             var inputs = d3.selectAll("[data-node-to-node-index$='-" + start + "'][data-phase='activation']");
+            
+            var text = "";
+            var value = 0;
+            for(var i = 0; i < inputs[0].length; i++) {
+              var result = inputs[0][i].getAttribute("data-result");
+              text += result + "+";
+              value += parseFloat(result); // slice off '=' sign
+            }
+            text = text.slice(0,-1);
+            
           }
           else {
             // get all inputs of starting node
@@ -522,22 +547,39 @@ Organization: Machine Learning at Berkeley
             commentary.innerHTML = hiddenlayer_outputphase;
           }
           
-          // save calculation in data for retrieval during "result" phase
-          d.result = parseInt(weight.innerHTML) * parseInt(value);
-
-          // format multiplication properly
-          var operation = "• ";
-          // if value negative, wrap it in parentheses
-          if(parseInt(value) < 0) {value = "(" + value + ")";}
-          this.innerHTML = operation + value;
           
-          d.equation = "fn(" + weight.innerHTML + operation + value;
+
+          if(layercount != outputlayer) {
+            // save calculation in data for retrieval during "result" phase
+            d.result = parseFloat(weight.innerHTML) * parseFloat(value);
+            
+            // format multiplication properly
+            var operation = "• ";
+            // if value negative, wrap it in parentheses
+            if(parseInt(value) < 0) {value = "(" + value + ")";}
+            this.innerHTML = operation + value;
+            if(layercount == outputlayer-1) {
+              var fn = "";
+            } else {var fn = "f("}
+            d.equation = fn + weight.innerHTML + operation + value;
+          }
+          else {
+            d.result = value;
+            this.innerHTML = text;
+            d.equation = "f(" + text;
+          }
+          
+          
         }
         else if(currentphase == "bias") {
-
-          // get value displayed on node in next layer
-          var value = d3.select("[data-index='" + endNode + "']")[0][0].innerHTML;
-
+          if(layercount != outputlayer) {
+            // get value displayed on node in next layer
+            var value = d3.select("[data-index='" + end + "']")[0][0].innerHTML;
+            this.setAttribute("startOffset", "100%");    
+          }
+          else {
+            var value = d3.select("[data-index='" + start + "']")[0][0].innerHTML;
+          }
           // format addition/subtraction
           var operation = "+ ";
           if(parseInt(value) < 0) {
@@ -545,21 +587,15 @@ Organization: Machine Learning at Berkeley
             value = value.slice(1); // remove negative sign on value
           }
           this.innerHTML = operation + value;
-          
-          this.setAttribute("startOffset", "100%");
-
           // save calculation in data for retrieval during "result" phase
-          d.result = d.result + parseInt(value);
-          d.equation += " " + operation + value;
-          
+          d.result = Math.round(parseFloat(d.result + value)*outputprecision)/outputprecision;
+          d.equation += " " + operation + value + " = " + d.result.toString() + ")";
+
           commentary.innerHTML = hiddenlayer_biasphase;
           
-          if(layercount == outputlayer-1) {
-            
-          }
         }
         else if(currentphase == "result") {
-          d.equation += ") = fn(" + d.result.toString() + ")";
+//          d.equation += ") = f(" + d.result.toString() + ")";
           this.innerHTML = "= " + d.result.toString();
           if(currentphase === inputlayer) {
             commentary.innerHTML = inputlayer_resultphase;
@@ -569,48 +605,52 @@ Organization: Machine Learning at Berkeley
           }
         }
         else if(currentphase == "activation") {
+          if(layercount == outputlayer-1) {
+            var result = Math.round(d.result * outputprecision)/outputprecision;
+          }
+          else {
+            var result = Math.round(activation_fn(d.result) * outputprecision)/outputprecision;
+          }
           // save result so next layer can access it
-          this.setAttribute("data-result", Math.round(activation_fn(d.result) * outputprecision)/outputprecision);
+          this.setAttribute("data-result", result);
           // make all text on connection disappear
           d3.selectAll("[data-node-to-node-index='" + this.getAttribute('href').slice(1) + "']").transition().style("opacity", 0).duration(transitionDuration).delay(transitionDelay).each('end', function() {
             // get text node displaying weight and replace it with equation
             // using weight node because it is the leftmost node, so has space
             var label = d3.select("[data-node-to-node-index='" + this.getAttribute('href').slice(1) + "'][class='weight']");
             
-            var equation = d.equation + " = " + Math.round(activation_fn(d.result) * outputprecision)/outputprecision;
+            var equation = d.equation + " = " + result;
             label.text(equation);
             if(equation.length > 25) {
               var linewidth = document.getElementById(this.getAttribute('href').slice(1)).getBBox().width - nodeSize;
-              label.attr("textLength", linewidth-50);
+              label.attr("textLength", linewidth-20);
             }
-            label.transition().style("opacity", 1).duration(transitionDuration).each("end", function() { // display output
-              if(layercount == outputlayer) {
-                var outputs = d3.selectAll("[data-layer='" + outputlayer + "']");
-                outputs.style("opacity", 0);
-                outputs.text(function(d) {
-                  
-
-                  // adds up inputs. idk why reduce doesn't work
-                  // get all inputs of starting node
-                  var inputs = d3.selectAll("[data-node-to-node-index$='-" + d.id + "'][data-phase='activation']");
-                  var value = 0;
-                  for(var i = 0; i < inputs[0].length; i++) {
-                    value += parseFloat(inputs[0][i].getAttribute("data-result")); 
-                  }
-                  
-                  // display output at end of arrow
-                  // find text element next to current output node, which should have the same index number
-                  var outputText = d3.selectAll("[data-output-index='" + d.id + "']");
-                  outputText[0][0].innerHTML = Math.round(activation_fn(value) * outputprecision)/outputprecision;
-                  outputText.transition().style("opacity", 1).duration(transitionDuration);
-                  
-                  commentary.innerHTML = hiddenlayer_outputphase;
-
-                  return "";
-                });
+            label.transition().style("opacity", 1).duration(transitionDuration);
+//              .each("end", function() { // display output
+//              if(layercount == outputlayer) {
+//                var outputs = d3.selectAll("[data-layer='" + outputlayer + "']");
+//                outputs.style("opacity", 0);
+//                outputs.text(function(d) {   // adds up inputs. idk why reduce doesn't work
+//                  // get all inputs of starting node
+//                  var inputs = d3.selectAll("[data-node-to-node-index$='-" + d.id + "'][data-phase='activation']");
+//                  var value = 0;
+//                  for(var i = 0; i < inputs[0].length; i++) {
+//                    value += parseFloat(inputs[0][i].getAttribute("data-result")); 
+//                  }
+//                  
+//                  // display output at end of arrow
+//                  // find text element next to current output node, which should have the same index number
+//                  var outputText = d3.selectAll("[data-output-index='" + d.id + "']");
+//                  outputText[0][0].innerHTML = Math.round(activation_fn(d.result) * outputprecision)/outputprecision;
+//                  outputText.transition().style("opacity", 1).duration(transitionDuration);
+//                  
+//                  commentary.innerHTML = hiddenlayer_outputphase;
+//
+//                  return "";
+//                });
                 
-              }
-            });
+//              }
+//            });
             
             
             if(layercount === inputlayer && currentphase === "activation") {
@@ -633,10 +673,14 @@ Organization: Machine Learning at Berkeley
            so that it aligns with existing text */
           var weightlabelwidth = weight.getBBox().width;
           // this is here due to completely unknown forces that the programmer doesn't understand
-          if(currentphase === "bias") {weightlabelwidth += this.getBBox().width;}
+          if(currentphase === "bias" && layercount != outputlayer) {
+            weightlabelwidth += this.getBBox().width;
+          }
           var linewidth = document.getElementById(this.getAttribute('href').slice(1)).getBBox().width;
           d.startOffset = weightlabelwidth/linewidth*100;
-
+          if(currentphase === "output" && layercount == outputlayer) {
+            d.startOffset = "15";
+          }
           
         
       });
@@ -644,8 +688,14 @@ Organization: Machine Learning at Berkeley
         label.transition().attr("startOffset", function(d, i) {
             return d.startOffset.toString() + "%";
           }).duration(1000).delay(100);
-      
+        
+        if(currentphase == "output" && layercount == outputlayer-1) {
+          phaseindex += 3;
+        }
+        else {
           phaseindex++;
+        }
+
         
         currentphase = phases[phaseindex];
           if(phaseindex == phases.length && layercount < outputlayer) {
