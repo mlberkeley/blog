@@ -53,6 +53,7 @@ Organization: Machine Learning at Berkeley
       var nodeSize = 25;
       var inputrange = 4; // goes from -inputrange to inputrange
       var inputprecision = 0.01; // step size
+      var outputprecision = 100; // 1 decimal = 10, 2 decimals = 100, etc.
       var weightSize = 5;
 
       var inputcolor = "green";
@@ -60,7 +61,7 @@ Organization: Machine Learning at Berkeley
       
       activation_fn = sigmoid;
       function sigmoid(t) {
-        return 10/(1+Math.pow(Math.E, -t));
+        return 1/(1+Math.pow(Math.E, -t));
       }
       
       /* functionality settings */
@@ -288,7 +289,7 @@ Organization: Machine Learning at Berkeley
                       .attr("data-layer-to-layer", function(d) {return d.connection;})
                       .attr("data-node-to-node-index", function(d) {return d.id})
                       .attr("data-phase", "bias")
-                      .attr("startOffset", "0%")
+                      .attr("startOffset", "100%")
                       .text();
       // output
       weightlabels.append("textPath")
@@ -347,11 +348,8 @@ Organization: Machine Learning at Berkeley
         .style("fill", outputcolor);
             
       
-        outputnodes.append("line")
-          .attr("x1", function(d){return 0;})
-          .attr("y1", function(d){return 0;})
-          .attr("x2", function(d){return nodeSize*4;})
-          .attr("y2", function(d){return 0;})
+        outputnodes.append("path")
+          .attr("d", function(d) { return "M " + 0 + " " + 0 + " L " + nodeSize*4 + " " + 0;})
           .attr("stroke", outputcolor)
           .attr("stroke-width", "5")
           .attr("marker-end", "url(#arrow)");
@@ -524,14 +522,14 @@ Organization: Machine Learning at Berkeley
         }
         else if(currentphase == "activation") {
           // save result so next layer can access it
-          this.setAttribute("data-result", Math.round(activation_fn(d.result) * 100)/100);
+          this.setAttribute("data-result", Math.round(activation_fn(d.result) * outputprecision)/outputprecision);
           // make all text on connection disappear
           d3.selectAll("[data-node-to-node-index='" + this.getAttribute('href').slice(1) + "']").transition().style("opacity", 0).duration(transitionDuration).delay(transitionDelay).each('end', function() {
             // get text node displaying weight and replace it with equation
             // using weight node because it is the leftmost node, so has space
             var label = d3.select("[data-node-to-node-index='" + this.getAttribute('href').slice(1) + "'][class='weight']");
             
-            var equation = d.equation + " = " + Math.round(activation_fn(d.result) * 100)/100;
+            var equation = d.equation + " = " + Math.round(activation_fn(d.result) * outputprecision)/outputprecision;
             label.text(equation);
             if(equation.length > 25) {
               var linewidth = document.getElementById(this.getAttribute('href').slice(1)).getBBox().width - nodeSize;
@@ -546,7 +544,7 @@ Organization: Machine Learning at Berkeley
 
                   // adds up inputs. idk why reduce doesn't work
                   // get all inputs of starting node
-                  var inputs = d3.selectAll("[data-node-to-node-index$='-" + start + "'][data-phase='activation']");
+                  var inputs = d3.selectAll("[data-node-to-node-index$='-" + d.id + "'][data-phase='activation']");
                   var value = 0;
                   for(var i = 0; i < inputs[0].length; i++) {
                     value += parseFloat(inputs[0][i].getAttribute("data-result")); 
@@ -554,19 +552,20 @@ Organization: Machine Learning at Berkeley
                   
                   // display output at end of arrow
                   // find text element next to current output node, which should have the same index number
-                  var outputText = d3.selectAll("[data-output-index='" + d.id + "']")[0][0];
-                  outputText.innerHTML = value;
+                  var outputText = d3.selectAll("[data-output-index='" + d.id + "']");
+                  outputText[0][0].innerHTML = Math.round(activation_fn(value) * outputprecision)/outputprecision;
+                  outputText.transition().style("opacity", 1).duration(transitionDuration);
                   
                   commentary.innerHTML = hiddenlayer_outputphase;
 
                   return "";
                 });
-                outputs.transition().style("opacity", 1).duration(transitionDuration);
+                
               }
             });
             
             
-            if(currentphase === inputlayer) {
+            if(layercount === inputlayer && currentphase === "activation") {
               commentary.innerHTML = inputlayer_activationphase;
             }
             else {
@@ -585,6 +584,8 @@ Organization: Machine Learning at Berkeley
           /* figure out where text should be moved to 
            so that it aligns with existing text */
           var weightlabelwidth = weight.getBBox().width;
+          // this is here due to completely unknown forces that the programmer doesn't understand
+          if(currentphase === "bias") {weightlabelwidth += this.getBBox().width;}
           var linewidth = document.getElementById(this.getAttribute('href').slice(1)).getBBox().width;
           d.startOffset = weightlabelwidth/linewidth*100;
 
