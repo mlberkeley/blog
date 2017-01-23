@@ -180,7 +180,7 @@ Organization: Machine Learning at Berkeley
         }
       }  
     </script>
-    <script type='text/template' id='defs'>
+    <script type='text/template' id='knobgradient'>
 
           <radialGradient id="knobgradient"> <!-- referenced in CSS -->
             <stop offset="0" stop-color="gray"/>
@@ -188,6 +188,7 @@ Organization: Machine Learning at Berkeley
           </radialGradient>
 
       </script>
+  
   
       <script type='text/template' id='knob'>
         <g class="knob" data-speed="null" data-rotations="null">
@@ -207,7 +208,7 @@ Organization: Machine Learning at Berkeley
         .attr("width", width+2*nodeSize)
         .attr("height", height*2/3);
       
-      var knobgradient = d3.select('#defs').html();
+      var knobgradient = d3.select('#knobgradient').html();
       var gradient = svg.append(function() {
         var g = document.createElementNS("http://www.w3.org/2000/svg", "defs");
         g.innerHTML = knobgradient;
@@ -225,6 +226,8 @@ Organization: Machine Learning at Berkeley
                       .attr("stroke", "black")
                       .attr("stroke-width", function(d) { return Math.abs(d.weight); })
                       .attr("id", function(d) {return d.id;});
+      
+
       // an invisible line that is thicker than the actual line for ease of interaction
       var selectable = svg.selectAll("selectable")
                     .data(lines).enter()
@@ -323,6 +326,7 @@ Organization: Machine Learning at Berkeley
           .attr("transform", function(d) {
             return "translate(" + d.x + ", " + d.y + ")";});
       
+      
 
       
       
@@ -364,29 +368,21 @@ Organization: Machine Learning at Berkeley
                   .attr("oninput", "changeInput.apply(this)");
 
         }
-//        else if(d.layer === outputlayer) {
-//          // create dud node that doesn't do anything
-//          var g = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-//          g.setAttribute("r", nodeSize);
-//          g.setAttribute("class", "node");
-//          g.setAttribute("fill", outputcolor);
-//          g.setAttribute("data-index", i);
-//          // display output
-//          
-//        }
         else {
           // create knobs that allow users to adjust bias
           var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
           g.innerHTML = knobcode;
           g.setAttribute("viewBox", "-6 -6 24 24");
           g.setAttribute("style", "transform: scale(5)");
-          g.setAttribute('class', 'node dial');
+
+          if(d.layer === outputlayer) {g.setAttribute("class", "dial node outputnode");}
+          else {g.setAttribute("class", "dial node");}
+
           g.getElementsByClassName('knob_number')[0].setAttribute('data-index', i);
         }
         return g;
       });
 
-      
       var text = node.append("text")
           .attr("class", "nodetext")
           .attr("style", "text-anchor: middle; alignment-baseline: middle;")
@@ -403,6 +399,34 @@ Organization: Machine Learning at Berkeley
               return "";
             }
           });
+      
+      // add output arrow
+//      <marker id="arrow" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+//            <path d="M0,0 L0,6 L9,3 z" fill="#f00" />
+//          </marker>
+      var outputnodes = node.filter(function(d) {return d.layer == outputlayer;});
+      
+      outputnodes.append("svg:defs").append("svg:marker")
+        .attr("id", "arrow")
+        .attr("refX", 6)
+        .attr("refY", 6)
+        .attr("markerWidth", 120)
+        .attr("markerHeight", 60)
+        .attr("orient", "auto")
+        .append("path")
+        .attr("d", "M 0 0 12 6 0 12 3 6")
+        .style("fill", "black");
+            
+      
+        outputnodes.append("line")
+          .attr("x1", function(d){return 0;})
+          .attr("y1", function(d){return 0;})
+          .attr("x2", function(d){return nodeSize*4;})
+          .attr("y2", function(d){return 0;})
+          .attr("stroke", "#000")
+          .attr("stroke-width", "5")
+          .attr("marker-end", "url(#arrow)");
+      
       
     </script>
   
@@ -429,6 +453,7 @@ Organization: Machine Learning at Berkeley
       label.each(function(d, i) { // figure out where and what text to display 
         // get index of starting node
         var start = parseInt(this.getAttribute('href').slice(1)); 
+        var endNode = parseInt(this.getAttribute('href').slice(-1));
         // get weight of connection
         var weight = d3.selectAll("[*|href='" + this.getAttribute('href') + "']")[0][0];
 
@@ -463,8 +488,8 @@ Organization: Machine Learning at Berkeley
         }
         else if(currentphase == "bias") {
 
-          // get value displayed on starting node
-          var value = d3.select("[data-index='" + start + "']")[0][0].innerHTML;
+          // get value displayed on node in next layer
+          var value = d3.select("[data-index='" + endNode + "']")[0][0].innerHTML;
 
           // format addition/subtraction
           var operation = "+ ";
@@ -473,6 +498,8 @@ Organization: Machine Learning at Berkeley
             value = value.slice(1); // remove negative sign on value
           }
           this.innerHTML = operation + value;
+          
+          this.setAttribute("startOffset", "100%");
 
           // save calculation in data for retrieval during "result" phase
           d.result = d.result + parseInt(value);
@@ -558,13 +585,8 @@ Organization: Machine Learning at Berkeley
             return d.startOffset.toString() + "%";
           }).duration(1000).delay(100);
       
-        // skip bias of input layer
-        if(layercount === inputlayer && currentphase == "output") {
-          phaseindex += 2;
-        }
-        else {
           phaseindex++;
-        }
+        
         currentphase = phases[phaseindex];
           if(phaseindex == phases.length && layercount < outputlayer) {
             layercount++;
