@@ -48,17 +48,18 @@ Organization: Machine Learning at Berkeley
   
 
     <script> // sizing variables
-      var width = 800;
+      var width = 700;
       var height = 600;
       var nodeSize = 25;
       var inputrange = 4; // goes from -inputrange to inputrange
       var inputprecision = 0.01; // step size
       var outputprecision = 100; // 1 decimal = 10, 2 decimals = 100, etc.
       var weightSize = 5;
+      var labeloffset = "12%"; // controls how far from the nodes the weights are displayed 
 
       var inputcolor = "green";
       var outputcolor = "blue";
-      var outputArrowLength = nodeSize*10;
+      var outputArrowLength = nodeSize*9;
       
       activation_fn = sigmoid;
       function sigmoid(t) {
@@ -81,6 +82,8 @@ Organization: Machine Learning at Berkeley
       var hiddenlayer_biasphase = "After multiplying all of its inputs by their respective weights, the receiving neuron sums up the results and adds its bias";
       var hiddenlayer_resultphase = "After multiplying all of its inputs by their respective weights, the receiving neuron sums up the results and adds its bias";
       var hiddenlayer_activationphase = "The receiving neuron applies its activation function to the result.";
+      
+      
     </script>
     <script> // process nodes
       
@@ -288,7 +291,7 @@ Organization: Machine Learning at Berkeley
                     .append("text")
                       .attr("style", "text-anchor: left;")
                       .attr("dy", function(d) { // draw text above or below line
-                        if(d.connection.includes("-" + outputlayer)) {
+                        if(d.connection.includes("-" + outputlayer)) { // this is hardcoding to ensure that the text is printed on outside of neural net
                           if((d.y1-d.y2)/(d.x1-d.x2) > 0) {
                             return "-12";
                           }
@@ -308,7 +311,7 @@ Organization: Machine Learning at Berkeley
                       .attr("xlink:href", function(d) {return "#" + d.id})
                       .attr("data-layer-to-layer", function(d) {return d.connection;})
                       .attr("data-node-to-node-index", function(d) {return d.id})
-                      .attr("startOffset", "10%")
+                      .attr("startOffset", labeloffset)
 //                      .attr("textLength", function() {
 //                        return document.getElementById(this.getAttribute('href').slice(1)).getBBox().width - nodeSize;
 //                      })
@@ -623,7 +626,7 @@ Organization: Machine Learning at Berkeley
             label.text(equation);
             if(equation.length > 25) {
               var linewidth = document.getElementById(this.getAttribute('href').slice(1)).getBBox().width - nodeSize;
-              label.attr("textLength", linewidth-20);
+              label.attr("textLength", linewidth-10);
             }
             label.transition().style("opacity", 1).duration(transitionDuration);
 //              .each("end", function() { // display output
@@ -664,7 +667,7 @@ Organization: Machine Learning at Berkeley
           
 //          var label = d3.select("[data-node-to-node-index='" + this.getAttribute('href').slice(1) + "'][class='weight']");
 //          label.text(d.equation + " = " + activation_fn(d.result).toString());
-//          label.transition().style("opacity", 1).duration(500);
+//          label.transition().style("opacity", 1).duration(transitionDuration);
         }
         
         
@@ -687,7 +690,7 @@ Organization: Machine Learning at Berkeley
        
         label.transition().attr("startOffset", function(d, i) {
             return d.startOffset.toString() + "%";
-          }).duration(1000).delay(100);
+          }).duration(transitionDuration).delay(transitionDelay);
         
         if(currentphase == "output" && layercount == outputlayer-1) {
           phaseindex += 3;
@@ -744,7 +747,11 @@ Organization: Machine Learning at Berkeley
     <button onclick="resetSim.apply(this)">reset</button>
   </div>
     <p id="commentary"></p>
-  <script>insertDirections();</script>
+  <script>
+    insertDirections();
+    document.getElementById('commentary').setAttribute("style", "width: " + (width-100).toString());
+
+  </script>
   
 </body>
 </html>
