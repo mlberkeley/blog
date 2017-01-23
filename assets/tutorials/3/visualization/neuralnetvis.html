@@ -591,7 +591,7 @@ Organization: Machine Learning at Berkeley
           }
           this.innerHTML = operation + value;
           // save calculation in data for retrieval during "result" phase
-          d.result = Math.round(parseFloat(d.result + value)*outputprecision)/outputprecision;
+          d.result = Math.round(parseFloat(d.result + parseFloat(value))*outputprecision)/outputprecision;
           d.equation += " " + operation + value + " = " + d.result.toString() + ")";
 
           commentary.innerHTML = hiddenlayer_biasphase;
@@ -677,7 +677,7 @@ Organization: Machine Learning at Berkeley
           var weightlabelwidth = weight.getBBox().width;
           // this is here due to completely unknown forces that the programmer doesn't understand
           if(currentphase === "bias" && layercount != outputlayer) {
-            weightlabelwidth += this.getBBox().width;
+            weightlabelwidth = this.getBBox().width * 1.5;
           }
           var linewidth = document.getElementById(this.getAttribute('href').slice(1)).getBBox().width;
           d.startOffset = weightlabelwidth/linewidth*100;
