@@ -112,7 +112,7 @@ Finally, each layer is **fully connected** to the one before it and after it. Th
 </style>
 
 <div id="mydiv">
-    <iframe id="myframe" height="600px" scrolling="no" src="/blog/assets/tutorials/3/neuralnetvis.html" width="1000px">
+    <iframe id="myframe" height="600px" scrolling="no" src="/blog/assets/tutorials/3/visualization/neuralnetvis.html" width="1000px">
     </iframe>
 </div>
 
