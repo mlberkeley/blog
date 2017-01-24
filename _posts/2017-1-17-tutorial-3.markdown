@@ -95,7 +95,7 @@ Similarly, the output of the output layer (on the very right) will be the output
 
 Between the input layer and the output layer are hidden layers. The optimal number of hidden layers is the subject of much discussion, but the short answer is that it's completely up to whoever builds the network. For simplicity, we’ll talk about a network with one hidden layer.
 
-Finally, each layer is **fully connected** to the one before it and after it. This means the output of a single neuron in a layer connects to (or is the input of) every neuron in the next layer, because the information that a neuron provides in one layer could be useful to any neuron in the next layer. Between each connection is a weight that the output is weighted by. Let’s go through a visual example a simple example:
+Finally, each layer is **fully connected** to the one before it and after it. This means the output of a single neuron in a layer connects to (or is the input of) every neuron in the next layer, because the information that a neuron provides in one layer could be useful to any neuron in the next layer. Between each connection is a weight that the output is weighted by. Let’s go through a visual example (sorry, it doesn't work on Firefox or mobile):
 
 <style>
 #mydiv{
