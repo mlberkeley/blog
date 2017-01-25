@@ -279,7 +279,7 @@ Organization: Machine Learning at Berkeley
       
       //              var weight = document.getElementById(this.getAttribute('data-line'));
 //              var weightlabel = document.querySelectorAll('[*|href="#' + this.getAttribute('data-line') + '"]')[0];
-//              strokewidth = parseInt(document.querySelectorAll('[*|href="#' + this.getAttribute('data-line') + '"]')[0].innerHTML);
+//              strokewidth = parseFloat(document.querySelectorAll('[*|href="#' + this.getAttribute('data-line') + '"]')[0].innerHTML);
 //
 //              if(d3.event.dy > 2 && strokewidth < weightSize) {
 //                strokewidth = strokewidth+1;
@@ -388,7 +388,7 @@ Organization: Machine Learning at Berkeley
 //            
 //              var weight = document.getElementById(this.getAttribute('data-line'));
 //              var weightlabel = document.querySelectorAll('[*|href="#' + this.getAttribute('data-line') + '"]')[0];
-//              strokewidth = parseInt(document.querySelectorAll('[*|href="#' + this.getAttribute('data-line') + '"]')[0].innerHTML);
+//              strokewidth = parseFloat(document.querySelectorAll('[*|href="#' + this.getAttribute('data-line') + '"]')[0].innerHTML);
 //
 //              if(d3.event.dy > 2 && strokewidth < weightSize) {
 //                strokewidth = strokewidth+1;
@@ -607,8 +607,8 @@ Organization: Machine Learning at Berkeley
       label.style("opacity", 1);
       label.each(function(d, i) { // figure out where and what text to display 
         // get index of starting node
-        var start = parseInt(this.getAttribute('data-node-to-node-index')); 
-        var end = parseInt(this.getAttribute('data-node-to-node-index').slice(-1));
+        var start = parseFloat(this.getAttribute('data-node-to-node-index')); 
+        var end = parseFloat(this.getAttribute('data-node-to-node-index').slice(-1));
         // get weight of connection
         var weight = d3.selectAll("[*|href='" + this.getAttribute('href') + "']")[0][0];
 
@@ -653,7 +653,7 @@ Organization: Machine Learning at Berkeley
             // format multiplication properly
             var operation = "• ";
             // if value negative, wrap it in parentheses
-            if(parseInt(value) < 0) {value = "(" + value + ")";}
+            if(parseFloat(value) < 0) {value = "(" + value + ")";}
             this.innerHTML = operation + value;
             if(layercount == outputlayer-1) {
               var fn = "";
@@ -679,7 +679,7 @@ Organization: Machine Learning at Berkeley
           }
           // format addition/subtraction
           var operation = "+ ";
-          if(parseInt(value) < 0) {
+          if(parseFloat(value) < 0) {
             var operation = "- ";
             value = value.slice(1); // remove negative sign on value
           }
@@ -820,7 +820,7 @@ Organization: Machine Learning at Berkeley
       label.transition().style("opacity", 0).duration(transitionDuration).delay(transitionDelay)
         .each("end", function(d, i) {
         if(this.getAttribute("class") === "weight") {
-          if(parseInt(d.connection) == outputlayer) {
+          if(parseFloat(d.connection) == outputlayer) {
             this.innerHTML = "";
           }
           else {
