@@ -45,9 +45,14 @@ body {
   user-select: none;
 }
 
-text {
-  font-family: sans-serif;
+text{
+  font-family: "PT Sans", Helvetica, Arial, sans-serif;
 }
+
+p {
+  font-family: "PT Sans", Helvetica, Arial, sans-serif;
+}
+
 .input_slider {
   -webkit-appearance: slider-vertical;
   position: relative;
@@ -61,6 +66,6 @@ text {
 }
 #commentary {
   position: relative;
-
-
+  text-align: center;
+  font-family: "PT Sans", Helvetica, Arial, sans-serif;
 }

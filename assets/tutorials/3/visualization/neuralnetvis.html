@@ -56,13 +56,19 @@ Organization: Machine Learning at Berkeley
       var inputprecision = 0.01; // step size
       var outputprecision = 100; // 1 decimal = 10, 2 decimals = 100, etc.
       
-      var weightrange = 5;
+      var weightrange = 2;
       var weightprecision = 0.1;
       
       var labeloffset = "12%"; // controls how far from the nodes the weights are displayed 
 
-      var inputcolor = "green";
-      var outputcolor = "blue";
+      var inputcolor = "#60ba46";
+      var outputcolor = "#006fff";
+      
+      var weightcolor = "#60ba46"; // green
+      var outputcolor = "#006fff"; // blue
+      var biascolor = "#ed3624"; // red
+      var resultcolor = "#a21cc4"; // purple
+      
       var outputArrowLength = nodeSize*9;
       
       activation_fn = sigmoid;
@@ -106,8 +112,8 @@ Organization: Machine Learning at Berkeley
       // refer to nodes by their labels. 
       // if a weight isn't specified for a connection, default will be 1
       weights = [
-        {"startLabel": "input 1", "endLabel": "hidden 1", "weight": 5},
-        {"startLabel": "hidden 1", "endLabel": "output 1", "weight": -3},
+        {"startLabel": "input 1", "endLabel": "hidden 1", "weight": 1},
+        {"startLabel": "hidden 1", "endLabel": "output 1", "weight": -0.5},
         {"startLabel": "input 1", "endLabel": "hidden 2", "weight": 2}
       ]
       
@@ -426,6 +432,7 @@ Organization: Machine Learning at Berkeley
                       .attr("xlink:href", function(d) {return "#" + d.id})
                       .attr("data-layer-to-layer", function(d) {return d.connection;})
                       .attr("data-node-to-node-index", function(d) {return d.id})
+                      .attr("fill", weightcolor)
                       .attr("startOffset", labeloffset)
 //                      .attr("textLength", function() {
 //                        return document.getElementById(this.getAttribute('href').slice(1)).getBBox().width - nodeSize;
@@ -443,6 +450,7 @@ Organization: Machine Learning at Berkeley
                       .attr("data-node-to-node-index", function(d) {return d.id})
                       .attr("data-phase", "bias")
                       .attr("startOffset", "100%")
+                      .attr("fill", biascolor)
                       .text();
       // output
       weightlabels.append("textPath")
@@ -451,6 +459,7 @@ Organization: Machine Learning at Berkeley
                       .attr("data-layer-to-layer", function(d) {return d.connection;})
                       .attr("data-node-to-node-index", function(d) {return d.id})
                       .attr("data-phase", "output")
+                      .attr("fill", outputcolor)
                       .attr("startOffset", "0%")
                       .text();
       // result
@@ -460,6 +469,7 @@ Organization: Machine Learning at Berkeley
                       .attr("data-layer-to-layer", function(d) {return d.connection;})
                       .attr("data-node-to-node-index", function(d) {return d.id})
                       .attr("data-phase", "result")
+                      .attr("fill", resultcolor)
                       .attr("startOffset", "0%")
                       .text();
       // activation
@@ -839,11 +849,13 @@ Organization: Machine Learning at Berkeley
     <button onclick="moveText.apply(this)">next</button>
     <button onclick="resetSim.apply(this)">reset</button>
   </div>
+  <div id="commentaryWrapper">
     <p id="commentary"></p>
+  </div>
   <script>
     insertDirections();
     document.getElementById('commentary').setAttribute("style", "width: " + (width-100).toString());
-
+    document.getElementById("commentaryWrapper").setAttribute("style", "width: " + width.toString);
   </script>
   
 </body>
