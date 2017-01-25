@@ -334,14 +334,14 @@ Organization: Machine Learning at Berkeley
                                           if(d.connection.includes(outputlayer)) { // this is hardcoding to ensure that sliders are on outside of neural net
                                             var offset = 0;
                                             if((d.y1-d.y2)/(d.x1-d.x2) > 0) { // sloping up
-                                              offset = Math.min(d.y1, d.y2); 
+                                              offset = Math.min(d.y1, d.y2)-nodeSize; 
                                             }
                                             else {
                                               offset = Math.max(d.y1, d.y2);
                                             }
                                           }
                                           else if((d.y1-d.y2)/(d.x1-d.x2) <= 0) {
-                                            offset = Math.min(d.y1, d.y2);
+                                            offset = Math.min(d.y1, d.y2) - nodeSize;
                                           }
                                           else {
                                             offset = Math.max(d.y1, d.y2);
