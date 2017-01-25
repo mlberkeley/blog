@@ -51,10 +51,14 @@ Organization: Machine Learning at Berkeley
       var width = 700;
       var height = 600;
       var nodeSize = 25;
+      
       var inputrange = 4; // goes from -inputrange to inputrange
       var inputprecision = 0.01; // step size
       var outputprecision = 100; // 1 decimal = 10, 2 decimals = 100, etc.
-      var weightSize = 5;
+      
+      var weightrange = 5;
+      var weightprecision = 0.1;
+      
       var labeloffset = "12%"; // controls how far from the nodes the weights are displayed 
 
       var inputcolor = "green";
@@ -81,8 +85,12 @@ Organization: Machine Learning at Berkeley
       var hiddenlayer_outputphase = "The receiving neuron receives the calculated result and multiplies its inputs by the weight of its connection(s) to the sender neuron.";
       var hiddenlayer_biasphase = "After multiplying all of its inputs by their respective weights, the receiving neuron sums up the results and adds its bias";
       var hiddenlayer_resultphase = "After multiplying all of its inputs by their respective weights, the receiving neuron sums up the results and adds its bias";
-      var hiddenlayer_activationphase = "The receiving neuron applies its activation function to the result.";
+      var hiddenlayer_activationphase = "The receiving neuron multiplies its inputs by their corresponding weights";
       
+      var outputlayer_outputphase = "";
+      var outputlayer_biasphase = "output bias";
+      var outputlayer_resultphase = "output result";
+      var outputlayer_activationphase = "The output neuron applies its activation function to the result.";
       
     </script>
     <script> // process nodes
@@ -222,6 +230,7 @@ Organization: Machine Learning at Berkeley
       </script>
   
     <script async>
+
       var svg = d3.select("body").append("svg")
         .attr("xmlns", "http://www.w3.org/2000/svg")
 //        .attr("viewBox", "0 50 800 800") // I would scale, but foreignObject bug doesn't let me
@@ -239,52 +248,141 @@ Organization: Machine Learning at Berkeley
         return document.getElementById('knobstyle');
       });
       
+      //      svg.append("foreignObject")
+//              .attr("width", nodeSize)
+//              .attr("height", nodeSize*4)
+//              .attr("x", d.x - 2*nodeSize)
+//              .attr("y", d.y - 2*nodeSize)
+//              .append("xhtml:form").append("xhtml:input") // xhtml tells d3.js it's HTML, not SVG
+//                  .attr("class", "input_slider")
+//                  .attr("value", 0)
+//                  .attr("min", -inputrange)
+//                  .attr("max", inputrange)
+//                  .attr("step", inputprecision)
+//                  .attr("type", "range")
+//                  .attr("style", "height: " + (nodeSize*4-10).toString())
+//                  .attr("orient", "vertical")
+//                  .attr("data-node", i)
+//                  .attr("oninput", "changeInput.apply(this)");
+
+      
+      function changeInput() {
+        var i = this.getAttribute('data-node');
+        d3.selectAll('.nodetext')[0][i].innerHTML = d3.selectAll('.input_slider')[0][i].value;
+      }
+      
+      //              var weight = document.getElementById(this.getAttribute('data-line'));
+//              var weightlabel = document.querySelectorAll('[*|href="#' + this.getAttribute('data-line') + '"]')[0];
+//              strokewidth = parseInt(document.querySelectorAll('[*|href="#' + this.getAttribute('data-line') + '"]')[0].innerHTML);
+//
+//              if(d3.event.dy > 2 && strokewidth < weightSize) {
+//                strokewidth = strokewidth+1;
+//                weight.setAttribute('stroke-width', Math.abs(strokewidth));
+//              }
+//              else if(d3.event.dy < -2 && strokewidth > -weightSize) {
+//                strokewidth = strokewidth-1;
+//                weight.setAttribute('stroke-width', Math.abs(strokewidth));
+//              }
+//              weightlabel.innerHTML = strokewidth;
+//            
+//              // adjust weight text as line thickens
+//              weightlabel.parentElement.setAttribute("dy", (-Math.abs(strokewidth)/2-12).toString());
+      
+      // changes the weight according to the weight's corresponding slider position
+      // id is the nodeIndex-to-nodeIndex that the weight is connecting
+      function changeWeight(id) {
+        var weight = d3.selectAll("[id='" + id + "']")[0][0];
+        var weightlabel = d3.selectAll('[*|href="#' + id + '"][class="weight"]')[0][0];
+        var sliderValue = this.value;
+        
+        weight.setAttribute("stroke-width", Math.abs(sliderValue));
+        weightlabel.innerHTML = sliderValue;
+//        weight.setAttribute("")
+      }
+
       var line = svg.selectAll("lines")
                     .data(lines).enter()
-                    .append("path")
-                      .attr("d", function(d) { return "M " + d.x1 + " " + d.y1 + " L " + d.x2 + " " + d.y2;})
-                      .attr("stroke", function(d) {
-                        if(d.connection == outputlayer.toString() + "-" + (outputlayer+1).toString()){return outputcolor;}
-                        else{return "black";}})
-                      .attr("stroke-width", function(d) { return Math.abs(d.weight); })
-                      .attr("id", function(d) {return d.id;})
-                      .attr("marker-end", function(d){if(d.connection == outputlayer.toString() + "-" + (outputlayer+1).toString()) {return "url(#arrow)";}});
+                    .append(function(d, i) {
+                      var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                      path.setAttribute("d", "M " + d.x1 + " " + d.y1 + " L " + d.x2 + " " + d.y2);
+                      function getStroke() {
+                        if(d.connection == outputlayer.toString() + "-" + (outputlayer+1).toString()){ // make output arrows a different color
+                          return outputcolor;
+                        }
+                        else{
+                          return "black";
+                        }
+                      }
+                      path.setAttribute("stroke", getStroke());
+                      path.setAttribute("stroke-width", Math.abs(d.weight));
+                      path.setAttribute("id", d.id);
+                      
+                      function getMarker(){ // draw pointer at end of output arrow
+                        if(d.connection == outputlayer.toString() + "-" + (outputlayer+1).toString()) {
+                          return "url(#arrow)";
+                        }
+                      }
+                      path.setAttribute("marker-end", getMarker());
       
+            
+                      if(!d.connection.includes(outputlayer + "-")) {
+                        svg.append("foreignObject")
+                            .attr("width", nodeSize*4)
+                            .attr("height", nodeSize)
+                            .attr("x", (d.x1+d.x2)/2-nodeSize*2)
+                            .attr("y", (d.y1+d.y2)/2)
+                            .append("xhtml:form").append("xhtml:input") // xhtml tells d3.js it's HTML, not SVG
+                                .attr("class", "weight_slider")
+                                .attr("value", d.weight)
+                                .attr("min", -weightrange)
+                                .attr("max", weightrange)
+                                .attr("step", weightprecision)
+                                .attr("type", "range")
+                                .attr("style", "width: " + (nodeSize*4-10).toString())
+                                .attr("orient", "")
+                                .attr("data-node", i)
+                                .attr("oninput", "changeWeight.apply(this,['" + d.id + "'])");
+                      }
+              
+                      return path;
+                    });
       
       // an invisible line that is thicker than the actual line for ease of interaction
-      var selectable = svg.selectAll("selectable")
-                    .data(lines).enter()
-                    .append("path")
-                      .attr("d", function(d) { return "M " + d.x1 + " " + d.y1 + " L " + d.x2 + " " + d.y2;})
-//                      .attr("stroke", "red")
-                      .attr("stroke-width", nodeSize)
-                      .attr("data-line", function(d) {return d.id;})
-                      .attr("pointer-events", "visible");
+      // used for changing weights by dragging
+//      var selectable = svg.selectAll("selectable")
+//                    .data(lines).enter()
+//                    .append("path")
+//                      .attr("d", function(d) { return "M " + d.x1 + " " + d.y1 + " L " + d.x2 + " " + d.y2;})
+////                      .attr("stroke", "red")
+//                      .attr("stroke-width", nodeSize)
+//                      .attr("data-line", function(d) {return d.id;})
+//                      .attr("pointer-events", "visible");
       
+      // enables changing weight by dragging
       // known bug: horizontal lines don't thicken when dragged (drag event isn't even triggered)
-      var drag = d3.behavior.drag()
-          .on("drag", function(d, i) {
-            
-              var weight = document.getElementById(this.getAttribute('data-line'));
-              var weightlabel = document.querySelectorAll('[*|href="#' + this.getAttribute('data-line') + '"]')[0];
-              strokewidth = parseInt(document.querySelectorAll('[*|href="#' + this.getAttribute('data-line') + '"]')[0].innerHTML);
-
-              if(d3.event.dy > 2 && strokewidth < weightSize) {
-                strokewidth = strokewidth+1;
-                weight.setAttribute('stroke-width', Math.abs(strokewidth));
-              }
-              else if(d3.event.dy < -2 && strokewidth > -weightSize) {
-                strokewidth = strokewidth-1;
-                weight.setAttribute('stroke-width', Math.abs(strokewidth));
-              }
-              weightlabel.innerHTML = strokewidth;
-            
-              // adjust weight text as line thickens
-              weightlabel.parentElement.setAttribute("dy", (-Math.abs(strokewidth)/2-12).toString());
-          
-          }
-      );
-      selectable.call(drag);
+//      var drag = d3.behavior.drag()
+//          .on("drag", function(d, i) {
+//            
+//              var weight = document.getElementById(this.getAttribute('data-line'));
+//              var weightlabel = document.querySelectorAll('[*|href="#' + this.getAttribute('data-line') + '"]')[0];
+//              strokewidth = parseInt(document.querySelectorAll('[*|href="#' + this.getAttribute('data-line') + '"]')[0].innerHTML);
+//
+//              if(d3.event.dy > 2 && strokewidth < weightSize) {
+//                strokewidth = strokewidth+1;
+//                weight.setAttribute('stroke-width', Math.abs(strokewidth));
+//              }
+//              else if(d3.event.dy < -2 && strokewidth > -weightSize) {
+//                strokewidth = strokewidth-1;
+//                weight.setAttribute('stroke-width', Math.abs(strokewidth));
+//              }
+//              weightlabel.innerHTML = strokewidth;
+//            
+//              // adjust weight text as line thickens
+//              weightlabel.parentElement.setAttribute("dy", (-Math.abs(strokewidth)/2-12).toString());
+//          
+//          }
+//      );
+//      selectable.call(drag);
       
       var weightlabels = svg.selectAll("weights")
                     .data(lines).enter()
@@ -366,20 +464,6 @@ Organization: Machine Learning at Berkeley
           .attr("transform", function(d) {
             return "translate(" + d.x + ", " + d.y + ")";});
       
-      
-
-      // add output arrow
-//      <marker id="arrow" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
-//            <path d="M0,0 L0,6 L9,3 z" fill="#f00" />
-//          </marker>
-      
-//      var line = svg.selectAll("lines")
-//                    .data(lines).enter()
-//                    .append("path")
-//                      .attr("d", function(d) { return "M " + d.x1 + " " + d.y1 + " L " + d.x2 + " " + d.y2;})
-//                      .attr("stroke", "black")
-//                      .attr("stroke-width", function(d) { return Math.abs(d.weight); })
-//                      .attr("id", function(d) {return d.id;});
       var outputnodes = node.filter(function(d) {return d.layer == outputlayer;});
       
       outputnodes.append("svg:defs").append("svg:marker")
@@ -392,19 +476,6 @@ Organization: Machine Learning at Berkeley
         .append("path")
         .attr("d", "M 0 0 4 2 0 4 1 2")
         .style("fill", outputcolor);
-            
-//      // failed project
-//        svg.selectAll("something").data(nodes).append((function(d, i) {
-//          if(d.layer != outputlayer) {return;}
-//          var outputarrow = document.createElementNS("http://www.w3.org/2000/svg", "path");
-//          outputarrow.setAttribute("d", "M " + d.x + " " + d.y + " L " + (d.x+nodeSize*4) + " " + d.y);
-//          outputarrow.setAttribute("stroke", outputcolor);
-//          outputarrow.setAttribute("stroke-width", "5");
-//          outputarrow.setAttribute("id", d.id);
-//          outputarrow.setAttribute("marker-end", "url(#arrow)");
-//          return outputarrow;
-//        }));
-      
 
       
 
@@ -425,11 +496,6 @@ Organization: Machine Learning at Berkeley
           .text("");
       
 
-      function changeInput() {
-        var i = this.getAttribute('data-node');
-        d3.selectAll('.nodetext')[0][i].innerHTML = d3.selectAll('.input_slider')[0][i].value;
-      }
-      
         var knobcode = d3.select('#knob').html();
         var knobs = node.append(function(d, i) {
         // make this if statement, check data if 1 < layer < max and draw sliders for input output layers
@@ -536,6 +602,7 @@ Organization: Machine Learning at Berkeley
               value += parseFloat(result); // slice off '=' sign
             }
             text = text.slice(0,-1);
+            commentary.innerHTML = outputlayer_outputphase;
             
           }
           else {
@@ -629,6 +696,7 @@ Organization: Machine Learning at Berkeley
               label.attr("textLength", linewidth-10);
             }
             label.transition().style("opacity", 1).duration(transitionDuration);
+// this is code that displays the output at the end of the arrow. Just append it to the end of the previous line
 //              .each("end", function() { // display output
 //              if(layercount == outputlayer) {
 //                var outputs = d3.selectAll("[data-layer='" + outputlayer + "']");
@@ -656,8 +724,11 @@ Organization: Machine Learning at Berkeley
 //            });
             
             
-            if(layercount === inputlayer && currentphase === "activation") {
+            if(layercount === inputlayer+1) {
               commentary.innerHTML = inputlayer_activationphase;
+            }
+            else if(layercount == outputlayer) {
+              commentary.innerHTML = outputlayer_activationphase;
             }
             else {
               commentary.innerHTML = hiddenlayer_activationphase;
