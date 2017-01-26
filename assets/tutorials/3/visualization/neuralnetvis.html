@@ -67,7 +67,10 @@ Organization: Machine Learning at Berkeley
       var weightcolor = "#60ba46"; // green
       var outputcolor = "#006fff"; // blue
       var biascolor = "#ed3624"; // red
-      var resultcolor = "#a21cc4"; // purple
+      var sumcolor = "#a21cc4"; // purple
+      var operationcolor = "black";
+      var activationcolor = "#a21cc4"; // purple
+      var resultcolor = "#006fff"; // blue
       
       var outputArrowLength = nodeSize*9;
       
@@ -601,6 +604,7 @@ Organization: Machine Learning at Berkeley
     
     /* all operations are output * weight (already displayed) + bias = result */
     function moveText() {
+      var final_result;
       // select all weights between layercount and layercount + 1
       var label = d3.selectAll("[data-layer-to-layer='" + layercount.toString() + "-" + (layercount+1).toString() + "'][data-phase='" + currentphase + "']");
       label.attr("startOffset", "0%");
@@ -658,12 +662,18 @@ Organization: Machine Learning at Berkeley
             if(layercount == outputlayer-1) {
               var fn = "";
             } else {var fn = "f("}
+            d.fn1 = fn;
+            d.weight = weight.innerHTML;
+            d.multiply = operation;
+            d.output = value;
             d.equation = fn + weight.innerHTML + operation + value;
           }
           else {
             d.result = value;
             this.innerHTML = text;
             d.equation = "f(" + text;
+            d.fn1 = "f(";
+            d.output = text;
           }
           
           
@@ -687,7 +697,10 @@ Organization: Machine Learning at Berkeley
           // save calculation in data for retrieval during "result" phase
           d.result = Math.round(parseFloat(d.result + parseFloat(value))*outputprecision)/outputprecision;
           d.equation += " " + operation + value + " = " + d.result.toString() + ")";
-
+          d.plus = operation;
+          d.bias = value;
+          d.sum = d.result.toString();
+          d.fn2 = ") = ";
           commentary.innerHTML = hiddenlayer_biasphase;
           
         }
@@ -702,8 +715,9 @@ Organization: Machine Learning at Berkeley
           }
         }
         else if(currentphase == "activation") {
-          if(layercount == outputlayer-1) {
+          if(layercount == outputlayer-1) { // if this is connecting to the outputlayer
             var result = Math.round(d.result * outputprecision)/outputprecision;
+            d.sum = " = ";
           }
           else {
             var result = Math.round(activation_fn(d.result) * outputprecision)/outputprecision;
@@ -717,38 +731,55 @@ Organization: Machine Learning at Berkeley
             var label = d3.select("[data-node-to-node-index='" + this.getAttribute('href').slice(1) + "'][class='weight']");
             
             var equation = d.equation + " = " + result;
-            label.text(equation);
+            d.result = result;
+//            label.text(equation);
+            if(!d.added_equation) { // this is here because I'm a lazy programmer. Please don't let John DeNero see this. Or any part of this program.
+              label.text("");
+              label.append("tspan").attr("class", "equation_fn1").text(d.fn1);
+              label.append("tspan").attr("class", "equation_weight").text(d.weight);
+              label.append("tspan").attr("class", "equation_multiply").text(d.multiply);
+              label.append("tspan").attr("class", "equation_output").text(d.output);
+              label.append("tspan").attr("class", "equation_plus").text(d.plus);
+              label.append("tspan").attr("class", "equation_bias").text(d.bias);
+              label.append("tspan").attr("class", "equation_fn2").text(d.fn2);
+              label.append("tspan").attr("class", "equation_fn1").text(d.fn1);
+              label.append("tspan").attr("class", "equation_sum").text(d.sum);
+              label.append("tspan").attr("class", "equation_fn2").text(d.fn2);
+              label.append("tspan").attr("class", "equation_result").text(d.result);
+              d.added_equation = true;
+              setEquationColors();
+              final_result = d.result;
+            }
             if(equation.length > 25) {
               var linewidth = document.getElementById(this.getAttribute('href').slice(1)).getBBox().width - nodeSize;
               label.attr("textLength", linewidth-10);
             }
-            label.transition().style("opacity", 1).duration(transitionDuration);
-// this is code that displays the output at the end of the arrow. Just append it to the end of the previous line
-//              .each("end", function() { // display output
-//              if(layercount == outputlayer) {
-//                var outputs = d3.selectAll("[data-layer='" + outputlayer + "']");
-//                outputs.style("opacity", 0);
-//                outputs.text(function(d) {   // adds up inputs. idk why reduce doesn't work
-//                  // get all inputs of starting node
-//                  var inputs = d3.selectAll("[data-node-to-node-index$='-" + d.id + "'][data-phase='activation']");
-//                  var value = 0;
-//                  for(var i = 0; i < inputs[0].length; i++) {
-//                    value += parseFloat(inputs[0][i].getAttribute("data-result")); 
-//                  }
-//                  
-//                  // display output at end of arrow
-//                  // find text element next to current output node, which should have the same index number
-//                  var outputText = d3.selectAll("[data-output-index='" + d.id + "']");
-//                  outputText[0][0].innerHTML = Math.round(activation_fn(d.result) * outputprecision)/outputprecision;
-//                  outputText.transition().style("opacity", 1).duration(transitionDuration);
-//                  
-//                  commentary.innerHTML = hiddenlayer_outputphase;
-//
-//                  return "";
-//                });
+            label.transition().style("opacity", 1).duration(transitionDuration)
+              .each("end", function() { // display output
+              if(layercount == outputlayer && !currentphase) {
+                var outputs = d3.selectAll("[data-layer='" + outputlayer + "']");
+                outputs.style("opacity", 0);
+                outputs.text(function(d) {   // adds up inputs. idk why reduce doesn't work
+                  // get all inputs of starting node
+                  var inputs = d3.selectAll("[data-node-to-node-index$='-" + d.id + "'][data-phase='activation']");
+                  var value = 0;
+                  for(var i = 0; i < inputs[0].length; i++) {
+                    value += parseFloat(inputs[0][i].getAttribute("data-result")); 
+                  }
+                  
+                  // display output at end of arrow
+                  // find text element next to current output node, which should have the same index number
+                  var outputText = d3.selectAll("[data-output-index='" + d.id + "']");
+                  outputText[0][0].innerHTML = final_result;
+                  outputText.transition().style("opacity", 1).duration(transitionDuration);
+                  
+                  commentary.innerHTML = hiddenlayer_outputphase;
+
+                  return "";
+                });
                 
-//              }
-//            });
+              }
+            });
             
             
             if(layercount === inputlayer+1) {
@@ -831,6 +862,7 @@ Organization: Machine Learning at Berkeley
         }
         else {
           this.innerHTML = "";
+          d.added_equation = false;
         }
         commentary.innerHTML = directions;
       });
@@ -844,6 +876,32 @@ Organization: Machine Learning at Berkeley
     }
     
     
+  </script>
+  
+  <script> // set colors for final equation
+    /*label.append("tspan").attr("class", "equation_fn1").text(d.fn1);
+              label.append("tspan").attr("class", "equation_weight").text(d.weight);
+              label.append("tspan").attr("class", "equation_multiply").text(d.multiply);
+              label.append("tspan").attr("class", "equation_output").text(d.output);
+              label.append("tspan").attr("class", "equation_plus").text(d.plus);
+              label.append("tspan").attr("class", "equation_bias").text(d.bias);
+              label.append("tspan").attr("class", "equation_fn2").text(d.fn2);
+              label.append("tspan").attr("class", "equation_fn1").text(d.fn1);
+              label.append("tspan").attr("class", "equation_sum").text(d.sum);
+              label.append("tspan").attr("class", "equation_fn2").text(d.fn2);
+              label.append("tspan").attr("class", "equation_result").text(d.result);
+*/
+    function setEquationColors() {
+      d3.selectAll("[class='equation_fn1']").style("fill", activationcolor);
+      d3.selectAll("[class='equation_weight']").style("fill", weightcolor);
+      d3.selectAll("[class='equation_multiply']").style("fill", operationcolor);
+      d3.selectAll("[class='equation_output']").style("fill", outputcolor);
+      d3.selectAll("[class='equation_plus']").style("fill", operationcolor);
+      d3.selectAll("[class='equation_bias']").style("fill", biascolor);
+      d3.selectAll("[class='equation_fn2']").style("fill", activationcolor);
+      d3.selectAll("[class='equation_sum']").style("fill", sumcolor);
+      d3.selectAll("[class='equation_result']").style("fill", resultcolor);
+    }
   </script>
   <div id="controls">
     <button onclick="moveText.apply(this)">next</button>
