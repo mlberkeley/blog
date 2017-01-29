@@ -49,15 +49,12 @@ Organization: Machine Learning at Berkeley
   
 
     <script> // sizing variables
-//      var width = parent.interactivewidth-100;
-//      var height = parent.interactiveheight+200;
+      
       var ratio = window.devicePixelRatio || 1;
-      var width = screen.width * ratio;
-      var height = screen.height * ratio;
-      if(isNaN(width) || isNaN(height) == null) {
-        width = 360;
-        height = 600;
-      }
+//      var width = screen.width * ratio;
+      var width = (parent.interactivewidth-100)/ratio || 360;
+      var height = parent.interactiveheight+200 || 600;
+      
       var nodeSize = width*0.0208+12.5; // set to 25 on 600px+ screens, set to 20 on 360px screens
       
       var inputrange = 1; // goes from -inputrange to inputrange
