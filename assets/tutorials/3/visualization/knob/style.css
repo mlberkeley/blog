@@ -53,6 +53,10 @@ p {
   font-family: "PT Sans", Helvetica, Arial, sans-serif;
 }
 
+svg {
+  overflow: visible;
+}
+
 .input_slider {
   -webkit-appearance: slider-vertical;
   position: relative;
@@ -67,6 +71,10 @@ p {
 #commentary {
   position: relative;
   text-align: center;
-  font-family: "PT Sans", Helvetica, Arial, sans-serif;
+  /* I'm too lazy to figure this out but if you want to change the font, you'll also have to 
+  change the font in the line after:
+  weightslider.append("xhtml:center").append("xhtml:div")
+  because CSS seems to not extend to elements inside foreignObject */
+  font-family: "PT Sans", Helvetica, Arial, sans-serif; 
 }
 

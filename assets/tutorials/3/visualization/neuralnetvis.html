@@ -3,8 +3,9 @@ Author: Shannon Shih
 Created: 1/2017
 Organization: Machine Learning at Berkeley
 -->
+<!DOCTYPE html>
 <html>
-<head>
+<head xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width">
   
@@ -48,9 +49,16 @@ Organization: Machine Learning at Berkeley
   
 
     <script> // sizing variables
-      var width = 700;
-      var height = 600;
-      var nodeSize = 25;
+      
+      var ratio = window.devicePixelRatio || 1;
+//      var width = screen.width * ratio;
+      var width = (parent.interactivewidth-100) || 600;
+      var height = parent.interactiveheight+200 || 600;
+      
+      if(screen.width/ratio < width) {
+        width = 360;
+      }
+      var nodeSize = width*0.0208+12.5; // set to 25 on 600px+ screens, set to 20 on 360px screens
       
       var inputrange = 1; // goes from -inputrange to inputrange
       var inputprecision = 0.01; // step size
@@ -59,7 +67,7 @@ Organization: Machine Learning at Berkeley
       var weightrange = 2;
       var weightprecision = 0.1;
       
-      var labeloffset = "12%"; // controls how far from the nodes the weights are displayed 
+      var labeloffset = "14%"; // controls how far from the nodes the weights are displayed 
 
       var inputcolor = "#60ba46";
       var outputcolor = "#006fff";
@@ -335,39 +343,59 @@ Organization: Machine Learning at Berkeley
       
             
                       if(!d.connection.includes(outputlayer + "-")) {
-                        svg.append("foreignObject")
-                            .attr("width", nodeSize*4)
-                            .attr("height", nodeSize)
-                            .attr("x", (d.x1+d.x2)/2-nodeSize*2)
-                            .attr("y", function() { // draw text above or below line
+                        var weightslider = svg.append("foreignObject")
+                            .attr("width", nodeSize*3+4)
+                            .attr("height", nodeSize*2)
+                            .attr("x", function() { // draw sliders above or below line
                                           if(d.connection.includes(outputlayer)) { // this is hardcoding to ensure that sliders are on outside of neural net
                                             var offset = 0;
                                             if((d.y1-d.y2)/(d.x1-d.x2) > 0) { // sloping up
-                                              offset = Math.min(d.y1, d.y2)-nodeSize; 
+                                              offset = (d.x1+d.x2)/2; 
                                             }
                                             else {
-                                              offset = Math.max(d.y1, d.y2);
+                                              offset = (d.x1+d.x2)/2;
                                             }
                                           }
                                           else if((d.y1-d.y2)/(d.x1-d.x2) <= 0) {
-                                            offset = Math.min(d.y1, d.y2) - nodeSize;
+                                            offset = (d.x1+d.x2)/2-2.5*nodeSize;
                                           }
                                           else {
-                                            offset = Math.max(d.y1, d.y2);
+                                            offset = (d.x1+d.x2)/2-2.5*nodeSize;
                                           }
                                           return offset;
                                         })
-                            .append("xhtml:form").append("xhtml:input") // xhtml tells d3.js it's HTML, not SVG
+                            .attr("y", function() { // draw sliders above or below line
+                                          if(d.connection.includes(outputlayer)) { // this is hardcoding to ensure that sliders are on outside of neural net
+                                            var offset = 0;
+                                            if((d.y1-d.y2)/(d.x1-d.x2) > 0) { // sloping up
+                                              offset = (d.y1+d.y2)/2-3.5*nodeSize; 
+                                            }
+                                            else {
+                                              offset = (d.y1+d.y2)/2+2*nodeSize;
+                                            }
+                                          }
+                                          else if((d.y1-d.y2)/(d.x1-d.x2) <= 0) {
+                                            offset = (d.y1+d.y2)/2-3.5*nodeSize;
+                                          }
+                                          else {
+                                            offset = (d.y1+d.y2)/2+2*nodeSize;
+                                          }
+                                          return offset;
+                                        });
+                            weightslider.append("xhtml:form").append("xhtml:input") // xhtml tells d3.js it's HTML, not SVG
                                 .attr("class", "weight_slider")
                                 .attr("value", d.weight)
                                 .attr("min", -weightrange)
                                 .attr("max", weightrange)
                                 .attr("step", weightprecision)
                                 .attr("type", "range")
-                                .attr("style", "width: " + (nodeSize*4-10).toString())
+                                .style("width", nodeSize*3 + "px")
                                 .attr("orient", "")
                                 .attr("data-node", i)
                                 .attr("oninput", "changeWeight.apply(this,['" + d.id + "'])");
+                            weightslider.append("xhtml:center").append("xhtml:div")
+                                .attr("style", "font-family: 'PT Sans', Helvetica, Arial, sans-serif;")
+                                .text("weight");
                       }
               
                       return path;
@@ -436,9 +464,10 @@ Organization: Machine Learning at Berkeley
                       .attr("data-layer-to-layer", function(d) {return d.connection;})
                       .attr("data-node-to-node-index", function(d) {return d.id})
                       .attr("fill", weightcolor)
+                      .attr("lengthAdjust", "spacingAndGlyphs")
                       .attr("startOffset", labeloffset)
 //                      .attr("textLength", function() {
-//                        return document.getElementById(this.getAttribute('href').slice(1)).getBBox().width - nodeSize;
+//                        return document.getElementById(this.getAttribute('href').slice(1)).getBoundingClientRect().width - nodeSize;
 //                      })
                       .text(function(d) {
                             if(d.connection == outputlayer.toString() + "-" + (outputlayer+1).toString()) {return "";}
@@ -560,7 +589,7 @@ Organization: Machine Learning at Berkeley
           var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
           g.innerHTML = knobcode;
           g.setAttribute("viewBox", "-6 -6 24 24");
-          g.setAttribute("style", "transform: scale(5)");
+          g.setAttribute("style", "transform: scale(" + nodeSize/5 + ")");
 
           if(d.layer === outputlayer) {g.setAttribute("class", "dial node outputnode");}
           else {g.setAttribute("class", "dial node");}
@@ -574,8 +603,20 @@ Organization: Machine Learning at Berkeley
           .attr("class", "nodetext")
           .attr("style", "text-anchor: middle; alignment-baseline: middle;")
           .attr("dx", 0)
-          .attr("dy", 0)
-          .attr("fill", "white")
+          .attr("dy", function(d) {
+            if(d.layer === inputlayer) {
+              return 0;
+            }
+            else {
+              return -nodeSize*1.5;
+            }
+          })
+          .attr("fill", function(d) {
+            if(d.layer === inputlayer) {
+              return "white";
+            }
+            else {return "black";}
+          })
           .attr("data-index", function(d, i) {return i;})
           .attr("data-layer", function(d, i) {return d.layer;})
           .text(function addSlider(d, i) {
@@ -583,7 +624,7 @@ Organization: Machine Learning at Berkeley
               return d3.selectAll(".input_slider")[0][i].value;
             }
             else {
-              return "";
+              return "bias";
             }
           });
     </script>
@@ -750,9 +791,13 @@ Organization: Machine Learning at Berkeley
               setEquationColors();
               final_result = d.result;
             }
-            if(equation.length > 25) {
-              var linewidth = document.getElementById(this.getAttribute('href').slice(1)).getBBox().width - nodeSize;
+            var linewidth = document.getElementById(this.getAttribute('href').slice(1)).getBoundingClientRect().width;
+            var textwidth = weight.getBoundingClientRect().width;
+            if(textwidth > linewidth - nodeSize) {
               label.attr("textLength", linewidth-10);
+            }
+            if(layercount == outputlayer && textwidth > linewidth - 3*nodeSize) {
+              label.attr("textLength", linewidth-2*nodeSize);
             }
             label.transition().style("opacity", 1).duration(transitionDuration)
               .each("end", function() { // display output
@@ -803,12 +848,12 @@ Organization: Machine Learning at Berkeley
         
           /* figure out where text should be moved to 
            so that it aligns with existing text */
-          var weightlabelwidth = weight.getBBox().width;
+          var weightlabelwidth = weight.getBoundingClientRect().width;
           // this is here due to completely unknown forces that the programmer doesn't understand
           if(currentphase === "bias" && layercount != outputlayer) {
-            weightlabelwidth = this.getBBox().width * 1.5;
+            weightlabelwidth = this.getBoundingClientRect().width * 1.5;
           }
-          var linewidth = document.getElementById(this.getAttribute('href').slice(1)).getBBox().width;
+          var linewidth = document.getElementById(this.getAttribute('href').slice(1)).getBoundingClientRect().width;
           d.startOffset = weightlabelwidth/linewidth*100;
           if(currentphase === "output" && layercount == outputlayer) {
             d.startOffset = "15";
@@ -912,8 +957,8 @@ Organization: Machine Learning at Berkeley
   </div>
   <script>
     insertDirections();
-    document.getElementById('commentary').setAttribute("style", "width: " + (width-100).toString());
-    document.getElementById("commentaryWrapper").setAttribute("style", "width: " + width.toString);
+    d3.select("#commentaryWrapper").style("width", (width).toString() + "px");
+    document.getElementById("commentaryWrapper").style.width = width.toString();
   </script>
   
 </body>
