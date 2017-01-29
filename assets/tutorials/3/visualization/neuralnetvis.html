@@ -52,9 +52,12 @@ Organization: Machine Learning at Berkeley
       
       var ratio = window.devicePixelRatio || 1;
 //      var width = screen.width * ratio;
-      var width = (parent.interactivewidth-100)/ratio || 360;
+      var width = (parent.interactivewidth-100) || 600;
       var height = parent.interactiveheight+200 || 600;
       
+      if(screen.width/ratio < width) {
+        width = 360;
+      }
       var nodeSize = width*0.0208+12.5; // set to 25 on 600px+ screens, set to 20 on 360px screens
       
       var inputrange = 1; // goes from -inputrange to inputrange
