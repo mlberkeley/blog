@@ -116,7 +116,7 @@ Finally, each layer is **fully connected** to the one before it and after it. Th
     </iframe>
 </div>
 
-<center id="alt-interactive"><img src='{{ site.baseurl }}/assets/tutorials/3/slideshow.gif' width="400"></center>
+<center id="alt-interactive"><img src='{{ site.baseurl }}/assets/tutorials/3/slideshow.gif' width="600"></center>
 
 <script>
 var isFirefox = typeof InstallTrigger !== 'undefined';
