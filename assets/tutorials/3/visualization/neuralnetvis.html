@@ -49,9 +49,14 @@ Organization: Machine Learning at Berkeley
   
 
     <script> // sizing variables
-      var width = 700;
-      var height = 600;
-      var nodeSize = 25;
+      var width = parent.interactivewidth-100;
+      var height = parent.interactiveheight+200;
+      
+      if(isNaN(width) || isNaN(height) == null) {
+        width = 360;
+        height = 600;
+      }
+      var nodeSize = width*0.0208+12.5; // set to 25 on 600px+ screens, set to 20 on 360px screens
       
       var inputrange = 1; // goes from -inputrange to inputrange
       var inputprecision = 0.01; // step size
@@ -60,7 +65,7 @@ Organization: Machine Learning at Berkeley
       var weightrange = 2;
       var weightprecision = 0.1;
       
-      var labeloffset = "12%"; // controls how far from the nodes the weights are displayed 
+      var labeloffset = "14%"; // controls how far from the nodes the weights are displayed 
 
       var inputcolor = "#60ba46";
       var outputcolor = "#006fff";
@@ -337,24 +342,41 @@ Organization: Machine Learning at Berkeley
             
                       if(!d.connection.includes(outputlayer + "-")) {
                         var weightslider = svg.append("foreignObject")
-                            .attr("width", nodeSize*3+2)
+                            .attr("width", nodeSize*3+4)
                             .attr("height", nodeSize*2)
-                            .attr("x", (d.x1+d.x2)/2-nodeSize*2)
-                            .attr("y", function() { // draw text above or below line
+                            .attr("x", function() { // draw sliders above or below line
                                           if(d.connection.includes(outputlayer)) { // this is hardcoding to ensure that sliders are on outside of neural net
                                             var offset = 0;
                                             if((d.y1-d.y2)/(d.x1-d.x2) > 0) { // sloping up
-                                              offset = Math.min(d.y1, d.y2)-nodeSize; 
+                                              offset = (d.x1+d.x2)/2; 
                                             }
                                             else {
-                                              offset = Math.max(d.y1, d.y2);
+                                              offset = (d.x1+d.x2)/2;
                                             }
                                           }
                                           else if((d.y1-d.y2)/(d.x1-d.x2) <= 0) {
-                                            offset = Math.min(d.y1, d.y2) - nodeSize;
+                                            offset = (d.x1+d.x2)/2-2.5*nodeSize;
                                           }
                                           else {
-                                            offset = Math.max(d.y1, d.y2);
+                                            offset = (d.x1+d.x2)/2-2.5*nodeSize;
+                                          }
+                                          return offset;
+                                        })
+                            .attr("y", function() { // draw sliders above or below line
+                                          if(d.connection.includes(outputlayer)) { // this is hardcoding to ensure that sliders are on outside of neural net
+                                            var offset = 0;
+                                            if((d.y1-d.y2)/(d.x1-d.x2) > 0) { // sloping up
+                                              offset = (d.y1+d.y2)/2-3.5*nodeSize; 
+                                            }
+                                            else {
+                                              offset = (d.y1+d.y2)/2+2*nodeSize;
+                                            }
+                                          }
+                                          else if((d.y1-d.y2)/(d.x1-d.x2) <= 0) {
+                                            offset = (d.y1+d.y2)/2-3.5*nodeSize;
+                                          }
+                                          else {
+                                            offset = (d.y1+d.y2)/2+2*nodeSize;
                                           }
                                           return offset;
                                         });
@@ -440,6 +462,7 @@ Organization: Machine Learning at Berkeley
                       .attr("data-layer-to-layer", function(d) {return d.connection;})
                       .attr("data-node-to-node-index", function(d) {return d.id})
                       .attr("fill", weightcolor)
+                      .attr("lengthAdjust", "spacingAndGlyphs")
                       .attr("startOffset", labeloffset)
 //                      .attr("textLength", function() {
 //                        return document.getElementById(this.getAttribute('href').slice(1)).getBoundingClientRect().width - nodeSize;
@@ -564,7 +587,7 @@ Organization: Machine Learning at Berkeley
           var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
           g.innerHTML = knobcode;
           g.setAttribute("viewBox", "-6 -6 24 24");
-          g.setAttribute("style", "transform: scale(5)");
+          g.setAttribute("style", "transform: scale(" + nodeSize/5 + ")");
 
           if(d.layer === outputlayer) {g.setAttribute("class", "dial node outputnode");}
           else {g.setAttribute("class", "dial node");}
@@ -766,9 +789,13 @@ Organization: Machine Learning at Berkeley
               setEquationColors();
               final_result = d.result;
             }
-            if(equation.length > 25) {
-              var linewidth = document.getElementById(this.getAttribute('href').slice(1)).getBoundingClientRect().width - nodeSize;
+            var linewidth = document.getElementById(this.getAttribute('href').slice(1)).getBoundingClientRect().width;
+            var textwidth = weight.getBoundingClientRect().width;
+            if(textwidth > linewidth - nodeSize) {
               label.attr("textLength", linewidth-10);
+            }
+            if(layercount == outputlayer && textwidth > linewidth - 3*nodeSize) {
+              label.attr("textLength", linewidth-2*nodeSize);
             }
             label.transition().style("opacity", 1).duration(transitionDuration)
               .each("end", function() { // display output
@@ -928,8 +955,8 @@ Organization: Machine Learning at Berkeley
   </div>
   <script>
     insertDirections();
-    document.getElementById('commentary').setAttribute("style", "width: " + (width-100).toString());
-    document.getElementById("commentaryWrapper").setAttribute("style", "width: " + width.toString);
+    d3.select("#commentaryWrapper").style("width", (width).toString() + "px");
+    document.getElementById("commentaryWrapper").style.width = width.toString();
   </script>
   
 </body>

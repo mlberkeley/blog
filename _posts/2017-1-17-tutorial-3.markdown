@@ -111,12 +111,18 @@ Finally, each layer is **fully connected** to the one before it and after it. Th
 }
 </style>
 
-<div id="interactive">
+
+<div id="interactive" width="100%" height="600px">
     <iframe id="myframe" height="600px" scrolling="no" src="/blog/assets/tutorials/3/visualization/neuralnetvis.html" width="1000px">
     </iframe>
 </div>
 
 <center id="alt-interactive"><img src='{{ site.baseurl }}/assets/tutorials/3/slideshow.gif' width="600"></center>
+
+<script>
+var interactivewidth = document.getElementById("interactive").clientWidth;
+var interactiveheight = document.getElementById("interactive").clientHeight;
+</script>
 
 <script>
 var isFirefox = typeof InstallTrigger !== 'undefined';
