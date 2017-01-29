@@ -49,11 +49,12 @@ Organization: Machine Learning at Berkeley
   
 
     <script> // sizing variables
-      var width = parent.interactivewidth-100;
-      var height = parent.interactiveheight+200;
-      
+//      var width = parent.interactivewidth-100;
+//      var height = parent.interactiveheight+200;
+      var ratio = window.devicePixelRatio || 1;
+      var width = screen.width * ratio;
+      var height = screen.height * ratio;
       if(isNaN(width) || isNaN(height) == null) {
-        
         width = 360;
         height = 600;
       }
