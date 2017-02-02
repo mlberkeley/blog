@@ -67,7 +67,7 @@ Organization: Machine Learning at Berkeley
       var weightrange = 2;
       var weightprecision = 0.1;
       
-      var labeloffset = "14%"; // controls how far from the nodes the weights are displayed 
+      var labeloffset = "13%"; // controls how far from the nodes the weights are displayed 
 
       var inputcolor = "#60ba46";
       var outputcolor = "#006fff";
@@ -644,6 +644,7 @@ Organization: Machine Learning at Berkeley
     var phaseindex = 0;
     var currentphase = phases[phaseindex];
     
+
     /* all operations are output * weight (already displayed) + bias = result */
     function moveText() {
       d3.selectAll(".weight_slider").attr("disabled", "true"); // disable slider changing during animation
@@ -658,7 +659,15 @@ Organization: Machine Learning at Berkeley
         var end = parseFloat(this.getAttribute('data-node-to-node-index').slice(-1));
         // get weight of connection
         var weight = d3.selectAll("[*|href='" + this.getAttribute('href') + "']")[0][0];
-
+        if(currentphase == "result") {
+          var linewidth = document.getElementById(this.getAttribute('href').slice(1)).getBoundingClientRect().width;
+          
+          var weightlabelwidth = weight.getBoundingClientRect().width+parseFloat(labeloffset)/100*linewidth;;
+        }
+          else {
+          var weightlabelwidth = weight.getBoundingClientRect().width+nodeSize/1.5;
+          }
+        
         if(currentphase == "output") {
           if (layercount === inputlayer) {
             // get value displayed on starting node
@@ -698,7 +707,7 @@ Organization: Machine Learning at Berkeley
             d.result = parseFloat(weight.innerHTML) * parseFloat(value);
             
             // format multiplication properly
-            var operation = "• ";
+            var operation = "•";
             // if value negative, wrap it in parentheses
             if(parseFloat(value) < 0) {value = "(" + value + ")";}
             this.innerHTML = operation + value;
@@ -749,7 +758,7 @@ Organization: Machine Learning at Berkeley
         }
         else if(currentphase == "result") {
 //          d.equation += ") = f(" + d.result.toString() + ")";
-          this.innerHTML = "= " + d.result.toString();
+          this.innerHTML = "=" + d.result.toString();
           if(currentphase === inputlayer) {
             commentary.innerHTML = inputlayer_resultphase;
           }
@@ -851,10 +860,10 @@ Organization: Machine Learning at Berkeley
         
           /* figure out where text should be moved to 
            so that it aligns with existing text */
-          var weightlabelwidth = weight.getBoundingClientRect().width-nodeSize/10;
+//          var weightlabelwidth = weight.getBoundingClientRect().width-nodeSize/10;
           // this is here due to completely unknown forces that the programmer doesn't understand
-          if(currentphase === "bias" && layercount != outputlayer) {
-            weightlabelwidth = this.getBoundingClientRect().width+nodeSize;
+          if(currentphase == "bias" && layercount != outputlayer) {
+            weightlabelwidth = this.getBoundingClientRect().width+nodeSize/1.5;
           }
           var linewidth = document.getElementById(this.getAttribute('href').slice(1)).getBoundingClientRect().width;
           d.startOffset = weightlabelwidth/linewidth*100;
