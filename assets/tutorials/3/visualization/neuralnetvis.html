@@ -666,7 +666,7 @@ Organization: Machine Learning at Berkeley
         }
           else {
           var weightlabelwidth = weight.getBoundingClientRect().width+nodeSize/1.5;
-            if(currentphase == "bias") {
+            if(currentphase == "bias" && layercount != outputlayer) {
               weightlabelwidth = weight.getBoundingClientRect().width;
             }
           }
@@ -742,20 +742,24 @@ Organization: Machine Learning at Berkeley
           else {
             var value = d3.select("[data-index='" + start + "']")[0][0].innerHTML;
           }
+          
+          // save calculation in data for retrieval during "result" phase
+          d.result = Math.round(parseFloat(d.result + parseFloat(value))*outputprecision)/outputprecision;
+          
+          
           // format addition/subtraction
           var operation = "+";
           if(parseFloat(value) < 0) {
             var operation = "-";
             value = value.slice(1); // remove negative sign on value
           }
-          this.innerHTML = operation + value;
-          // save calculation in data for retrieval during "result" phase
-          d.result = Math.round(parseFloat(d.result + parseFloat(value))*outputprecision)/outputprecision;
+          
           d.equation += " " + operation + value + " = " + d.result.toString() + ")";
           d.plus = operation;
           d.bias = value;
           d.sum = d.result.toString();
           d.fn2 = ") = ";
+          this.innerHTML = operation + value;
           commentary.innerHTML = hiddenlayer_biasphase;
           
         }
