@@ -95,19 +95,20 @@ Organization: Machine Learning at Berkeley
       var directions = "Drag the slider on the left to change the input <br>" + 
                        "Drag the horizontal sliders to change the weights <br>" + 
                        "Turn the gray knobs to change the bias.";
-      var inputlayer_outputphase = "The input node only outputs its given value";
-      var inputlayer_resultphase = "The hidden neuron multiplies its inputs by the weight of its connection(s) to the input neuron(s).";
+      var inputlayer_outputphase = "The input node only outputs its given value. The receiving neurons multiply their inputs by their respective weights";
+      var inputlayer_biasphase = "The receiving neurons add their bias to their inputs";
+      var inputlayer_resultphase = "";
       var inputlayer_activationphase = "The hidden neuron applies its activation function to the result.";
       
-      var hiddenlayer_outputphase = "The output neuron applies its activation function to the result.";
-      var hiddenlayer_biasphase = "After multiplying all of its inputs by their respective weights, the receiving neuron sums up the results and adds its bias";
-      var hiddenlayer_resultphase = "After multiplying all of its inputs by their respective weights, the receiving neuron sums up the results and adds its bias";
+      var hiddenlayer_outputphase = "The output neuron receives the results of the previous layers' calculations";
+      var hiddenlayer_biasphase = "The receiving neurons add their bias to their inputs";
+      var hiddenlayer_resultphase = "";
       var hiddenlayer_activationphase = "The receiving neuron multiplies its inputs by their corresponding weights";
       
-      var outputlayer_outputphase = "";
-      var outputlayer_biasphase = "output bias";
-      var outputlayer_resultphase = "output result";
-      var outputlayer_activationphase = "The receiving neuron sums up its results";
+      var outputlayer_outputphase = "The output neuron sums up the results...";
+      var outputlayer_biasphase = "...and adds its own bias to it";
+      var outputlayer_resultphase = "";
+      var outputlayer_activationphase = "Finally, the output neuron applies its activation to the result, which becomes the output of the whole neural network.";
       
     </script>
     <script> // process nodes
@@ -310,7 +311,7 @@ Organization: Machine Learning at Berkeley
       function changeWeight(id) {
         var weight = d3.selectAll("[id='" + id + "']")[0][0];
         var weightlabel = d3.selectAll('[*|href="#' + id + '"][class="weight"]')[0][0];
-        var sliderValue = this.value;
+        var sliderValue = d3.selectAll("[slider-node-to-node-index='" + id + "']")[0][0].value;
         
         weight.setAttribute("stroke-width", Math.abs(sliderValue));
         weightlabel.innerHTML = sliderValue;
@@ -391,7 +392,7 @@ Organization: Machine Learning at Berkeley
                                 .attr("type", "range")
                                 .style("width", nodeSize*3 + "px")
                                 .attr("orient", "")
-                                .attr("data-node", i)
+                                .attr("slider-node-to-node-index", d.id)
                                 .attr("oninput", "changeWeight.apply(this,['" + d.id + "'])");
                             weightslider.append("xhtml:center").append("xhtml:div")
                                 .attr("style", "font-family: 'PT Sans', Helvetica, Arial, sans-serif;")
@@ -763,14 +764,26 @@ Organization: Machine Learning at Berkeley
           d.sum = d.result.toString();
           d.fn2 = ") = ";
           this.innerHTML = operation + value;
-          commentary.innerHTML = hiddenlayer_biasphase;
+          if(layercount == inputlayer) {
+            commentary.innerHTML = inputlayer_biasphase;
+          }
+          else if(layercount == outputlayer) {
+            commentary.innerHTML = outputlayer_biasphase;
+          }
+          else {
+            commentary.innerHTML = hiddenlayer_biasphase;
+          }
+            
           
         }
         else if(currentphase == "result") {
 //          d.equation += ") = f(" + d.result.toString() + ")";
           this.innerHTML = "=" + d.result.toString();
-          if(currentphase === inputlayer) {
+          if(layercount == inputlayer) {
             commentary.innerHTML = inputlayer_resultphase;
+          }
+          else if(layercount == outputlayer) {
+            commentary.innerHTML = outputlayer_resultphase;
           }
           else {
             commentary.innerHTML = hiddenlayer_resultphase;
@@ -840,7 +853,7 @@ Organization: Machine Learning at Berkeley
                   outputText[0][0].innerHTML = final_result;
                   outputText.transition().style("opacity", 1).duration(transitionDuration);
                   
-                  commentary.innerHTML = hiddenlayer_outputphase;
+//                  commentary.innerHTML = hiddenlayer_outputphase;
 
                   return "";
                 });
@@ -852,7 +865,7 @@ Organization: Machine Learning at Berkeley
             if(layercount === inputlayer+1) {
               commentary.innerHTML = inputlayer_activationphase;
             }
-            else if(layercount == outputlayer) {
+            else if(layercount == outputlayer && (typeof currentphase == 'undefined')) {
               commentary.innerHTML = outputlayer_activationphase;
             }
             else {
@@ -922,7 +935,7 @@ Organization: Machine Learning at Berkeley
             this.innerHTML = "";
           }
           else {
-            this.innerHTML = d.weight;
+            changeWeight.apply(this,[d.id]);
           }
           this.setAttribute("textLength", ""); // reset textLength
           d3.selectAll(".weight").transition().style("opacity", 1).duration(transitionDuration);
