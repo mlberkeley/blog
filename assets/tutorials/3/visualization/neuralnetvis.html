@@ -93,13 +93,13 @@ Organization: Machine Learning at Berkeley
       
       // commentary
       var directions = "Drag the slider on the left to change the input <br>" + 
-                       "Click and drag the lines to change the weights <br>" + 
-                       "Turn the knobs in the hidden layer to change the bias.";
-      var inputlayer_outputphase = "The input node(s) only outputs its given value";
+                       "Drag the horizontal sliders to change the weights <br>" + 
+                       "Turn the gray knobs to change the bias.";
+      var inputlayer_outputphase = "The input node only outputs its given value";
       var inputlayer_resultphase = "The hidden neuron multiplies its inputs by the weight of its connection(s) to the input neuron(s).";
       var inputlayer_activationphase = "The hidden neuron applies its activation function to the result.";
       
-      var hiddenlayer_outputphase = "The receiving neuron receives the calculated result and multiplies its inputs by the weight of its connection(s) to the sender neuron.";
+      var hiddenlayer_outputphase = "The output neuron applies its activation function to the result.";
       var hiddenlayer_biasphase = "After multiplying all of its inputs by their respective weights, the receiving neuron sums up the results and adds its bias";
       var hiddenlayer_resultphase = "After multiplying all of its inputs by their respective weights, the receiving neuron sums up the results and adds its bias";
       var hiddenlayer_activationphase = "The receiving neuron multiplies its inputs by their corresponding weights";
@@ -107,7 +107,7 @@ Organization: Machine Learning at Berkeley
       var outputlayer_outputphase = "";
       var outputlayer_biasphase = "output bias";
       var outputlayer_resultphase = "output result";
-      var outputlayer_activationphase = "The output neuron applies its activation function to the result.";
+      var outputlayer_activationphase = "The receiving neuron sums up its results";
       
     </script>
     <script> // process nodes
@@ -466,6 +466,7 @@ Organization: Machine Learning at Berkeley
                       .attr("fill", weightcolor)
                       .attr("lengthAdjust", "spacingAndGlyphs")
                       .attr("startOffset", labeloffset)
+
 //                      .attr("textLength", function() {
 //                        return document.getElementById(this.getAttribute('href').slice(1)).getBoundingClientRect().width - nodeSize;
 //                      })
@@ -645,6 +646,7 @@ Organization: Machine Learning at Berkeley
     
     /* all operations are output * weight (already displayed) + bias = result */
     function moveText() {
+      d3.selectAll(".weight_slider").attr("disabled", "true"); // disable slider changing during animation
       var final_result;
       // select all weights between layercount and layercount + 1
       var label = d3.selectAll("[data-layer-to-layer='" + layercount.toString() + "-" + (layercount+1).toString() + "'][data-phase='" + currentphase + "']");
@@ -729,9 +731,9 @@ Organization: Machine Learning at Berkeley
             var value = d3.select("[data-index='" + start + "']")[0][0].innerHTML;
           }
           // format addition/subtraction
-          var operation = "+ ";
+          var operation = "+";
           if(parseFloat(value) < 0) {
-            var operation = "- ";
+            var operation = "-";
             value = value.slice(1); // remove negative sign on value
           }
           this.innerHTML = operation + value;
@@ -793,8 +795,8 @@ Organization: Machine Learning at Berkeley
             }
             var linewidth = document.getElementById(this.getAttribute('href').slice(1)).getBoundingClientRect().width;
             var textwidth = weight.getBoundingClientRect().width;
-            if(textwidth > linewidth - nodeSize) {
-              label.attr("textLength", linewidth-10);
+            if(textwidth > linewidth - 1.5*nodeSize) {
+              label.attr("textLength", linewidth-1.5*nodeSize);
             }
             if(layercount == outputlayer && textwidth > linewidth - 3*nodeSize) {
               label.attr("textLength", linewidth-2*nodeSize);
@@ -917,6 +919,13 @@ Organization: Machine Learning at Berkeley
       outputs.transition().style("opacity", 0).duration(transitionDuration).delay(transitionDelay).each("end", function(d, i) {
         this.innerHTML = "";
       })
+      
+      // make sliders changeable again.
+      var weight_sliders = document.getElementsByClassName("weight_slider");
+      for(var i = 0; i < weight_sliders.length; i++) {
+        weight_sliders[i].disabled = false;
+      }
+      
       
     }
     
