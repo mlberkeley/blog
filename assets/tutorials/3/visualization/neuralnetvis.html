@@ -793,6 +793,7 @@ Organization: Machine Learning at Berkeley
               setEquationColors();
               final_result = d.result;
             }
+            // if text exceeds space, squeeze it into the available space
             var linewidth = document.getElementById(this.getAttribute('href').slice(1)).getBoundingClientRect().width;
             var textwidth = weight.getBoundingClientRect().width;
             if(textwidth > linewidth - 1.5*nodeSize) {
@@ -850,10 +851,10 @@ Organization: Machine Learning at Berkeley
         
           /* figure out where text should be moved to 
            so that it aligns with existing text */
-          var weightlabelwidth = weight.getBoundingClientRect().width;
+          var weightlabelwidth = weight.getBoundingClientRect().width-nodeSize/10;
           // this is here due to completely unknown forces that the programmer doesn't understand
           if(currentphase === "bias" && layercount != outputlayer) {
-            weightlabelwidth = this.getBoundingClientRect().width * 1.5;
+            weightlabelwidth = this.getBoundingClientRect().width+nodeSize;
           }
           var linewidth = document.getElementById(this.getAttribute('href').slice(1)).getBoundingClientRect().width;
           d.startOffset = weightlabelwidth/linewidth*100;
