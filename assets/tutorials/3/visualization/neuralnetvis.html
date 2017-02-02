@@ -659,7 +659,7 @@ Organization: Machine Learning at Berkeley
         var end = parseFloat(this.getAttribute('data-node-to-node-index').slice(-1));
         // get weight of connection
         var weight = d3.selectAll("[*|href='" + this.getAttribute('href') + "']")[0][0];
-        if(currentphase == "result") {
+        if(currentphase == "result" && layercount != outputlayer) {
           var linewidth = document.getElementById(this.getAttribute('href').slice(1)).getBoundingClientRect().width;
           
           var weightlabelwidth = weight.getBoundingClientRect().width+parseFloat(labeloffset)/100*linewidth;;
@@ -668,6 +668,9 @@ Organization: Machine Learning at Berkeley
           var weightlabelwidth = weight.getBoundingClientRect().width+nodeSize/1.5;
             if(currentphase == "bias" && layercount != outputlayer) {
               weightlabelwidth = weight.getBoundingClientRect().width;
+            }
+            else if(layercount == outputlayer) {
+              var weightlabelwidth = weight.getBoundingClientRect().width+nodeSize*1.5;
             }
           }
         
