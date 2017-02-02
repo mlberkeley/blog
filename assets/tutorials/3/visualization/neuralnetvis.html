@@ -666,6 +666,9 @@ Organization: Machine Learning at Berkeley
         }
           else {
           var weightlabelwidth = weight.getBoundingClientRect().width+nodeSize/1.5;
+            if(currentphase == "bias") {
+              weightlabelwidth = weight.getBoundingClientRect().width;
+            }
           }
         
         if(currentphase == "output") {
