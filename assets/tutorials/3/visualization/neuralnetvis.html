@@ -811,7 +811,9 @@ Organization: Machine Learning at Berkeley
             if(!d.added_equation) { // this is here because I'm a lazy programmer. Please don't let John DeNero see this. Or any part of this program.
               label.text("");
               label.append("tspan").attr("class", "equation_fn1").text(d.fn1);
-              label.append("tspan").attr("class", "equation_weight").text(d.weight);
+              if((typeof currentphase != 'undefined')) {
+                label.append("tspan").attr("class", "equation_weight").text(d.weight);
+              }
               label.append("tspan").attr("class", "equation_multiply").text(d.multiply);
               label.append("tspan").attr("class", "equation_output").text(d.output);
               label.append("tspan").attr("class", "equation_plus").text(d.plus);
@@ -991,7 +993,7 @@ Organization: Machine Learning at Berkeley
     }
   </script>
   <div id="controls">
-    <button onclick="moveText.apply(this)">next</button>
+    <button id="nextButton" onclick="moveText.apply(this)">next</button>
     <button onclick="resetSim.apply(this)">reset</button>
   </div>
   <div id="commentaryWrapper">
@@ -1005,3 +1007,9 @@ Organization: Machine Learning at Berkeley
   
 </body>
 </html>
+
+
+<!-- To make gif of this:
+set directions = ""
+run document.getElementById('nextButton').click() to click next button
+-->
