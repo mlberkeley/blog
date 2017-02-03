@@ -383,5 +383,9 @@ Neural networks, however, suffer from none of these problems. Their adaptability
 
 <script>
   // on Windows Chrome browsers a reload of the visual is required.
-document.getElementById('interactiveFrame').src = document.getElementById('interactiveFrame').src
+  setTimeout(function(){
+ //your code here
+    document.getElementById('interactiveFrame').src = document.getElementById('interactiveFrame').src
+}, 1000);
+
 </script>
