@@ -140,8 +140,7 @@ if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine
 // otherwise display gif.
 if((isChrome || isSafari) && !isMobile) { 
   document.getElementById("alt-interactive").style.display = "none";
-  document.getElementById('interactive').contentWindow.location.reload();
-  
+
 }
 else {
   document.getElementById("interactive").style.display = "none";
@@ -380,3 +379,9 @@ Much of this section was shamelessly lifted from the explanation of backpropagat
 So far in this tutorial series we’ve talked about linear regression, logistic regression, the perceptron algorithm, and SVMs. These models are very effective and have solved some amazing problems. But at the same time, they are also very limited. For example linear regression requires the dataset to be, well, linear. And the perceptron algorithm and logistic regression can only draw a line through a dataset. Even SVMs are sensitive to what kernel is used.
 
 Neural networks, however, suffer from none of these problems. Their adaptability, effectiveness, and efficiency have singlehandedly transformed the machine learning world and effortlessly solved some of the most intractable problems that have stalled progress in many industries. Yet we know surprisingly little about this revolutionary tool. There is a lot of ongoing research into neural networks, but there are still huge swaths of unexplored territory that even a novice can explore.
+
+
+<script>
+  // on Windows Chrome browsers a reload of the visual is required.
+document.getElementById('interactive').contentWindow.location.reload();
+</script>
