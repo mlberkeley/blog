@@ -156,6 +156,9 @@ if((isChrome || isSafari) && !isMobile) {
 
 }
 else {
+  if(isIE) {
+    document.getElementById("alt-interactive").src = '{{ site.baseurl }}/assets/tutorials/3/visualization.gif';
+  }
   document.getElementById("interactive").style.display = "none";
 }
 </script>

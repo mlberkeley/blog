@@ -19,7 +19,7 @@
   cursor: pointer;
   position: absolute;
   top: 50%;
-  width: 40px;
+  width: 5vw;
   padding: 16px;
   margin-top: -22px;
   color: black;
@@ -31,12 +31,12 @@
 
 /* Position the "next button" to the right */
 .next {
-  right: -40px;
+  right: -5vw;
   border-radius: 0 3px 3px 0;
 }
 
 .prev {
-  left: -40px;
+  left: -5vw;
 }
 
 /* On hover, add a black background color with a little bit see-through */
