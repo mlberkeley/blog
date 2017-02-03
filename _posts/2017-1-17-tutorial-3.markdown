@@ -123,7 +123,7 @@ Finally, each layer is **fully connected** to the one before it and after it. Th
 <link rel="stylesheet" type="text/css" href="/blog/assets/tutorials/3/alt-visualization/style.css">
 <div id="alt-interactive">
   <div class="mySlides">
-    <img id="alt-visual" src="{{ site.baseurl }}/assets/tutorials/3/alt-visualization/slides/slide-0.png" style="width:100%">
+    <img id="alt-visual" src="{{ site.baseurl }}/assets/tutorials/3/visualization.gif" style="width:100%">
   </div>
   <a class="prev" onclick="plusSlides(-1)">❮</a>
   <a class="next" onclick="plusSlides(1)">❯</a>
@@ -156,8 +156,9 @@ if((isChrome || isSafari) && !isMobile) {
 
 }
 else {
-  if(isIE) {
-    document.getElementById("alt-interactive").src = '{{ site.baseurl }}/assets/tutorials/3/visualization.gif';
+  if(!isIE) {
+//    document.getElementById("alt-visual").src = "{{ site.baseurl }}/assets/tutorials/3/alt-visualization/slides/slide-0.png";
+    showSlides(slideIndex);
   }
   document.getElementById("interactive").style.display = "none";
 }

@@ -3,7 +3,7 @@ var numslides = 10;
 var suffix = ".png";
   
 var slideIndex = 0;
-showSlides(slideIndex);
+//showSlides(slideIndex); // now called in tutorial 3
 
 function plusSlides(n) {
   showSlides(slideIndex += n);
