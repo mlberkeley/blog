@@ -104,7 +104,7 @@ Finally, each layer is **fully connected** to the one before it and after it. Th
     height:500px;
     width:100%;
 }
-#myframe{
+#interactiveFrame{
     position:absolute;
     top:-164px;
     left:-10px;
@@ -113,7 +113,7 @@ Finally, each layer is **fully connected** to the one before it and after it. Th
 
 
 <div id="interactive" width="100%" height="600px">
-    <iframe id="myframe" height="600px" scrolling="no" src="/blog/assets/tutorials/3/visualization/neuralnetvis.html" width="1000px">
+    <iframe id="interactiveFrame" height="600px" scrolling="no" src="/blog/assets/tutorials/3/visualization/neuralnetvis.html" width="1000px">
     </iframe>
 </div>
 
@@ -383,5 +383,5 @@ Neural networks, however, suffer from none of these problems. Their adaptability
 
 <script>
   // on Windows Chrome browsers a reload of the visual is required.
-document.getElementById('interactive').contentWindow.location.reload();
+document.getElementById('interactiveFrame').src = document.getElementById('interactiveFrame').src
 </script>
