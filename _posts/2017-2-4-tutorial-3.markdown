@@ -1,14 +1,14 @@
 ---
 layout: post
 title:  "Machine Learning Crash Course: Part 3"
-date:   2017-1-17
+date:   2017-2-4
 author: Daniel Geng and Shannon Shih
 comments: true
 published: true
 description: The third post in our intro to ML tutorial series! Learn all about neural networks!
 ---
 
-Neural networks are perhaps one of the most exciting recent developments in machine learning. Got a problem? Just throw a neural net at it. Want to make a self-driving car? Throw a neural net at it. Want to [fly a helicopter](http://hackaday.com/2014/04/22/self-learning-helicopter-uses-neural-network/)? Throw a neural net at it. Curious about the [digestive cycles of your sheep](http://dl.acm.org/citation.cfm?id=901401)? Heck, throw a neural net at it. This extremely powerful algorithm holds much promise (but can also be a bit overhyped). In this article we’ll go through how a neural network actually works, and we’ll discuss some of the limitations of these seemingly magical tools.
+Neural networks are perhaps one of the most exciting recent developments in machine learning. Got a problem? Just throw a neural net at it. Want to make a self-driving car? Throw a neural net at it. Want to [fly a helicopter](http://hackaday.com/2014/04/22/self-learning-helicopter-uses-neural-network/)? Throw a neural net at it. Curious about the [digestive cycles of your sheep](http://dl.acm.org/citation.cfm?id=901401)? Heck, throw a neural net at it. This extremely powerful algorithm holds much promise (but can also be a bit overhyped). In this article we’ll go through how a neural network actually works, and in a future article we’ll discuss some of the limitations of these seemingly magical tools.
 
 <!-- break -->
 
@@ -34,10 +34,10 @@ Now that we know the basics of how the brain works and the history of neural net
 
 <center>
 <img src='{{ site.baseurl }}/assets/tutorials/3/black box.png' width="400">
-<p>A neural network takes in some inputs, math happens, and some number of outputs pop out.</p>
+<p style="font-size: 16px;">A neural network takes in some inputs, math happens, and some number of outputs pop out</p>
 </center>
 
-For example, if we want to classify images (say apples and oranges) then we’d want the number of inputs to be the number of pixels in our images, and the number of outputs to be the number of categories we have (two for the case of apples and oranges). If we were trying to model housing prices then the number of inputs would be the number of features we have, such as location, number of bathrooms, and square footage, and the number of outputs would be just one, for the price of the house.
+For example, if we want to classify images ([say apples and oranges](https://ml.berkeley.edu/blog/2016/12/24/tutorial-2/)) then we’d want the number of inputs to be the number of pixels in our images, and the number of outputs to be the number of categories we have (two for the case of apples and oranges). If we were trying to model housing prices then the number of inputs would be the number of features we have, such as location, number of bathrooms, and square footage, and the number of outputs would be just one, for the price of the house.
 
 Our machine has inputs and outputs, but how do we control what inputs create what outputs? That is, how do we change the neural network so certain inputs (say an image of an apple) give the correct outputs (say a 0 for the probability of being an orange and a 1 for the probability of being an apple)? Well, we can add “knobs” to our machine to control the output for a given input. In machine learning lingo, these “knobs” are called the **parameters** of a neural network. If we tune these knobs to the correct place, then for any input we can get the output that we want.
 
@@ -52,12 +52,14 @@ For those who have read our post on [perceptrons](https://ml.berkeley.edu/blog/2
 <center>
   <img src='{{ site.baseurl }}/assets/tutorials/3/neuron.png' width="400">
 </center>
+<p style="font-size: 16px;">A neuron weights its inputs and then sums them up with a bias. An activation function is then applied, which produces the output for the neuron</p>
+</center>
 
 Now each neuron could simply output $$ s $$, but that would be a bit boring as $$ s $$ is just a linear function, which makes it rather inflexible for modeling real-world data. What we want to do instead is to add one more step, called an activation function. An activation function is any function that takes in our $$ s $$ and gives the output of our neuron, called the **activation**. The perceptron that we described in the last post gave definitive yes/no answers using a blocky step function as its activation function.
 
 <center>
 <img src='{{ site.baseurl }}/assets/tutorials/3/nondifferentiable ant analogy.png' width="400">
-<p>For the step function, there is no way to tell how close you are to a “yes” or a “no”</p>
+<p style="font-size: 16px;">For the step function, there is no way to tell how close you are to a “yes” or a “no”</p>
 </center>
 
 However, using a step function makes training very difficult because there's no way to tell whether the neural network is getting closer or farther from the correct answer. Imagine you are an ant that can only see things very close to you. You are on the higher part of the step function trying to get to the lower part of the step function. But because everything is so flat, you wouldn’t know how far away the “step” part of the step function is, or even in which direction it is. The "blocky" structure makes the step function a bad activation function for neural networks.
@@ -66,7 +68,7 @@ To make it easier to train a network, we’ll use a function that is *smooth* (i
 
 <center>
 <img src='{{ site.baseurl }}/assets/tutorials/3/differentiable ant analogy.png' width="400">
-<p>A sigmoid function is a nice activation function because it is smooth everywhere, making it easier to figure out if you're getting closer to the top</p>
+<p style="font-size: 16px;">A sigmoid function is a nice activation function because it is smooth everywhere, making it easier to figure out if you're getting closer to the top</p>
 </center>
 
 Going back to our ant analogy, an ant could figure out exactly which direction to go and how far to go just by checking in which direction and how much the graph slopes at its current location. Despite the fact that the ant can’t see the low part of the sigmoid function, it can get a rough idea of where it is by looking whether the part of the function it is standing on is sloping up or down.
@@ -78,7 +80,7 @@ We wouldn't have much of a network if we just had one neuron, would we? The secr
 
 <center>
 <img src='{{ site.baseurl }}/assets/tutorials/3/output to input.png' width="400">
-<p>The output of neuron 1 (blue) becomes the input of neuron 2 (green)
+<p style="font-size: 16px;">The output of neuron 1 (blue) becomes the input of neuron 2 (green)
 </p>
 </center>
 
@@ -87,6 +89,8 @@ Of course, we can't just randomly connect neurons to each other and expect every
 
 <center>
 <img src='{{ site.baseurl }}/assets/tutorials/3/neural network.png' width="400">
+<p style="font-size: 16px;">Neural networks are composed of layers, with connections from one layer to the next layer
+</p>
 </center>
 
 Artificial neural network are composed of **layers** of artificial neurons in a similar way. In general, there are three types of layers: an input layer, one or more hidden layers, and an output layer. The input layer (on the very left) will take on values of whatever the input is to the the neural network. Notice that we can have our network take any number of inputs by changing the number of neurons in the input layer. Neat! 
@@ -169,6 +173,8 @@ else {
 
 <center>
 <img src='{{ site.baseurl }}/assets/tutorials/3/dogeml.jpeg' width="400">
+<p style="font-size: 16px;">You've been visited by ML-Doge! Please don't overfit!
+</p>
 </center>
 
 Say you're trying to recognize Doge. Do the pink and green blobs(flowers) in the background matter when trying to identify the main object in the picture? Probably not, so that information can probably be discarded. 
@@ -181,10 +187,10 @@ We can visualize this thought process with various neurons tasked with identifyi
 
 <center>
 <img src='{{ site.baseurl }}/assets/tutorials/3/recognize dog neural network.png' width="400">
-<p style="color:red;">How someone might identify a dog. Important inputs that are given a lot of weight are highlighted in red.</p>
+<p style="font-size: 16px;">How someone might identify a dog. Important inputs that are given a lot of weight are highlighted in red.</p>
 </center>
 
-Notice how the neurons are organized into layers, where the further right the neurons are, the more abstract the input? Trained neural networks function in a very similar way, although they arrive at this conclusion after training with a lot of data. No one explicitly tells the network to identify dogs in the fashion described above. 
+Notice how the neurons are organized into layers, where the further right the neurons are, the more abstract the input? In other words, the neurons on the left ask questions about general shapes and lines, whereas the neurons on the right ask questions about objects such as eyes or fur. Trained neural networks function in a very similar way, although they arrive at this conclusion after training with a lot of data. No one explicitly tells the network to identify dogs in the fashion described above. 
 
 The above example just provides a rough, slightly inaccurate but conceptual understanding of what's really happening under the hood to make the reasons behind the design of a neural network more clear. You can see some examples of what neurons "actually" see [here](http://playground.tensorflow.org). It takes raw data and refines it with math until it has the answer that it needs.
 
@@ -283,7 +289,7 @@ So to apply $$ f $$ to our $$ s^l $$ vector, we simply write $$ f(s^l) $$, which
 
 <center>
 <img src='{{ site.baseurl }}/assets/tutorials/3/slideshow.gif' width="400">
-<p>To do a feedforward step, we first multiply the output of a layer by the weight matrix, add the bias vector, and then apply the activation function</p></center>
+<p style="font-size: 16px;">To do a feedforward step, we first multiply the output of a layer by the weight matrix, add the bias vector, and then apply the activation function</p></center>
 
 ## Backpropagation
 
@@ -291,13 +297,18 @@ The whole point of backpropagation is to find the derivatives of the cost functi
 
 $$ \frac{\partial J}{\partial w^l_{jk}}, \frac{\partial J}{\partial b^l_{j}} $$
 
-where $$ w^l_{jk} $$ is the weight from the $$ k^{th} $$ neuron in the $$ (l-1)^{th} $$ layer to the $$ j^{th} $$ neuron in the $$ l^{th} $$ layer, $$ b^l_{j} $$ is the bias for the $$ j^{th} $$ neuron in the $$ l^{th} $$ layer, $$ J $$ is the cost function, and taking the derivative of a matrix means taking the derivative of the elements.
+Where:
 
-While this may seem like a daunting task at first, it turns out that the only tool we really need is our good friend chain rule (if you haven’t met her already, [allow us to introduce you](https://www.math.hmc.edu/calculus/tutorials/multichainrule/)). By blindly throwing the chain rule at our cost function, we’ll eventually be able to stumble upon the derivatives that we want. When in doubt, chain rule!
++ $$ w^l_{jk} $$ is the weight from the $$ k^{th} $$ neuron in the $$ (l-1)^{th} $$ layer to the $$ j^{th} $$ neuron in the $$ l^{th} $$ layer
++ $$ b^l_{j} $$ is the bias for the $$ j^{th} $$ neuron in the $$ l^{th} $$ layer
++ $$ J $$ is the cost function
++ and taking the derivative of a matrix means taking the derivative of the elements
+
+While this may seem like a daunting task at first, it turns out that the only tool we really need is our good friend chain rule (if you haven’t met it already, [allow us to introduce you](https://www.math.hmc.edu/calculus/tutorials/multichainrule/)). By blindly throwing the chain rule at our cost function, we’ll eventually be able to stumble upon the derivatives that we want. When in doubt, chain rule!
 
 First off, let’s talk about the cost function. Our assumption is that the cost function is some function of the outputs of the neural network and our training examples. So in general our cost function is $$ J(a^L_1, a^L_2, \dots, a^L_m, y) $$ where $$ L $$ represents the last layer which has $$ m $$ output neurons, and $$ y $$ represents our training data. For one, this should seem pretty intuitive for our cost function, after all the cost function should probably only be a function of the outputs of our algorithm (and our training examples). 
 
-Also, notice that any $$ a^l $$ is in turn a function of $$ s^{l} $$, and each $$ s^l $$ is in turn a function of all the $$ w^l_{jk} $$ and $$ b^l_j $$ in the layer. $$ having a cost function of this form makes it possible to use the chain rule very efficiently on our cost function.
+Also, notice that any $$ a^l $$ is in turn a function of $$ s^{l} $$, and each $$ s^l $$ is in turn a function of all the $$ w^l_{jk} $$ and $$ b^l_j $$ in the layer. Having a cost function of this form makes it possible to use the chain rule very efficiently.
 
 Now just one more thing before we start chain ruling away. To make our derivation a bit easier we’re going to calculate an intermediate value
 
@@ -387,15 +398,36 @@ Substituting we get
 
 $$ \frac{\partial J}{\partial w^l_{jk}} = a^{l-1}_k \delta^l_j $$
 
+which is what we want!
 
-Much of this section was shamelessly lifted from the explanation of backpropagation Michael Nielsen gives in his great book [Neural Networks and Deep Learning](http://neuralnetworksanddeeplearning.com/chap2.html).
+So in conclusion, there are really four main equations in the backpropagation algorithm:
+
++ An equation to find the delta of the last layer:
+
+$$ \delta^l_j = \frac{\partial J}{\partial a^l_j} \sigma’(s^l_j) $$
+
++ An equation to find the deltas of a layer from the deltas of the next layer (the backpropagation step):
+
+$$ \delta^l_j = \sum_k w^{l+1}_{kj} \delta^{l+1}_k \sigma’(s^l_j) $$
+
++ An equation to find the bias derivatives from the deltas:
+
+$$ \frac{\partial J}{\partial b^l_j} = \delta^l_j $$
+
++ And an equation to find the weight derivatives from the deltas:
+
+$$ \frac{\partial J}{\partial w^l_{jk}} = a^{l-1}_k \delta^l_j $$
+
+These equations combined allow us to find the derivatives of a neural network, and in turn form the basis for a wide variety of neural network based algorithms. They find application in everything from helicopter auto-pilots, stock market prediction, disease diagnosis, and fraud detection. These are, of course, highly non-trivial applications so don't be worried if you don't understand these equations completely at first. True understanding will take time and practice with these equations.\*
+
+\*Much of this section was shamelessly lifted from the amazing explanation of backpropagation Michael Nielsen gives in his great book [Neural Networks and Deep Learning](http://neuralnetworksanddeeplearning.com/chap2.html). As such, if you want more practice with the equations or want to read about backpropagation from a different perspective, we highly encourage you to check it out!
 
 {% endcapture %}
 {% include collapsible.html content=backprop title="Backpropagation"%}
 
 So far in this tutorial series we’ve talked about linear regression, logistic regression, the perceptron algorithm, and SVMs. These models are very effective and have solved some amazing problems. But at the same time, they are also very limited. For example linear regression requires the dataset to be, well, linear. And the perceptron algorithm and logistic regression can only draw a line through a dataset. Even SVMs are sensitive to what kernel is used.
 
-Neural networks, however, suffer from none of these problems. Their adaptability, effectiveness, and efficiency have singlehandedly transformed the machine learning world and effortlessly solved some of the most intractable problems that have stalled progress in many industries. Yet we know surprisingly little about this revolutionary tool. There is a lot of ongoing research into neural networks, but there are still huge swaths of unexplored territory that even a novice can explore.
+Neural networks, however, gives us a framework that minimizes the drawbacks of these problems. Their adaptability, effectiveness, and efficiency have transformed the world and solved some of the most intractable problems that have stalled progress in many industries. Yet we know surprisingly little about this revolutionary tool. There is a lot of ongoing research into neural networks, and the coming years are sure to hold many more revolutionary discoveries.
 
 
 <script>
