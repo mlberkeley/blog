@@ -3,9 +3,10 @@ layout: post
 title:  "Machine Learning Crash Course: Part 3"
 date:   2017-2-4
 author: Daniel Geng and Shannon Shih
+type: tutorial
 comments: true
 published: true
-description: The third post in our intro to ML tutorial series! Learn all about neural networks!
+description: Neural networks
 ---
 
 Neural networks are perhaps one of the most exciting recent developments in machine learning. Got a problem? Just throw a neural net at it. Want to make a self-driving car? Throw a neural net at it. Want to [fly a helicopter](http://hackaday.com/2014/04/22/self-learning-helicopter-uses-neural-network/)? Throw a neural net at it. Curious about the [digestive cycles of your sheep](http://dl.acm.org/citation.cfm?id=901401)? Heck, throw a neural net at it. This extremely powerful algorithm holds much promise (but can also be a bit overhyped). In this article we’ll go through how a neural network actually works, and in a future article we’ll discuss some of the limitations of these seemingly magical tools.

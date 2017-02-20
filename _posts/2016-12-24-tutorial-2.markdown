@@ -3,9 +3,10 @@ layout: post
 title:  "Machine Learning Crash Course: Part 2"
 date:   2016-12-24
 author: Daniel Geng and Shannon Shih
+type: tutorial
 comments: true
 published: true
-description: An introduction to perceptrons, logistic regression, and SVMs!
+description: Perceptrons, logistic regression, and SVMs
 ---
 
 
