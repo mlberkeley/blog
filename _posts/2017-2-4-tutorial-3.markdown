@@ -52,7 +52,6 @@ For those who have read our post on [perceptrons](https://ml.berkeley.edu/blog/2
 
 <center>
   <img src='{{ site.baseurl }}/assets/tutorials/3/neuron.png' width="400">
-</center>
 <p style="font-size: 16px;">A neuron weights its inputs and then sums them up with a bias. An activation function is then applied, which produces the output for the neuron</p>
 </center>
 
