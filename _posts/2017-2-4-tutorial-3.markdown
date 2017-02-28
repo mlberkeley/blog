@@ -3,9 +3,10 @@ layout: post
 title:  "Machine Learning Crash Course: Part 3"
 date:   2017-2-4
 author: Daniel Geng and Shannon Shih
+type: tutorial
 comments: true
 published: true
-description: The third post in our intro to ML tutorial series! Learn all about neural networks!
+description: Neural networks
 ---
 
 Neural networks are perhaps one of the most exciting recent developments in machine learning. Got a problem? Just throw a neural net at it. Want to make a self-driving car? Throw a neural net at it. Want to [fly a helicopter](http://hackaday.com/2014/04/22/self-learning-helicopter-uses-neural-network/)? Throw a neural net at it. Curious about the [digestive cycles of your sheep](http://dl.acm.org/citation.cfm?id=901401)? Heck, throw a neural net at it. This extremely powerful algorithm holds much promise (but can also be a bit overhyped). In this article we’ll go through how a neural network actually works, and in a future article we’ll discuss some of the limitations of these seemingly magical tools.
@@ -206,7 +207,7 @@ To review, gradient descent is a way to find the minimum of a function. In the c
 
 ## Backpropagation
 
-Of course, gradient descent needs to know which direction is “downhill” in order to work. Using our ant analogy, an ant sitting on the cost function knows only knows which way to go because the part of the function it is standing on is sloped. Remember, it can’t see very far, and certainly not far enough to see where the minimum actually is. The ant’s best bet is to go the direction that is sloping downhill the most.
+Of course, gradient descent needs to know which direction is “downhill” in order to work. Using our ant analogy, an ant sitting on the cost function only knows which way to go because the part of the function it is standing on is sloped. Remember, it can’t see very far, and certainly not far enough to see where the minimum actually is. The ant’s best bet is to go the direction that is sloping downhill the most.
 
 In math terms, these slopes are derivatives. Now if you suddenly felt a panic attack settling in upon reading the word “derivative” (or if you have absolutely no idea what a derivative is) don’t worry. We’ve tried our best to make this whole section completely understandable through just intuition. On the other hand, if you suddenly felt a rush of exhilaration we encourage you to go tackle the collapsible sections at the end of this article where we derive the backpropagation formulas.
 
