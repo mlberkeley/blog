@@ -52,7 +52,6 @@ For those who have read our post on [perceptrons](https://ml.berkeley.edu/blog/2
 
 <center>
   <img src='{{ site.baseurl }}/assets/tutorials/3/neuron.png' width="400">
-</center>
 <p style="font-size: 16px;">A neuron weights its inputs and then sums them up with a bias. An activation function is then applied, which produces the output for the neuron</p>
 </center>
 
@@ -208,7 +207,7 @@ To review, gradient descent is a way to find the minimum of a function. In the c
 
 ## Backpropagation
 
-Of course, gradient descent needs to know which direction is “downhill” in order to work. Using our ant analogy, an ant sitting on the cost function knows only knows which way to go because the part of the function it is standing on is sloped. Remember, it can’t see very far, and certainly not far enough to see where the minimum actually is. The ant’s best bet is to go the direction that is sloping downhill the most.
+Of course, gradient descent needs to know which direction is “downhill” in order to work. Using our ant analogy, an ant sitting on the cost function only knows which way to go because the part of the function it is standing on is sloped. Remember, it can’t see very far, and certainly not far enough to see where the minimum actually is. The ant’s best bet is to go the direction that is sloping downhill the most.
 
 In math terms, these slopes are derivatives. Now if you suddenly felt a panic attack settling in upon reading the word “derivative” (or if you have absolutely no idea what a derivative is) don’t worry. We’ve tried our best to make this whole section completely understandable through just intuition. On the other hand, if you suddenly felt a rush of exhilaration we encourage you to go tackle the collapsible sections at the end of this article where we derive the backpropagation formulas.
 
