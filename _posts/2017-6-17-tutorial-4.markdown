@@ -1,0 +1,205 @@
+---
+layout: post
+title:  "Machine Learning Crash Course: Part 4"
+date:   2017-6-17
+author: Daniel Geng and Shannon Shih
+type: tutorial
+comments: true
+published: true
+description: Neural networks
+---
+
+Here's a riddle:
+
+<!-- break -->
+
+IMAGE OF DOGE
+
+So what does this have to do with machine learning? Well, it turns out that machine learning algorithms are not that much different from our friend Doge: _they often run the risk of over-extrapolating or over-interpolating from the data that they are trained on._
+ 
+There is a very delicate balancing act when machine learning algorithms try to predict things. On the one hand, we want our algorithm to model the training data very closely, otherwise we'll miss relevant features and interesting trends in the data. However, on the other hand we don't want our model to fit _too_ closely to every outlier and irregularity in the data.
+ 
+## Fukushima
+ 
+The Fukushima power plant disaster is a devastating example of overfitting. When designing the power plant, engineers had to determine how often earthquakes would occur. They used a well-known law called the Gutenberg-Richter Law, which gives a way of predicting the probability of a very strong earthquake from the frequency that very weak earthquakes occur. This is useful because weak earthquakes--ones that are so weak that you can’t even feel them--happen almost all the time, while strong earthquakes happen almost never.
+ 
+Perhaps the most important result of the Gutenberg-Richter Law is that the relationship between the magnitude of an earthquake and the probability that it happens is _linear_. 
+ 
+_More accurately, the relationship between the magnitude of an earthquake and the logarithm of the probability that an earthquake of at least that magnitude occurs is linear._
+
+So the actual engineers of the nuclear power plant used earthquake data from the past 400 years to train a regression model. Their prediction looked something like this:
+
+<center>
+OVERFIT FUKUSHIMA MODEL
+</center>
+
+The diamonds represent actual data while the thin line shows the engineers’ regression. Notice how their model hugs very closely to the data points. In fact, their model makes a sort of “kink” at around a magnitude of 7.3. It’s decidedly not _linear_.
+ 
+In machine learning jargon, we call this *overfitting*. As the name implies, overfitting is when we train a predictive model that too closely models the training data. In this case, the engineers knew the relationship should have been linear but they used a much more complex model.
+ 
+What the engineers should have done was to use the correct linear model that doesn’t hug the data too closely. In other words, they should have used the model that doesn’t overfit. Something like this:
+
+<center>
+CORRECT FUKUSHIMA MODEL
+</center>
+
+Notice there’s no kink this time, so the line isn’t as steeply sloped after the data ends on the right. 
+ 
+The difference between these two models? The overfitted model predicted one earthquake of at least magnitude 9 about every 13000 years while the correct model predicted one earthquake of at least magnitude 9 just about every 300 years. And because of this, the Fukushima Nuclear Power Plant was built only to withstand an earthquake of magnitude 8.6. The 2011 earthquake that devastated the plant was of magnitude 9 (about 2.5 times stronger than a magnitude 8.6 earthquake).
+
+<center>
+MARKED UP FUKUSHIMA MODEL
+</center>
+
+## Underfitting
+ 
+There is actually a dual problem to overfitting, which is called underfitting. In our attempt to reduce overfitting, we might actually begin to head to the other extreme and our model can start to _ignore_ important features of our data set. This happens when we choose a model that is not complex enough to capture these important features, such as using a linear model when a quadratic is necessary.
+
+<center>
+LINEAR ON QUADRATIC DATA
+</center>
+
+## The Bias-Variance dilemma
+ 
+So we want to avoid overfitting because it gives too much predictive power to quirks in our training data. But in our attempt to reduce overfitting we can also begin to underfit, ignoring important features in our training data. So how do we balance the two?
+ 
+In the field of machine learning this problem is known as the bias-variance dilemma and is an incredibly important problem. It’s entirely possible to have state-of-the-art algorithms, the fastest computers, and the most recent GPUs but if your model overfits or underfits to the training data, its predictive powers are going to be complete and utter crap.
+ 
+The name Bias-Variance comes from two terms in statistics: **Bias**, which corresponds to underfitting,  and **Variance**, which corresponds to overfitting. 
+
+<center>
+LINEAR ON QUADRATIC DATA
+</center>
+CAPTION:Approximating the data with a straight line. The X’s are data points, and the blue line is our prediction.
+ 
+The drawing above depicts an example of high **bias**. In other words, the model is _underfitting_. The data points obviously follow some sort of curve, but our predictor isn’t complex enough to capture that information. Our model is _biased_ in that it _assumes_ that the data will behave in a certain fashion (linear, quadratic, etc.) even though that assumption may not be true.  A key point is that there’s nothing wrong with our training---_this is the best possible linear model fit to the data._ There is, however, something wrong with _the model itself_ in that it can’t possibly account for all the complexities of our data.
+
+<center>
+SQUGGLY ON QUADRATIC DATA
+</center>
+CAPTION: Approximating data with a simple pattern using a very complex model. Notice how the line pays too much attention to small variations in the data. Even though there is a general upward trend in the data, the model predicts that it will go downwards.
+ 
+In this drawing, we see an example of a model with very high **variance**. In other words, a model that is _overfitting_. Again, the data points suggest a sort of graceful curve. However, our model uses a very detailed curve to get as close to every data point as possible. Consequently, a model with high variance has very low bias because it makes little to no assumption about the data. In fact, it adapts _too_ much to the data. And again, there’s nothing wrong with our training. In fact, our predictor hits _every single_ data point and is by most metrics perfect. It is actually our _model itself_ that’s the problem. It wants to account for every single piece of data perfectly and thus over-generalizes. A model that over-generalizes has high **variance** because it varies too much based on insignificant details about the data.
+
+<center>
+XKCD
+</center>
+CAPTION: Here’s an example of high “variance” in everyday life from xkcd. ‘Girls sucking at math’ in this case an overgeneralization based on only a single data point. 
+
+## Explaining the Dilemma
+ 
+So, why is there a trade-off between bias and variance anyways? How come we can’t have the best of both worlds and have a model that has both low bias and low variance? It turns out that bias and variance are actually side effects of one factor: the complexity of our model.
+ 
+For the case of high bias, we have a very simple model. In our example above we used a linear model, possibly the most simple model there is. And for the case of high variance, the model we used was super complex (think squiggly).
+
+<center>
+COMPLEXITY GAUGE
+</center>
+
+The image above should make things a bit more clear as to why the bias-variance trade-off exists. Whenever we choose a model with low complexity (like a linear model) and thus low variance, we’re also choosing a model with high bias. If we try to increase the complexity of our model (use maybe a quadratic model) we sacrifice low variance for low bias but high variance.
+
+The best we can do is try to settle somewhere in the middle of the spectrum, where the purple pointer is.
+
+## Visualization
+
+Here's a visualization of the bias-variance tradeoff. We are trying to fit a model to some noisy sign wave data. Move the slider to adjust the complexity of the model and see what happens. The bottom graph shows the training error and the test error in red and blue respectively. Notice how training error always decreases with increasing complexity, but test error will hit a minimum at some point.
+
+https://gist.github.com/agramfort/850437
+
+<center>
+<img style="margin: auto; display: block;" id="picBoxPred" src='{{ site.baseurl }}/assets/tutorials/4/figures-resized/50.jpg' width="400px" height="300px">
+
+<div align="center">
+<input id="image_id" type="range" style="width: 300px" oninput="showVal(this.value)" max="97" min="1" start="50" />
+</div>
+
+<p id="test" style="text-align: center;">Complexity: .5</p>
+
+<img style="margin: auto; display: block;" id="picBoxErr" src='{{ site.baseurl }}/assets/tutorials/4/errors-resized/50.jpg' width="400px" height="300px">
+</center>
+
+## Noise
+ 
+Here’s another (more mathematical) insight into what bias and variance is all about. In machine learning and data science we often have a function that we want to model, whether it be a function that associates square footage to house prices or magnitudes of an earthquake and the frequency at which they occur. We assume that there is some perfect, god-given, platonic-ideal of a function that models exactly what we want. But the world isn’t perfect, so when we get real data to train our model it inevitably has noise--random fluctuations from things such as human error and instrument inaccuracies.
+
+<center>
+ADDITION OF PLATO AND NOISE
+</center>
+CAPTION: Our “perfect” function added to noise is what we end up measuring in the real world. 
+ 
+In statistics jargon, when data is measured in the real world we say the data is “drawn from a distribution.” So drawing from the distribution above, we would end up with data that looks like this:
+
+<center>
+ADDITION OF PLATO AND NOISE
+</center>
+CAPTION: This noise manifests as disorganized data points. What we want to do is recover the perfect function (in green) from these data points.
+ 
+In math terms, we say that $$ y = f(x) + \epsilon $$. Where $$ y $$ is the training data we get, and $$ f(x) $$ is that perfect function and $$ \epsilon $$ is the random error that we can’t avoid. From $$ y $$ we want to construct $$ \hat f(x) $$, an approximation of $$ f(x) $$. 
+ 
+The bias-variance tradeoff results from using our necessarily flawed data to reconstruct this perfect function $$ f(x) $$. We want to ignore the noise term $$ \epsilon $$, but the noise is mashed up with the real data $$ f(x) $$, so if we ignore the noise too much, we end up ignoring the real data too.
+ 
+For the more mathematically inclined, this sets the stage for us to prove that there must exist a tradeoff. Two things though. Firstly, knowing a bit of probability theory will probably make this proof a bit easier to swallow (although we’ll certainly try to explain everything). And secondly, this proof is straight from [Wikipedia](https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff#Derivation) (there’s only so many ways to prove things!) but we hope we have a much more elucidating version of the proof here.
+ 
+{% capture bvDerivation %}
+ 
+We start with the fact that our training data comes from our god-given function mixed with some noise. That is $$ y = f(x) + \epsilon $$, where $$ \epsilon $$ is distributed normally, has mean 0, and variance $$ \sigma^2 $$. We then choose a function to approximate $$ f(x) $$, call this $$ \hat f(x) $$.
+ 
+Our derivation of the bias-variance tradeoff will show that (hold your breath…)
+ 
+$$ \operatorname{E} \left[ (y - \hat f(x))^2 \right] = \operatorname{Bias} \left[ \hat f(x) \right]^2 + \operatorname{Var} \left[ \hat f(x) \right] + \sigma^2 $$
+ 
+where 
+ 
+$$ \operatorname{Bias} \left[ \hat f(x) \right] = \operatorname{E} \left[ \hat f(x) - f(x) \right] $$
+ 
+and
+ 
+$$ \operatorname{Var} \left[ \hat f(x) \right] = \operatorname{E} \left [ \hat f(x) ^2 \right] - \operatorname{E} \left[ \hat f(x) \right ]^2 $$
+ 
+Let’s break this down a bit. We’re showing that the mean squared error (remember from tutorial 1?) $$ \operatorname{E} \left[ (y - \hat f(x))^2 \right] $$ can be broken down into a “bias” term, a “variance” term, and a “sigma” term (the $$ \operatorname{E} $$ thing means “expectation of” and is just a fancy way of saying “average”). That is, how “wrong” our model, $$ \hat f(x) $$, is at predicting $$ y $$ can be broken down into those three components.
+ 
+The first of these three terms is the bias term: $$ \operatorname{Bias} \left[ \hat f(x) \right] = \operatorname{E} \left[ \hat f(x) - f(x) \right] $$. This term measures how much the model, $$ \hat f(x) $$, differs from the actual function, $$ f(x) $$. In essence, it measures the errors due to simplifying assumptions of our model $$ \hat f(x) $$. In this way, it’s an indicator of underfitting.
+ 
+The second term is the variance term: $$ \operatorname{Var} \left[ \hat f(x) \right] = \operatorname{E} \left [ \hat f(x) ^2 \right] - \operatorname{E} \left[ \hat f(x) \right ]^2 $$. Readers with a bit of background in probability or statistics will likely see that this is the exact working definition of variance. Intuitively, the variance measures how much spread a model has. That is, how much it “wriggles” around and overfits the data.
+ 
+Finally, the third term is called the _irreducible error_. It’s irreducible because no matter what model we use, the error will always be there. This is because the $$ \sigma^2 $$ term comes directly from the error in our training data: $$ \epsilon $$. Note that because both the bias term and the variance term are non-negative (the bias because it’s being squared, and the variance by definition), $$ \sigma^2 $$ is a lower bound for the mean squared error. 
+ 
+For simplicity, we now denote $$ f(x) $$ by just $$ f $$ and $$ \hat (f(x) $$ by just $$ \hat f $$.
+ 
+To derive the identity, we start with our given
+ 
+$$ \operatorname{E} \left[ (y - \hat f(x))^2 \right] $$
+ 
+and square the inside term and apply [linearity of expectation](https://brilliant.org/wiki/linearity-of-expectation/)
+ 
+$$ \operatorname{E} \left[ y^2 - 2y\hat f + \hat f^2 \right] = \operatorname{E}[y^2] + \operatorname{E}[\hat f^2] - 2y \operatorname{E}[\hat f] $$
+ 
+Continue later on markdown editor… (too hard with just mathjax)
+ 
+{% endcapture %}
+{% include collapsible.html content=bvDerivation title="Bias-Variance Tradeoff Derivation"%}
+
+## Validation
+ 
+How do you know when you are overfitting and when you are underfitting? In data science, we use a technique called validation to make sure our model is working correctly.
+ 
+One of the easiest and most common ways to test a model is to take your original data and split it into two groups. One group we call the training set (typically 80% of the data) and the other group we call the test set (typically 20% of the data). After training your model on the training set you can test your model on the test set to see how well it does. Like studying for a test, the training set is the studying material and the test set serves as a benchmark to see how well the model was trained. Evidently, if your model doesn’t end up doing well on the test set, then there’s something wrong.
+ 
+But how do we figure out if we’re overfitting or underfitting? These two situations have very unique fingerprints. Underfitting means your accuracy on your training set as well as your test set will be low. How come? Because your model inherently lacks enough complexity to describe the data. It’ll have poor results on both what it’s training on and what it’s testing on.
+
+<script>
+    function showVal(newVal){
+        document.getElementById("test").innerHTML="Complexity: " + newVal / 100;
+        showImage(newVal);
+    }
+    
+    function showImage(newVal) {
+        var img = document.getElementById("picBoxPred");
+        img.src = "{{ site.baseurl }}/assets/tutorials/4/figures-resized/" + newVal + '.jpg';
+        
+        var img = document.getElementById("picBoxErr");
+        img.src = "errors-1/" + (newVal - 1) + '.jpg';
+        img.src = "{{ site.baseurl }}/assets/tutorials/4/errors-resized/" + (newVal - 1) + '.jpg';
+    }
+</script>
+
