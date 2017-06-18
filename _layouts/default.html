@@ -3,7 +3,7 @@
 
   {% include head.html %}
 
-  <body class="sidebar-overlay">
+  <body class="">
 
     {% include google_analytics.html %}
     {% include sidebar.html %}
@@ -28,14 +28,13 @@
     </div>
 
     <label for="sidebar-checkbox" class="sidebar-toggle"></label>
-
+    <center style="font-size:12px">© Machine Learning at Berkeley {{ "now" | date: "%Y" }} • Please <a href="mailto: ml.at.berkeley@gmail.com">contact us</a> for permission to republish any part of this website</center>
     <script>
       (function(document) {
         var toggle = document.querySelector('.sidebar-toggle');
         var sidebar = document.querySelector('#sidebar');
         var checkbox = document.querySelector('#sidebar-checkbox');
         
-//        checkbox.checked = false; // change this to true to make sidebar permanent
         document.addEventListener('click', function(e) {
           var target = e.target;
 
