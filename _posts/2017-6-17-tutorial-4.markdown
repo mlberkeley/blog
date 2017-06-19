@@ -112,7 +112,7 @@ https://gist.github.com/agramfort/850437
 </div>
 
 <div align="center">
-<input id="image_id" type="range" style="width: 300px" oninput="showVal(this.value)" max="97" min="1" start="50" />
+<input id="image_id" type="range" style="width: 300px" oninput="showVal(this.value)" max="96" min="1" start="50" />
 </div>
 
 <p id="test" style="text-align: center;">Complexity: .5</p>
