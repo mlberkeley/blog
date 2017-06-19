@@ -6,7 +6,7 @@ author: Daniel Geng and Shannon Shih
 type: tutorial
 comments: true
 published: true
-description: Neural networks
+description: The Bias Variance Tradeoff
 ---
 
 Here's a riddle...
