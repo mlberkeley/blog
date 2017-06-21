@@ -1,6 +1,6 @@
 // dimensions of each frame
-var imgWidth = 600;
-var imgHeight = 450;
+var imgWidth = 400;
+var imgHeight = 300;
 
 // dimensions of image in frames
 var rows = 24;

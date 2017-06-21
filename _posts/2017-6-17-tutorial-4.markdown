@@ -62,7 +62,7 @@ Notice there’s no kink this time, so the line isn’t as steeply sloped after 
 The difference between these two models? The overfitted model predicted one earthquake of at least magnitude 9 about every 13000 years while the correct model predicted one earthquake of at least magnitude 9 just about every 300 years. And because of this, the Fukushima Nuclear Power Plant was built only to withstand an earthquake of magnitude 8.6. The 2011 earthquake that devastated the plant was of magnitude 9 (about 2.5 times stronger than a magnitude 8.6 earthquake).
 
 <center>
-  <img src="{{ site.baseurl }}/assets/tutorials/4/earthquake-fit-analysis.png" class="img" style="width: 400px">
+  <img src="{{ site.baseurl }}/assets/tutorials/4/earthquake-fit-analysis.png" class="img" style="">
 </center>
 
 ## Underfitting
@@ -70,7 +70,7 @@ The difference between these two models? The overfitted model predicted one eart
 There is actually a dual problem to overfitting, which is called underfitting. In our attempt to reduce overfitting, we might actually begin to head to the other extreme and our model can start to _ignore_ important features of our data set. This happens when we choose a model that is not complex enough to capture these important features, such as using a linear model when a quadratic is necessary.
 
 <center>
-  <img src="{{ site.baseurl }}/assets/tutorials/4/underfitting.png" class="img" style="width: 400px">
+  <img src="{{ site.baseurl }}/assets/tutorials/4/underfitting.png" class="img" style="width: 300px">
 </center>
 
 ## The Bias-Variance dilemma
@@ -82,7 +82,7 @@ In the field of machine learning this problem is known as the bias-variance dile
 The name Bias-Variance comes from two terms in statistics: **Bias**, which corresponds to underfitting,  and **Variance**, which corresponds to overfitting. 
 
 <center>
-<img src="{{ site.baseurl }}/assets/tutorials/4/underfitting.png" class="img" style="width: 400px">
+<img src="{{ site.baseurl }}/assets/tutorials/4/underfitting.png" class="img" style="width: 300px">
 </center>
 
 <div style="margin-left: 100px; margin-right: 100px">
@@ -94,7 +94,7 @@ Approximating the data with a straight line. The X’s are data points, and the 
 The drawing above depicts an example of high **bias**. In other words, the model is _underfitting_. The data points obviously follow some sort of curve, but our predictor isn’t complex enough to capture that information. Our model is _biased_ in that it _assumes_ that the data will behave in a certain fashion (linear, quadratic, etc.) even though that assumption may not be true.  A key point is that there’s nothing wrong with our training---_this is the best possible linear model fit to the data._ There is, however, something wrong with _the model itself_ in that it can’t possibly account for all the complexities of our data.
 
 <center>
-  <img src="{{ site.baseurl }}/assets/tutorials/4/overfitting.png" class="img" style="width: 400px">
+  <img src="{{ site.baseurl }}/assets/tutorials/4/overfitting.png" class="img" style="width: 300px">
 </center>
 
 <div style="margin-left: 100px; margin-right: 100px">
