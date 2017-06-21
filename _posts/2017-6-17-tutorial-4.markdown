@@ -31,11 +31,9 @@ There is a very delicate balancing act when machine learning algorithms try to p
  
 ## Fukushima
  
-The Fukushima power plant disaster is a devastating example of overfitting. When designing the power plant, engineers had to determine how often earthquakes would occur. They used a well-known law called the Gutenberg-Richter Law, which gives a way of predicting the probability of a very strong earthquake from the frequency that very weak earthquakes occur. This is useful because weak earthquakes--ones that are so weak that you can’t even feel them--happen almost all the time, while strong earthquakes happen almost never.
- 
-Perhaps the most important result of the Gutenberg-Richter Law is that the relationship between the magnitude of an earthquake and the probability that it happens is _linear_. _(More accurately, the relationship between the magnitude of an earthquake and the logarithm of the probability that an earthquake of at least that magnitude occurs is linear.)_
+The Fukushima power plant disaster is a devastating example of overfitting. When designing the power plant, engineers had to determine how often earthquakes would occur. They used a well-known law called the Gutenberg-Richter Law, which gives a way of predicting the probability of a very strong earthquake from the frequency that very weak earthquakes occur. This is useful because weak earthquakes--ones that are so weak that you can’t even feel them--happen almost all the time, while strong earthquakes almost never happen. Perhaps the most important result of this law is that the relationship between the magnitude of an earthquake and the logarithm of the probability that it happens is _linear_. 
 
-So the actual engineers of the nuclear power plant used earthquake data from the past 400 years to train a regression model. Their prediction looked something like this:
+The engineers of the nuclear power plant used earthquake data from the past 400 years to train a regression model. Their prediction looked something like this:
 
 <center>
   <img src="{{ site.baseurl }}/assets/tutorials/4/earthquake-overfit.png" class="img">
@@ -45,7 +43,7 @@ So the actual engineers of the nuclear power plant used earthquake data from the
 <p style="font-size: 16px;">The diamonds represent actual data while the thin line shows the engineers’ regression. Notice how their model hugs very closely to the data points. In fact, their model makes a sort of “kink” at around a magnitude of 7.3. It’s decidedly not linear.</p>
 </div>
  
-In machine learning jargon, we call this *overfitting*. As the name implies, overfitting is when we train a predictive model that too closely models the training data. In this case, the engineers knew the relationship should have been linear but they used a much more complex model.
+In machine learning jargon, we call this *overfitting*. As the name implies, overfitting is when we train a predictive model that "hugs" the training data too closely. In this case, the engineers knew the relationship should have been linear but they used a much more complex model.
  
 What the engineers should have done was to use the correct linear model that doesn’t hug the data too closely. In other words, they should have used the model that doesn’t overfit. Something like this:
 
@@ -77,7 +75,7 @@ There is actually a dual problem to overfitting, which is called underfitting. I
  
 So we want to avoid overfitting because it gives too much predictive power to quirks in our training data. But in our attempt to reduce overfitting we can also begin to underfit, ignoring important features in our training data. So how do we balance the two?
  
-In the field of machine learning this problem is known as the bias-variance dilemma and is an incredibly important problem. It’s entirely possible to have state-of-the-art algorithms, the fastest computers, and the most recent GPUs but if your model overfits or underfits to the training data, its predictive powers are going to be complete and utter crap.
+In the field of machine learning this problem is known as the bias-variance dilemma and is an incredibly important problem. It’s entirely possible to have state-of-the-art algorithms, the fastest computers, and the most recent GPUs but if your model overfits or underfits to the training data, its predictive powers are going to be complete garbage.
  
 The name Bias-Variance comes from two terms in statistics: **Bias**, which corresponds to underfitting,  and **Variance**, which corresponds to overfitting. 
 
@@ -91,7 +89,7 @@ Approximating the data with a straight line. The X’s are data points, and the 
 </p>
 </div>
  
-The drawing above depicts an example of high **bias**. In other words, the model is _underfitting_. The data points obviously follow some sort of curve, but our predictor isn’t complex enough to capture that information. Our model is _biased_ in that it _assumes_ that the data will behave in a certain fashion (linear, quadratic, etc.) even though that assumption may not be true.  A key point is that there’s nothing wrong with our training---_this is the best possible linear model fit to the data._ There is, however, something wrong with _the model itself_ in that it can’t possibly account for all the complexities of our data.
+The drawing above depicts an example of high **bias**. In other words, the model is _underfitting_. The data points obviously follow some sort of curve, but our predictor isn’t complex enough to capture that information. Our model is _biased_ in that it _assumes_ that the data will behave in a certain fashion (linear, quadratic, etc.) even though that assumption may not be true.  A key point is that there’s nothing wrong with our training---this is the *best* possible linear model fit to the data. There is, however, something wrong with _the model itself_ in that it can’t possibly account for all the complexities of our data.
 
 <center>
   <img src="{{ site.baseurl }}/assets/tutorials/4/overfitting.png" class="img" style="width: 300px">
@@ -111,7 +109,7 @@ In this drawing, we see an example of a model with very high **variance**. In ot
 
 <div style="margin-left: 100px; margin-right: 100px">
 <p style="font-size: 16px;">
-Here’s an example of high “variance” in everyday life from xkcd. ‘Girls sucking at math’ in this case an overgeneralization based on only a single data point.
+An example of high “variance” in everyday life from xkcd. ‘Girls sucking at math’ in this case an overgeneralization based on only a single data point.
 </p>
 </div>
 
@@ -130,11 +128,9 @@ The image above should make things a bit more clear as to why the bias-variance 
 
 The best we can do is try to settle somewhere in the middle of the spectrum, where the purple pointer is.
 
-## Visualization
+## Visualization!
 
-Here's a visualization of the bias-variance tradeoff. We are trying to fit a model to some noisy sign wave data. Move the slider to adjust the complexity of the model and see what happens. The bottom graph shows the training error and the test error in red and blue respectively. Notice how training error always decreases with increasing complexity, but test error will hit a minimum at some point.
-
-https://gist.github.com/agramfort/850437
+This is a visualization of the bias-variance tradeoff. We are trying to fit a model (the blue line) to some noisy sine wave data (the red crosses). Move the slider to adjust the complexity of the model and see what happens. The bottom graph shows the training error and the test error in red and blue respectively. Notice how training error always decreases with increasing complexity, but test error will hit a minimum at some point.
 
 <center>
 <div id="predBox" style="position: relative; overflow: hidden;">
@@ -150,6 +146,12 @@ https://gist.github.com/agramfort/850437
   <img src="{{ site.baseurl }}/assets/tutorials/4/errors.png" id="errPic" style="max-width: none; position: absolute;">
 </div>
 </center>
+
+<div style="margin-left: 100px; margin-right: 100px">
+<p style="font-size: 16px;">
+Details: We are training a locally-weighted linear regression model (LOWESS) on a sine wave with added gaussian noise. (Thank you to <a src="https://gist.github.com/agramfort/850437">agramfort</a> for the LWLR code). The smoothing parameter is used as a proxy for complexity, and the error is the average L1 distance.
+</p>
+</div>
 
 ## Noise
  
