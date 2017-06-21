@@ -50,5 +50,16 @@
   <!-- MathJax -->
   <script type="text/javascript" async
     src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+    MathJax.Hub.Config({
+      "HTML-CSS": {
+        linebreaks: { automatic: true, width: "container" }          
+      },
+      CommonHTML: {
+        linebreaks: { automatic: true, width: "container" }          
+      }, 
+      SVG: {
+        linebreaks: {automatic: true, width: "container" }
+      }
+    })
   </script>
 </head>
