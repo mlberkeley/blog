@@ -198,6 +198,11 @@ This noise manifests as disorganized data points. What we want to do is recover 
 </div>
 
 ## Bias-Variance Tradeoff Derivation
+=======
+ 
+In math terms, we say that $$ y = f(x) + \epsilon $$. Where $$ y $$ is the training data we get, and $$ f(x) $$ is that perfect function and $$ \epsilon $$ is the random error that we can’t avoid. From $$ y $$ we want to construct $$ \hat f(x) $$, an approximation of $$ f(x) $$. 
+ 
+The bias-variance tradeoff results from using our necessarily flawed data to reconstruct this perfect function $$ f(x) $$. We want to ignore the noise term $$ \epsilon $$ by increasing our bias, but the noise is mashed up with the real data $$ f(x) $$, so if we ignore the noise too much, we end up ignoring the real data too, which leads to underfitting.
  
 For the more mathematically inclined, this sets the stage for us to prove that there must exist a tradeoff. Two things though. Firstly, knowing a bit of probability theory will probably make this proof a bit easier to swallow (although we’ll certainly try to explain everything). And secondly, this proof is straight from [Wikipedia](https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff#Derivation) (there’s only so many ways to prove things!) but we hope we have a much more elucidating version of the proof here.
  
@@ -217,7 +222,7 @@ and
  
 $$ \operatorname{Var} \left[ \hat f(x) \right] = \operatorname{E} \left [ \hat f(x) ^2 \right] - \operatorname{E} \left[ \hat f(x) \right ]^2 $$
  
-Let’s break this down a bit. We’re showing that the mean squared error (remember from tutorial 1?) $$ \operatorname{E} \left[ (y - \hat f(x))^2 \right] $$ can be broken down into a “bias” term, a “variance” term, and a “sigma” term (the $$ \operatorname{E} $$ thing means “expectation of” and is just a fancy way of saying “average”). That is, how “wrong” our model, $$ \hat f(x) $$, is at predicting $$ y $$ can be broken down into those three components.
+Let’s break this down a bit. We’re showing that the mean squared error (remember from [tutorial 1]({{ site.baseurl }}/2016/11/06/tutorial-1/)?) $$ \operatorname{E} \left[ (y - \hat f(x))^2 \right] $$ can be broken down into a “bias” term, a “variance” term, and a “sigma” term (the $$ \operatorname{E} $$ thing means “expectation of” and is just a fancy way of saying “average”). That is, how “wrong” our model, $$ \hat f(x) $$, is at predicting $$ y $$ can be broken down into those three components.
  
 The first of these three terms is the bias term: $$ \operatorname{Bias} \left[ \hat f(x) \right] = \operatorname{E} \left[ \hat f(x) - f(x) \right] $$. This term measures how much the model, $$ \hat f(x) $$, differs from the actual function, $$ f(x) $$. In essence, it measures the errors due to simplifying assumptions of our model $$ \hat f(x) $$. In this way, it’s an indicator of underfitting.
  
