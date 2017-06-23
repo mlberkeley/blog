@@ -1,3 +1,8 @@
+function scaleVisual() {
+  if (window.innerWidth < 600) {
+    document.getElementById("visual").style.transform = "scale(0.5)";
+  }
+}
 // dimensions of each frame
 var imgWidth = 400;
 var imgHeight = 300;

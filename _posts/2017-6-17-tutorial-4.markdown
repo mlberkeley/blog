@@ -13,6 +13,7 @@ description: The Bias Variance Tradeoff
   .img {
   width: 600px;
   }
+  
 </style>
 
 Here's a riddle...
@@ -134,11 +135,13 @@ The image above should make things a bit more clear as to why the bias-variance 
 
 The best we can do is try to settle somewhere in the middle of the spectrum, where the purple pointer is.
 
-## Visualization!
+## Visualization of the bias-variance tradeoff
 
 This is a visualization of the bias-variance tradeoff. Try fiddling around with the slider between the images. What's happening is that we're trying to fit a model (the blue line) to some noisy sine wave data (the red crosses). By moving the slider you can manually adjust the complexity of the model. 
 
+
 <center>
+<div id="visual">
 <div id="predBox" style="position: relative; overflow: hidden;">
   <img src="{{ site.baseurl }}/assets/tutorials/4/figures.png" id="predPic" style="max-width: none; position: absolute;">
 </div>
@@ -151,11 +154,12 @@ This is a visualization of the bias-variance tradeoff. Try fiddling around with 
 <div id="errBox" style="position: relative; overflow: hidden;">
   <img src="{{ site.baseurl }}/assets/tutorials/4/errors.png" id="errPic" style="max-width: none; position: absolute;">
 </div>
+</div>
 </center>
 
 <div style="margin: 0px 15%;">
 <p style="font-size: 16px;">
-Details: We are training a locally-weighted linear regression model (LOWESS) on a sine wave with added gaussian noise. (Thank you to <a target="_blank" href="https://gist.github.com/agramfort/850437">agramfort</a> for the LWLR code). The smoothing parameter is used as a proxy for complexity, and the error is the average L1 distance.
+We are training a locally-weighted linear regression model (LOWESS) on a sine wave with added gaussian noise.. The smoothing parameter is used as a proxy for complexity, and the error is the average L1 distance. Credits to <a target="_blank" href="https://gist.github.com/agramfort/850437">agramfort</a>.
 </p>
 </div>
 
@@ -239,8 +243,6 @@ $$ \operatorname{E} \left[ (y - \hat f(x))^2 \right] $$
 and square the inside term and apply [linearity of expectation](https://brilliant.org/wiki/linearity-of-expectation/)
  
 $$ \operatorname{E} \left[ y^2 - 2y\hat f + \hat f^2 \right] = \operatorname{E}[y^2] + \operatorname{E}[\hat f^2] - 2y \operatorname{E}[\hat f] $$
- 
-Continue later on markdown editor… (too hard with just mathjax)
  
 {% endcapture %}
 {% include collapsible.html content=bvDerivation title="Bias-Variance Tradeoff Derivation"%}
