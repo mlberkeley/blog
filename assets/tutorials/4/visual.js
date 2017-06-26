@@ -1,5 +1,10 @@
+window.addEventListener('load', function() {
+  if (window.innerWidth < 1000) {
+    document.getElementById("visual").style.transform = "scale(0.5)";
+  }
+})
 function scaleVisual() {
-  if (window.innerWidth < 600) {
+  if (window.innerWidth < 1000) {
     document.getElementById("visual").style.transform = "scale(0.5)";
   }
 }
