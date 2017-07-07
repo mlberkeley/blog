@@ -1,11 +1,16 @@
-window.addEventListener('load', function() {
-  if (window.innerWidth < 1000) {
-    document.getElementById("visual").style.transform = "scale(0.7)";
-  }
-})
 // dimensions of each frame
 var imgWidth = 400;
 var imgHeight = 300;
+
+// resize on mobile
+window.addEventListener('load', function() {
+  if (window.innerWidth < 1000) {
+    document.getElementById("visual").style.transform = "scale(0.7)";
+    document.querySelector('#predBox').style.transform = "translate(" + (screen.width - imgWidth) + "px)"
+    document.querySelector('#errBox').style.transform = "translate(" + (screen.width - imgWidth) + "px)"
+  }
+})
+
 
 // dimensions of image in frames
 var rows = 24;
