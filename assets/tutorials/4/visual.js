@@ -7,8 +7,9 @@ var smallScreen = 700;
 // 700 appears to be upper limit for phones, lower limit for tablets
 
 if (window.innerWidth < smallScreen) {
-  imgWidth = imgWidth / 2;
-  imgHeight = imgHeight / 2;
+  var scaleFactor = window.innerWidth / imgWidth;
+  imgWidth = imgWidth * scaleFactor;
+  imgHeight = imgHeight * scaleFactor;
 } 
 // dimensions of image in frames
 var rows = 24;
@@ -44,8 +45,8 @@ function showImage(newVal) {
   
 
   if (window.innerWidth < smallScreen) {
-    predImg.style.width = "1000px";
+    predImg.style.width = (2000 * scaleFactor).toString() + "px";
     
-    errImg.style.width = "1000px";
+    errImg.style.width = (2000 * scaleFactor).toString() + "px";
   }
 }
