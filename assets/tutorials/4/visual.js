@@ -1,7 +1,12 @@
 // dimensions of each frame
 var imgWidth = 400;
 var imgHeight = 300;
-if (window.innerWidth < 1000) {
+
+// small screen size upper limit
+var smallScreen = 700; 
+// 700 appears to be upper limit for phones, lower limit for tablets
+
+if (window.innerWidth < smallScreen) {
   imgWidth = imgWidth / 2;
   imgHeight = imgHeight / 2;
 } 
@@ -38,7 +43,7 @@ function showImage(newVal) {
   errImg.style.left = ((-1 * parseInt(+newVal / rows) * imgWidth) ).toString() + "px";
   
 
-  if (window.innerWidth < 1000) {
+  if (window.innerWidth < smallScreen) {
     predImg.style.width = "1000px";
     
     errImg.style.width = "1000px";
