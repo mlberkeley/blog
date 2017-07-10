@@ -1,10 +1,3 @@
-
-
-window.addEventListener('load', function() {
-  if (window.innerWidth < 1000) {
-    
-  }
-})
 // dimensions of each frame
 var imgWidth = 400;
 var imgHeight = 300;
@@ -49,6 +42,7 @@ function showImage(newVal) {
   errImg.style.top = ((-1 * (+newVal) * imgHeight) % (rows * imgHeight)).toString() + "px";
   errImg.style.left = ((-1 * parseInt(+newVal / rows) * imgWidth) ).toString() + "px";
   
+
   if (window.innerWidth < 1000) {
     predImg.style.width = "1000px";
     predImg.style.left = ((-1 * parseInt(+newVal / rows) * imgWidth) / 2).toString() + "px";
