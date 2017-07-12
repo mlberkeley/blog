@@ -141,7 +141,7 @@ This is a visualization of the bias-variance tradeoff. Try fiddling around with 
 
 
 <center>
-<div id="visual">
+<div id="visual" style="position: relative;">
 <div id="predBox" style="position: relative; overflow: hidden;">
   <img src="{{ site.baseurl }}/assets/tutorials/4/figures.png" id="predPic" style="max-width: none; position: absolute;">
 </div>
