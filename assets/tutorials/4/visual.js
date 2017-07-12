@@ -6,6 +6,14 @@ var imgHeight = 300;
 var smallScreen = 700; 
 // 700 appears to be upper limit for phones, lower limit for tablets
 
+// dimensions of image in frames
+var rows = 24;
+var cols = 5;
+
+var topOffset = -30;
+
+  var pred = document.getElementById("predBox");
+  var err = document.getElementById("errBox");
 if (window.innerWidth < smallScreen) {
   var scaleFactor = window.innerWidth / imgWidth;
   imgWidth = imgWidth * scaleFactor;
@@ -14,11 +22,7 @@ if (window.innerWidth < smallScreen) {
   pred.style.right = pred.getBoundingClientRect().left.toString() + "px";
     err.style.right = err.getBoundingClientRect().left.toString() + "px";
 } 
-// dimensions of image in frames
-var rows = 24;
-var cols = 5;
 
-var topOffset = -30;
 
 var startVal = +document.getElementById("image_id").getAttribute("start");
 showVal(startVal);
@@ -28,8 +32,7 @@ function showVal(newVal){
 }
 
 function showImage(newVal) {
-  var pred = document.getElementById("predBox");
-  var err = document.getElementById("errBox");
+
 
     pred.style.width = imgWidth.toString() + "px";
     pred.style.height = imgHeight.toString() + "px";
