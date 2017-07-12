@@ -139,6 +139,7 @@ The best we can do is try to settle somewhere in the middle of the spectrum, whe
 
 This is a visualization of the bias-variance tradeoff. Try fiddling around with the slider between the images. What's happening is that we're trying to fit a model (the blue line) to some noisy sine wave data (the red crosses). By moving the slider you can manually adjust the complexity of the model. 
 
+The bottom graph shows the training error and the test error in red and blue respectively. Notice how training error always decreases with increasing complexity, but test error will hit a minimum at some point, and then increase after that. You can always tell whether you are underfitting or overfitting by looking at the training and test errors. 
 
 <center>
 <div id="visual" style="position: relative;">
@@ -166,13 +167,13 @@ We are training a locally-weighted linear regression model (LOWESS) on a sine wa
 </p>
 </div>
 
-The bottom graph shows the training error and the test error in red and blue respectively. Notice how training error always decreases with increasing complexity, but test error will hit a minimum at some point. You can always tell whether you are underfitting or overfitting by looking at the training and test errors. 
+### Analyzing the Training and Test Error
 
-Underfitting will result in poor accuracy (and high error) for both training and test data, which occurs on the left of the bottom graph. This is because the model inherently lacks enough complexity to describe the data. It’ll have poor results on both what it’s training on and what it’s testing on.
+Low complexity will result in poor accuracy (and thus high error) for both training and test data. You can see this on the left of the bottom graph where both the red line (training error) and blue line (test error) are very high. This is because the model inherently lacks enough complexity to describe the data at all.
 
-On the other hand, overfitting will result in a low training error and a high test error. This is because a complex model will be able to model the training data a bit _too_ well, and thus can't generalize to the test data. You can see this happening on the right side of the bottom graph.
+On the other hand, high complexity models will result in a low training error and a high test error. You can see this happening on the right side of the bottom graph, where the red data points decrease but the blue data points increase. This is because a complex model will be able to model the training data a bit _too_ well, and thus can't generalize to the test data. 
 
-Notice that the best complexity lies where the test error reaches a minimum, that is, somewhere in between a very simple and a very complex model.
+Notice that the best complexity lies where the test error reaches a minimum, that is, somewhere in between a very simple and a very complex model. 
 
 ## Noise
  
@@ -204,15 +205,15 @@ This noise manifests as disorganized data points. What we want to do is recover 
 </p>
 </div>
 
-## Bias-Variance Tradeoff Derivation
+## Bias-Variance Decomposition Derivation
  
-For the more mathematically inclined, this sets the stage for us to prove that there must exist a tradeoff. Two things though. Firstly, knowing a bit of probability theory will probably make this proof a bit easier to swallow (although we’ll certainly try to explain everything). And secondly, this proof is straight from [Wikipedia](https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff#Derivation) (there’s only so many ways to prove things!) but we hope we have a much more elucidating version of the proof here.
+For the more mathematically inclined, this sets the stage for us to derive the _Bias-Variance Decomposition_. That is, we will prove that the error of a model is composed of three terms: a bias term, a variance term, and an unavoidable _irreducible error_ term. Two things though. Firstly, knowing a bit of probability theory will probably make this proof a bit easier to swallow (although we’ll certainly try to explain everything). And secondly, this proof is straight from [Wikipedia](https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff#Derivation) (there’s only so many ways to prove things!) but we hope we have a much more elucidating version of the proof here.
  
 {% capture bvDerivation %}
  
-We start with the fact that our training data comes from our god-given function mixed with some noise. That is $$ y = f(x) + \epsilon $$, where $$ \epsilon $$ is distributed normally, has mean $$ 0 $$, and variance $$ \sigma^2 $$. Our goal is to find a function, call this $$ \hat f(x) $$, to approximate $$ f(x) $$.
+We start with the fact that our training data, $$ y $$, comes from our god-given function, $$ f(x) $$, mixed with some noise. That is $$ y = f(x) + \epsilon $$, where the noise, $$ \epsilon $$, is distributed normally, has mean $$ 0 $$, and variance $$ \sigma^2 $$. Our goal is to find a function, call this $$ \hat f(x) $$, to approximate $$ f(x) $$.
  
-Our derivation of the bias-variance tradeoff will show that the error of $$ \hat f(x) $$ in approximating $$ y $$ can be seen as a combination of bias, variance, and an _irreducable error term_. That is:
+Again, we want to show that the error of $$ \hat f(x) $$ in approximating $$ y $$ can be seen as a combination of bias, variance, and an irreducable error term. That is:
  
 $$ \operatorname{E} \left[ (y - \hat f(x))^2 \right] = \operatorname{Bias} \left[ \hat f(x) \right]^2 + \operatorname{Var} \left[ \hat f(x) \right] + \sigma^2 $$
  
@@ -226,22 +227,23 @@ $$ \operatorname{Var} \left[ \hat f(x) \right] = \operatorname{E} \left [ \hat f
  
 If your eyes just started to glaze over, don't worry. Let’s break this down a bit. 
 
-The first equation just says that the mean squared error $$ \operatorname{E} \left[ (y - \hat f(x))^2 \right] $$ (which we talked about in a [previous post]({{ site.baseurl }}/2016/11/06/tutorial-1/)) can be broken down into a “bias” term, a “variance” term, and an “irreducible error term” (the $$ \operatorname{E} $$ means “expectation of” and is just a fancy way of saying “average”).
- 
-The first of these three terms is the bias term: 
+The $$ \operatorname{E} \left[ (y - \hat f(x))^2 \right] $$ on the left hand side of the first equation is the mean squared error (which we talked about in a [previous post]({{ site.baseurl }}/2016/11/06/tutorial-1/)). The right hand side shows it's decomposition into three terms.
+
+The $$ \sigma^2 $$ on the right hand side of the first equation is the variance of the noise (from $$ \epsilon $$). As real-world data must have some noise, for all intents and purposes this is a constant (hence the name "irreducible error").
+
+The first of these three terms (and the second equation) is the bias term: 
 
 $$ \operatorname{Bias} \left[ \hat f(x) \right] = \operatorname{E} \left[ \hat f(x) - f(x) \right] $$
 
-This term measures how much the model, $$ \hat f(x) $$, differs from the actual function, $$ f(x) $$. In essence, it measures the errors due to simplifying assumptions of our model $$ \hat f(x) $$. In this way, it’s an indicator of underfitting.
+This term measures how much the model, $$ \hat f(x) $$, differs from the actual function, $$ f(x) $$. The $$ \operatorname{E} $$ means expectation (or average), so we are literally taking the average difference between our model and the actual function. In essence, the difference measures the errors due to simplifying assumptions of our model $$ \hat f(x) $$. In this way, it’s an indicator of underfitting.
  
-The second term is the variance term: 
+The second term (and the third equation) is the variance term: 
 
 $$ \operatorname{Var} \left[ \hat f(x) \right] = \operatorname{E} \left [ \hat f(x) ^2 \right] - \operatorname{E} \left[ \hat f(x) \right ]^2 $$
 
-
-Readers with a bit of background in probability or statistics will likely see that this is the exact working definition of variance. Intuitively, the variance measures how much spread a model has. That is, how much it “wriggles” around and overfits the data.
+Readers with a bit of background in probability or statistics will likely recognize that this is the exact working definition for variance. Although there are more intuitive expressions for variance, this (rather opaque) formulation will help us later in the derivation. A proof of this formula can be found [here](https://en.wikipedia.org/wiki/Variance#Definition).
  
-Finally, the third term is called the _irreducible error_. It’s irreducible because no matter what model we use, the error will always be there. This is because the $$ \sigma^2 $$ term comes directly from the error in our training data: $$ \epsilon $$. Note that because both the bias term and the variance term are non-negative (the bias because it’s being squared, and the variance by definition), $$ \sigma^2 $$ is a lower bound for the mean squared error. 
+Finally, the third term, $$ \sigma^2 $$ is the _irreducible error_. It’s irreducible because no matter what model we use, the error will always be there. This is because the $$ \sigma^2 $$ term comes directly from the noise in our training data: $$ \epsilon $$. For all intents and purposes it is a constant. Note that because both the bias term and the variance term are non-negative (the bias because it’s being squared, and the variance by definition), $$ \sigma^2 $$ is a lower bound for the mean squared error. 
  
 For simplicity, we now denote $$ f(x) $$ by just $$ f $$ and $$ \hat f(x) $$ by just $$ \hat f $$.
  
@@ -251,7 +253,85 @@ $$ \operatorname{E} \left[ (y - \hat f(x))^2 \right] $$
  
 and square the inside term and apply [linearity of expectation](https://brilliant.org/wiki/linearity-of-expectation/)
  
-$$ \operatorname{E} \left[ y^2 - 2y\hat f + \hat f^2 \right] = \operatorname{E}[y^2] + \operatorname{E}[\hat f^2] - 2y \operatorname{E}[\hat f] $$
+$$ \operatorname{E} \left[ y^2 - 2y\hat f + \hat f^2 \right] = \operatorname{E}[y^2] + \operatorname{E}[\hat f^2] - \operatorname{E}[2y\hat f] $$
+
+We can rewrite both the first and second terms by using the definition for variance:
+
+$$ \operatorname{Var}[y] = \operatorname{E}[y^2] - \operatorname{E}[y]^2 $$
+
+$$ \operatorname{Var}[\hat f] = \operatorname{E}[\hat f^2] - \operatorname{E}[\hat f]^2 $$
+
+Rearranging we have:
+
+$$ \operatorname{E}[y^2] = \operatorname{Var}[y] + \operatorname{E}[y]^2 $$
+
+$$ \operatorname{E}[\hat f^2] = \operatorname{Var}[\hat f] + \operatorname{E}[\hat f]^2 $$
+
+Which are exactly the frist and second terms. As for the third term, we can directly calculate the expectation using linearity of expectation:
+
+$$ \operatorname{E}[2y\hat f] = 2 \operatorname{E}[y]\operatorname{E}[\hat f] $$
+
+Note that because $$ y = f + \epsilon $$ and, $$ \epsilon $$ has mean of 0:
+
+$$ \operatorname{E}[y] = \operatorname{E}[f + \epsilon] = \operatorname{E}[f] = f $$
+
+(The last equality holds because $$ f $$ is a deterministic function. It's average at any point is simply going to be it's value at that point). Thus:
+
+$$ \operatorname{E}[2y\hat f] = 2f\operatorname{E}[\hat f] $$
+
+Substituting all of this back, we obtain:
+
+\begin{align}
+\operatorname{E} \left[ (y - \hat f(x))^2 \right] &= \operatorname{E}[y^2] + \operatorname{E}[\hat f^2] - \operatorname{E}[2y\hat f] \\\
+&= \operatorname{Var}[y] + \operatorname{E}[y]^2 + \operatorname{Var}[\hat f] + \operatorname{E}[\hat f]^2 - 2f\operatorname{E}[\hat f]
+\end{align}
+
+Rearranging the terms (and using the fact that $$ \operatorname{E}[y] = f $$), we have:
+
+\begin{align}
+\operatorname{E} \left[ (y - \hat f(x))^2 \right] &= \operatorname{Var}[y] + \operatorname{E}[y]^2 + \operatorname{Var}[\hat f] + \operatorname{E}[\hat f]^2 - 2f\operatorname{E}[\hat f] \\\
+&= \operatorname{Var}[y] + \operatorname{Var}[\hat f] + (f^2 - 2f\operatorname{E}[\hat f] + \operatorname{E}[\hat f]^2) \\\
+&= \operatorname{Var}[y] + \operatorname{Var}[\hat f] + (f - \operatorname{E}[\hat f])^2 \\\
+\end{align}
+
+We're almost there! Because both $$ f $$ is fully deterministic, by linearity of expectation:
+
+$$ \operatorname{Bias}[\hat f] = \operatorname{E}[\hat f - f] = \operatorname{E}[\hat f] - \operatorname{E}[f] = \operatorname{E}[\hat f] - f $$
+
+Squaring the bias, we get:
+
+\begin{align}
+\operatorname{Bias}[\hat f]^2 &= (\operatorname{E}[\hat f] - f)^2 \\\
+&= (f - \operatorname{E}[\hat f])^2
+\end{align}
+
+But this is just the third term in the equation above! Substituting, we have:
+
+$$ \operatorname{E} \left[ (y - \hat f(x))^2 \right] = \operatorname{Var}[y] + \operatorname{Var}[\hat f] + \operatorname{Bias}[\hat f]^2 $$
+
+We have just one more act of mathematical gymnastics to perform. We need to somehow wrangle a $$ \sigma^2 $$ out of the $$ \operatorname{Var}[y] $$. Let's do it.
+
+Again, we have $$ y = f + \epsilon $$. So:
+
+\begin{align}
+\operatorname{Var}[y] &= \operatorname{E}[y^2] - \operatorname{E}[y]^2 \\\
+&= \operatorname{E}[f^2 + 2f\epsilon + \epsilon^2] - \operatorname{E}[f + \epsilon]^2 \\\
+&= \operatorname{E}[f^2] + 2\operatorname{E}[f]\operatorname{E}[\epsilon] + \operatorname{E}[\epsilon^2] - \operatorname{E}[f]^2 \\\
+&= \operatorname{E}[\epsilon^2]
+\end{align}
+
+Where we used linearity of expectation, the fact that $$ f $$ and $$ \epsilon $$ are independent, and $$ \operatorname{E}[\epsilon] = 0 $$.
+
+Using the definition of variance, we have:
+
+\begin{align}
+\operatorname{Var}[\epsilon] &= \operatorname{E}[\epsilon^2] - \operatorname{E}[\epsilon]^2 \\\
+&= \operatorname{E}[\epsilon^2]
+\end{align}
+
+But $$ \operatorname{Var}[\epsilon] = \sigma^2 $$! Substituting we obtain our decomposition:
+
+$$ \operatorname{E} \left[ (y - \hat f(x))^2 \right] = \operatorname{Var}[\hat f] + \operatorname{Bias}[\hat f]^2 + \sigma^2 $$
  
 {% endcapture %}
 {% include collapsible.html content=bvDerivation title="Bias-Variance Tradeoff Derivation"%}
@@ -264,6 +344,14 @@ As we've seen above, overfitting and underfitting have very clear signatures in 
 
 However, measuring training and test errors is hard when we have relatively few data points and our algorithms require a fair amount of data (which unfortunately happens quite often). In this case we can use a technique called **cross-validation**.
 
-This is where we take our entire dataset and split it into $$ k $$ groups. For each of the $$ k $$ groups, we train on the remaining $$ k - 1 $$ groups and **validate** on the $$ k^{th} $$ group. That is, we essentially test on the $$ k^{th} $$ validation set. This way we can make the most use of our data, essentially taking a dataset and training $$ k $$ times on it. 
+This is where we take our entire dataset and split it into $$ k $$ groups. For each of the $$ k $$ groups, we train on the remaining $$ k - 1 $$ groups and **validate** on the $$ k^{th} $$ group. This way we can make the most use of our data, essentially taking a dataset and training $$ k $$ times on it. 
+
+As for what to do after you detect a problem? Well, having high bias is symptomatic of a model that is not complex enough. In that case, your best bet would be to just pick a more complex model.
+
+The problem of high variance is a bit more interesting. One naive approach to reduce high variance is to use more data. Theoretically, with a complex enough model, as the number of samples tends toward infinity the variance tends toward zero. However, this approach is naive because the rate at which the variance decreases is typically fairly slow, and (the larger problem) data is almost always very hard to come across. Unless you're working at Google Brain (and even then), getting more data takes time, energy, and money.
+
+A better approach to reducing variance is to use regularization. That is, in addition to rewarding your model as it models the training data well, penalize it for growing too complex. Essentially, regularization injects "bias" into the model by telling it not to become too complex. Common regularization techniques include lasso or ridge regression, dropout for neural networks, and soft margin SVMs.
+
+Finally, **ensemble learning** (which we'll be talking about next time!) offers a way to reduce the variance of a model without sacrificing bias. The idea is to have an _ensemble_ of multiple classifiers (typically decision trees) trained on random subsets of the training data. To actually classify a data point, the ensemble of classifiers all "vote" on a classification.
 
 <script src="{{ site.baseurl }}/assets/tutorials/4/visual.js"></script>
