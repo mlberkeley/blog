@@ -11,6 +11,8 @@ if (window.innerWidth < smallScreen) {
   imgWidth = imgWidth * scaleFactor;
   imgHeight = imgHeight * scaleFactor;
   
+  pred.style.right = pred.getBoundingClientRect().left.toString() + "px";
+    err.style.right = err.getBoundingClientRect().left.toString() + "px";
 } 
 // dimensions of image in frames
 var rows = 24;
@@ -50,8 +52,7 @@ function showImage(newVal) {
     
     errImg.style.width = (2000 * scaleFactor).toString() + "px";
     
-    pred.style.right = pred.getBoundingClientRect().left.toString() + "px";
-    err.style.right = err.getBoundingClientRect().left.toString() + "px";
+    
 //    document.getElementById('visual').style.right = pred.getBoundingClientRect().left.toString() + "px";
   }
 }
