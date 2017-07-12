@@ -10,6 +10,7 @@ if (window.innerWidth < smallScreen) {
   var scaleFactor = window.innerWidth / imgWidth;
   imgWidth = imgWidth * scaleFactor;
   imgHeight = imgHeight * scaleFactor;
+  
 } 
 // dimensions of image in frames
 var rows = 24;
@@ -48,5 +49,7 @@ function showImage(newVal) {
     predImg.style.width = (2000 * scaleFactor).toString() + "px";
     
     errImg.style.width = (2000 * scaleFactor).toString() + "px";
+    
+    document.getElementById('visual').style.right = pred.getBoundingClientRect().left.toString() + "px";
   }
 }
