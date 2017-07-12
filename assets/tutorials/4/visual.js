@@ -50,6 +50,8 @@ function showImage(newVal) {
     
     errImg.style.width = (2000 * scaleFactor).toString() + "px";
     
-    document.getElementById('visual').style.right = pred.getBoundingClientRect().left.toString() + "px";
+    pred.style.right = pred.getBoundingClientRect().left.toString() + "px";
+    err.style.right = err.getBoundingClientRect().left.toString() + "px";
+//    document.getElementById('visual').style.right = pred.getBoundingClientRect().left.toString() + "px";
   }
 }
