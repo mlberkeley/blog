@@ -294,7 +294,7 @@ Rearranging the terms (and using the fact that $$ \operatorname{E}[y] = f $$), w
 &= \operatorname{Var}[y] + \operatorname{Var}[\hat f] + (f - \operatorname{E}[\hat f])^2 \\\
 \end{align}
 
-We're almost there! Because both $$ f $$ is fully deterministic, by linearity of expectation:
+We're almost there! Because $$ f $$ is fully deterministic, by linearity of expectation:
 
 $$ \operatorname{Bias}[\hat f] = \operatorname{E}[\hat f - f] = \operatorname{E}[\hat f] - \operatorname{E}[f] = \operatorname{E}[\hat f] - f $$
 
@@ -311,7 +311,7 @@ $$ \operatorname{E} \left[ (y - \hat f(x))^2 \right] = \operatorname{Var}[y] + \
 
 We have just one more act of mathematical gymnastics to perform. We need to somehow wrangle a $$ \sigma^2 $$ out of the $$ \operatorname{Var}[y] $$. Let's do it.
 
-Again, we have $$ y = f + \epsilon $$. So:
+Again, we have $$ y = f + \epsilon $$. So, from the definition of variance:
 
 \begin{align}
 \operatorname{Var}[y] &= \operatorname{E}[y^2] - \operatorname{E}[y]^2 \\\
@@ -322,14 +322,14 @@ Again, we have $$ y = f + \epsilon $$. So:
 
 Where we used linearity of expectation, the fact that $$ f $$ and $$ \epsilon $$ are independent, and $$ \operatorname{E}[\epsilon] = 0 $$.
 
-Using the definition of variance, we have:
+Again, using the definition of variance, we have:
 
 \begin{align}
 \operatorname{Var}[\epsilon] &= \operatorname{E}[\epsilon^2] - \operatorname{E}[\epsilon]^2 \\\
 &= \operatorname{E}[\epsilon^2]
 \end{align}
 
-But $$ \operatorname{Var}[\epsilon] = \sigma^2 $$! Substituting we obtain our decomposition:
+But $$ \operatorname{Var}[\epsilon] = \sigma^2 $$! And substituting, we obtain our decomposition:
 
 $$ \operatorname{E} \left[ (y - \hat f(x))^2 \right] = \operatorname{Var}[\hat f] + \operatorname{Bias}[\hat f]^2 + \sigma^2 $$
  
