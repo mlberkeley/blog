@@ -21,7 +21,7 @@ Here's a riddle:
 <!-- break -->
 
 <center>
-  <img src="{{ site.baseurl }}/assets/tutorials/4/doger_fitting.jpg" style="width: 300px" class="img">
+  <img src="{{ site.baseurl }}/assets/tutorials/4/doger_fitting.jpg" style="width: 400px" class="img">
 </center>
 
 So what does this have to do with machine learning? Well, it turns out that machine learning algorithms are not that much different from our friend Doge: _they often run the risk of over-extrapolating or over-interpolating from the data that they are trained on._
@@ -350,6 +350,6 @@ Finally, **ensemble learning** (which we'll be talking about next time!) offers 
 
 ## Conclusion
 
-As you may be starting to see, machine learning is an just as much an art as it is a science. Choosing a model and adjusting each of its parameters to reduce overfitting and underfitting is a task that requires skill and, more importantly, experience. And while there is probably a 'sweet' spot out there, us mere mortals will have to rely on our intuition and our cunning to find the best model for the job.
+As you may be starting to see, machine learning is just as much an art as it is a science. Choosing a model and adjusting each of its parameters to reduce overfitting and underfitting is a task that requires skill and, more importantly, experience. And while there is probably a 'sweet' spot out there, us mere mortals will have to rely on our intuition and our cunning to find the best model for the job.
 
 <script src="{{ site.baseurl }}/assets/tutorials/4/visual.js"></script>
