@@ -36,6 +36,11 @@ The engineers of the nuclear power plant used earthquake data from the past 400 
 
 <center>
   <img src="{{ site.baseurl }}/assets/tutorials/4/earthquake-overfit.png" class="img">
+  <div style="max-width: 70%;">
+  <p style="font-size: 16px;">
+Source: <a target="_blank" href="https://mpra.ub.uni-muenchen.de/69383/1/MPRA_paper_69383.pdf">Brian Stacey, Fukushima: The Failure of Predictive Models</a>
+</p>
+</div>
 </center>
 
 The diamonds represent actual data while the thin line shows the engineers’ regression. Notice how their model hugs the data points very closely. In fact, their model makes a kink at around a magnitude of 7.3 -- decidedly not linear.
