@@ -75,7 +75,7 @@ While the linear model (the blue line) follows the data (the purple X's), it mis
  
 So we want to avoid overfitting because it gives too much predictive power to quirks in our training data. But in our attempt to reduce overfitting we can also begin to underfit, ignoring important features in our training data. So how do we balance the two?
  
-In the field of machine learning this incredibly important problem is known as the bias-variance dilemma. It’s entirely possible to have state-of-the-art algorithms, the fastest computers, and the most recent GPUs, but if your model overfits or underfits to the training data, its predictive powers are going to be terrible no matter how much money or technology you have.
+In the field of machine learning this incredibly important problem is known as the bias-variance dilemma. It’s entirely possible to have state-of-the-art algorithms, the fastest computers, and the most recent GPUs, but if your model overfits or underfits to the training data, its predictive powers are going to be terrible no matter how much money or technology you throw at it.
  
 The name bias-variance dilemma comes from two terms in statistics: **bias**, which corresponds to underfitting,  and **variance**, which corresponds to overfitting. 
 
@@ -102,7 +102,7 @@ Again, there’s nothing wrong with our training. In fact, our predictor hits *e
 <center>
   <img src="{{ site.baseurl }}/assets/tutorials/4/xkcd.png" class="img" style="width: 200px">
   <p style="font-size: 16px;">
-An example of high “variance” in everyday life from <a target="_blank" href="https://xkcd.com/385/">xkcd</a>. ‘Girls sucking at math’ in this case an overgeneralization based on only a single data point.
+An example of high “variance” in everyday life from <a target="_blank" href="https://xkcd.com/385/">xkcd</a>. ‘Girls sucking at math’ in this case is an overgeneralization based on only a single data point.
 </p>
 </center>
 
@@ -120,9 +120,9 @@ The image above should make things a bit more clear as to why the bias-variance 
 
 ## Visualization of the bias-variance tradeoff
 
-This is a visualization of the bias-variance tradeoff. Try fiddling around with the slider between the images. What's happening is that we're trying to fit a model (the blue line) to some noisy sine wave data (the red crosses). By moving the slider you can manually adjust the complexity of the model. 
+_In this visualization we fit a model (the blue line) to some noisy sine wave data (the red crosses). By moving the slider you can manually adjust the complexity of the model and watch as it overfits and underfits._
 
-The bottom graph shows the training error and the test error in red and blue respectively. Notice how training error always decreases with increasing complexity, but test error will hit a minimum at some point, and then increase after that. You can always tell whether you are underfitting or overfitting by looking at the training and test errors. 
+_The bottom graph shows the training error and the test error in red and blue respectively. Notice how training error always decreases with increasing complexity, but test error will hit a minimum at some point, and then increase after that. You can always tell whether you are underfitting or overfitting by looking at the training and test errors._
 
 <center>
 <div id="visual" style="position: relative;">
@@ -140,10 +140,10 @@ The bottom graph shows the training error and the test error in red and blue res
 </div>
 </div>
 <p style="font-size: 16px;">
-The top image shows models of different complexities fitting to the data. The bottom image shows the the error of the model against a training set (<span style="color: red">red</span>) and a testing set (<span style="color: blue">blue</span>). 
+The top image shows models of different complexities fitting to the data. The bottom image shows the the error of the model against a training set (<span style="color: red">red</span>) and a test set (<span style="color: blue">blue</span>). 
 </p>
 <p style="font-size: 16px;">
-We are training a locally-weighted linear regression model (LOWESS) on a sine wave with added gaussian noise. The smoothing parameter is used as a proxy for complexity, and the error is the average L1 distance. Credits to <a target="_blank" href="https://gist.github.com/agramfort/850437">agramfort</a>.
+We are training a locally-weighted linear regression model (LOWESS) on a sine wave with added gaussian noise. The smoothing parameter is used as a proxy for complexity, and the error is the average L1 distance. Credits to <a target="_blank" href="https://gist.github.com/agramfort/850437">agramfort</a> for the LOWESS implementation. You can find the code that generated this visualization <a target="_blank" href="https://github.com/dangeng/bias-variance-tradeoff">here</a>.
 </p>
 </center>
 
@@ -157,7 +157,7 @@ Notice that the best complexity lies where the test error reaches a minimum, tha
 
 ## Noise
  
-Here’s another (more mathematical) insight into what bias and variance is all about. In machine learning and data science, we often have a function that we want to model, whether it be a function that associates square footage to house prices or magnitudes of an earthquake to the frequency at which they occur. We assume that there is some perfect, god-given, ideal function that models exactly what we want. But the world isn’t perfect, so when we get real data to train our model it inevitably has noise--random fluctuations from things such as human error and measurement uncertainty.
+Here’s another (more mathematical) insight into what bias and variance is all about. In machine learning and data science, we often have a function that we want to model, whether it be a function that associates square footage to house prices or magnitudes of an earthquake to the frequency at which they occur. We assume that there is some perfect, god-given, ideal function that models exactly what we want. But the world isn’t perfect, so when we get real data to train our model it inevitably has noise -- random fluctuations from things such as human error and measurement uncertainty.
  
 In math terms, we say that $$ y = f(x) + \epsilon $$. Where $$ y $$ is the training data we end up measuring, $$ f(x) $$ is that perfect function, and $$ \epsilon $$ is the random error that we can’t avoid.  
 
@@ -283,31 +283,25 @@ $$ \operatorname{E} \left[ (y - \hat f(x))^2 \right] = \operatorname{Var}[y] + \
 
 We have just one more act of mathematical gymnastics to perform. We need to somehow wrangle a $$ \sigma^2 $$ out of the $$ \operatorname{Var}[y] $$. Let's do it.
 
-Again, we have $$ y = f + \epsilon $$. So, from the definition of variance:
+Again, we have $$ y = f + \epsilon $$, so:
 
 \begin{align}
-\operatorname{Var}[y] &= \operatorname{E}[y^2] - \operatorname{E}[y]^2 \\\
-&= \operatorname{E}[(f + \epsilon)^2] - \operatorname{E}[f + \epsilon]^2 \\\
-&= \operatorname{E}[f^2 + 2f\epsilon + \epsilon^2] - \operatorname{E}[f + \epsilon]^2 \\\
-&= \operatorname{E}[f^2] + 2\operatorname{E}[f]\operatorname{E}[\epsilon] + \operatorname{E}[\epsilon^2] - \operatorname{E}[f]^2 \\\
-&= \operatorname{E}[\epsilon^2]
+\operatorname{Var}[y] &= \operatorname{E}[(y-\operatorname{E}[y])^2] \\\
+&= \operatorname{E}[(y - f)^2] \\\
+&= \operatorname{E}[f + \epsilon - f)^2] \\\
+&= \operatorname{E}[\epsilon^2] \\\
+&= \operatorname{Var}[\epsilon] + \operatorname{E}[\epsilon]^2 \\\
+&= \sigma^2
 \end{align}
 
-Where we used linearity of expectation, the fact that $$ f $$ and $$ \epsilon $$ are independent, and $$ \operatorname{E}[\epsilon] = 0 $$.
+In the first line we used the definition of variance. In the second we use the fact that $$ \operatorname{E}[y] = f $$. The third line we substitute $$ y $$. In the fifth line, we use the (other) definition of variance. Finally, in the sixth line we use the fact that $$ \operatorname{E}[\epsilon] = 0 $$ and $$ \operatorname{Var}[\epsilon] = \sigma^2 $$.
 
-Again, using the definition of variance, we have:
-
-\begin{align}
-\operatorname{Var}[\epsilon] &= \operatorname{E}[\epsilon^2] - \operatorname{E}[\epsilon]^2 \\\
-&= \operatorname{E}[\epsilon^2]
-\end{align}
-
-But $$ \operatorname{Var}[\epsilon] = \sigma^2 $$! And substituting, we obtain our decomposition:
+And substituting, we obtain our decomposition:
 
 $$ \operatorname{E} \left[ (y - \hat f(x))^2 \right] = \operatorname{Var}[\hat f] + \operatorname{Bias}[\hat f]^2 + \sigma^2 $$
  
 {% endcapture %}
-{% include collapsible.html content=bvDerivation title="Bias-Variance Tradeoff Derivation"%}
+{% include collapsible.html content=bvDerivation title="Bias-Variance Decomposition Derivation"%}
 
 ## Resolving the Dilemma
  
