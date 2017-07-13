@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Machine Learning Crash Course: Part 4 - The Bias-Variance Dilemma"
-date:   2017-6-17
+date:   2017-7-13
 author: Daniel Geng and Shannon Shih
 type: tutorial
 comments: true
