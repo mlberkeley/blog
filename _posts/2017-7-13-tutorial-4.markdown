@@ -334,7 +334,7 @@ This is where we take our entire dataset and split it into $$ k $$ groups. For e
   <img src="{{ site.baseurl }}/assets/tutorials/4/CV_diagram.png" class="img" style="width: 400px;">
   <div style="max-width: 70%;">
   <p style="font-size: 16px;">
-    Cross validation with k=3. We divide the entire test set into three parts, and then train our model three times using each part as the test set with the remaining two parts making up our training set.
+    Cross validation with k=3. We divide the entire test set into three parts, and then train our model three times using each part as the validation set with the remaining two parts making up our training set.
   </p>
   </div>
 </center>
