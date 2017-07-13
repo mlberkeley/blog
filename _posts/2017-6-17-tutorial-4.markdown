@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "ML Crash Course: The Bias-Variance Dilemma"
+title:  "Machine Learning Crash Course: Part 4 - The Bias-Variance Dilemma"
 date:   2017-6-17
 author: Daniel Geng and Shannon Shih
 type: tutorial
 comments: true
 published: true
-description: The Bias Variance Tradeoff
+description: The Bias Variance Dilemma
 ---
 
 <style>
@@ -32,7 +32,7 @@ There is a very delicate balancing act when machine learning algorithms try to p
  
 ## Fukushima
  
-The Fukushima power plant disaster is a devastating example of overfitting. When designing the power plant, engineers had to determine how often earthquakes would occur. They used a well-known law called the Gutenberg-Richter Law, which gives a way of predicting the probability of a very strong earthquake from the frequency that very weak earthquakes occur. This is useful because weak earthquakes--ones that are so weak that you can’t even feel them--happen almost all the time and are recorded by geologists, so the engineers had quite a large dataset to work with. Perhaps the most important result of this law is that the relationship between the magnitude of an earthquake and the logarithm of the probability that it happens is _linear_. 
+[The Fukushima power plant disaster](https://en.wikipedia.org/wiki/Fukushima_Daiichi_nuclear_disaster) is a devastating example of overfitting. When designing the power plant, engineers had to determine how often earthquakes would occur. They used a well-known law called the Gutenberg-Richter Law, which gives a way of predicting the probability of a very strong earthquake from the frequency that very weak earthquakes occur. This is useful because weak earthquakes--ones that are so weak that you can’t even feel them--happen almost all the time and are recorded by geologists, so the engineers had quite a large dataset to work with. Perhaps the most important result of this law is that the relationship between the magnitude of an earthquake and the logarithm of the probability that it happens is _linear_. 
 
 The engineers of the nuclear power plant used earthquake data from the past 400 years to train a regression model. Their prediction looked something like this:
 
@@ -40,21 +40,18 @@ The engineers of the nuclear power plant used earthquake data from the past 400 
   <img src="{{ site.baseurl }}/assets/tutorials/4/earthquake-overfit.png" class="img">
 </center>
 
-The diamonds represent actual data while the thin line shows the engineers’ regression. Notice how their model hugs very closely to the data points. In fact, their model makes a sort of “kink” at around a magnitude of 7.3 -- decidedly not linear.
+The diamonds represent actual data while the thin line shows the engineers’ regression. Notice how their model hugs the data points very closely. In fact, their model makes a kink at around a magnitude of 7.3 -- decidedly not linear.
  
-In machine learning jargon, we call this *overfitting*. As the name implies, overfitting is when we train a predictive model that "hugs" the training data too closely. In this case, the engineers knew the relationship should have been linear but they used a much more complex model.
+In machine learning jargon, we call this *overfitting*. As the name implies, overfitting is when we train a predictive model that "hugs" the training data too closely. In this case, the engineers knew the relationship should have been a straight line but they used a more complex model than they needed to.
  
 If the engineers had used the correct linear model, their results would have looked something like this:
 
 <center>
   <img src="{{ site.baseurl }}/assets/tutorials/4/earthquake-fit.png" class="img">
-</center>
-
-<div style="margin: 0px 15%;">
-<p style="font-size: 16px;">
-Notice there’s no kink this time, so the line isn’t as steeply sloped after the data ends on the right. 
+  <p style="font-size: 16px;">
+Notice there’s no kink this time, so the line isn’t as steeply sloped on the right. 
 </p>
-</div>
+</center>
  
 The difference between these two models? The overfitted model predicted one earthquake of at least magnitude 9 about every 13000 years while the correct model predicted one earthquake of at least magnitude 9 just about every 300 years. And because of this, the Fukushima Nuclear Power Plant was built only to withstand an earthquake of magnitude 8.6. The 2011 earthquake that devastated the plant was of magnitude 9 (about 2.5 times stronger than a magnitude 8.6 earthquake).
 
@@ -68,58 +65,46 @@ There is actually a dual problem to overfitting, which is called underfitting. I
 
 <center>
   <img src="{{ site.baseurl }}/assets/tutorials/4/underfitting.png" class="img" style="width: 300px">
-</center>
-
-<div style="margin: 0px 15%;">
-<p style="font-size: 16px;">
+  <p style="font-size: 16px;">
 While the linear model (the blue line) follows the data (the purple X's), it misses the underlying curving trend of the data. A quadratic model would have been better.
 </p>
-</div>
+</center>
+
 
 ## The Bias-Variance dilemma
  
 So we want to avoid overfitting because it gives too much predictive power to quirks in our training data. But in our attempt to reduce overfitting we can also begin to underfit, ignoring important features in our training data. So how do we balance the two?
  
-In the field of machine learning this incredibly important problem is known as the bias-variance dilemma. It’s entirely possible to have state-of-the-art algorithms, the fastest computers, and the most recent GPUs but if your model overfits or underfits to the training data, its predictive powers are going to be terrible no matter how much money or technology you have.
+In the field of machine learning this incredibly important problem is known as the bias-variance dilemma. It’s entirely possible to have state-of-the-art algorithms, the fastest computers, and the most recent GPUs, but if your model overfits or underfits to the training data, its predictive powers are going to be terrible no matter how much money or technology you have.
  
 The name bias-variance dilemma comes from two terms in statistics: **bias**, which corresponds to underfitting,  and **variance**, which corresponds to overfitting. 
 
 <center>
 <img src="{{ site.baseurl }}/assets/tutorials/4/underfitting.png" class="img" style="width: 300px">
-</center>
-
-<div style="margin: 0px 15%;">
 <p style="font-size: 16px;">
 Our example of underfitting from above. The blue line is our model, and the purple X's are the data that we are trying to predict.
 </p>
-</div>
+</center>
  
-The drawing above depicts an example of high **bias**. In other words, the model is _underfitting_. The data points obviously follow some sort of curve, but our predictor isn’t complex enough to capture that information. Our model is _biased_ in that it assumes that the data will behave in a certain fashion (linear, quadratic, etc.) even though that assumption may not be true.  A key point is that there’s nothing wrong with our training---this is the *best* possible linear model fit to the data. There is, however, something wrong with _the model itself_ in that it can’t possibly account for all the complexities of our data.
+The drawing above depicts an example of high **bias**. In other words, the model is _underfitting_. The data points obviously follow some sort of curve, but our predictor isn’t complex enough to capture that information. Our model is _biased_ in that it assumes that the data will behave in a certain fashion (linear, quadratic, etc.) even though that assumption may not be true.  A key point is that there’s nothing wrong with our training---this is the *best* possible fit that a linear model can achieve. There is, however, something wrong with the *model* itself in that it's not complex enough to model our data.
 
 <center>
   <img src="{{ site.baseurl }}/assets/tutorials/4/overfitting.png" class="img" style="width: 300px">
-</center>
-
-<div style="margin: 0px 15%;">
-<p style="font-size: 16px;">
+  <p style="font-size: 16px;">
 Approximating data using a very complex model. Notice how the line tends to over-interpolate between points. Even though there is a general upward trend in the data, the model predicts huge oscillations.
 </p>
-</div>
+</center>
  
-In this drawing, we see an example of a model with very high **variance**. In other words, a model that is _overfitting_. Again, the data points suggest a sort of graceful curve. However, our model uses a very detailed curve to get as close to every data point as possible. Consequently, a model with high variance has very low bias because it makes little to no assumption about the data. In fact, it adapts _too_ much to the data. 
+In this drawing, we see an example of a model with very high **variance**. In other words, a model that is _overfitting_. Again, the data points suggest a sort of graceful curve. However, our model uses a very complex curve to get as close to every data point as possible. Consequently, a model with high variance has very low bias because it makes little to no assumption about the data. In fact, it adapts _too_ much to the data. 
 
-Again, there’s nothing wrong with our training. In fact, our predictor hits _every single_ data point and is by most metrics perfect. It is actually our _model itself_ that’s the problem. It wants to account for every single piece of data perfectly and thus over-generalizes. A model that over-generalizes has high variance because it varies too much based on insignificant details about the data.
+Again, there’s nothing wrong with our training. In fact, our predictor hits *every* single data point and is by most metrics perfect. It is actually our _model itself_ that’s the problem. It wants to account for every single piece of data perfectly and thus over-generalizes. A model that over-generalizes has high variance because it varies too much based on insignificant details about the data.
 
 <center>
   <img src="{{ site.baseurl }}/assets/tutorials/4/xkcd.png" class="img" style="width: 200px">
-</center>
-
-<div style="margin: 0px 15%;">
-<p style="font-size: 16px;">
+  <p style="font-size: 16px;">
 An example of high “variance” in everyday life from <a target="_blank" href="https://xkcd.com/385/">xkcd</a>. ‘Girls sucking at math’ in this case an overgeneralization based on only a single data point.
 </p>
-</div>
-
+</center>
 
 ## Explaining the Dilemma
  
@@ -131,9 +116,7 @@ For the case of high bias, we have a very simple model. In our example above we 
   <img src="{{ site.baseurl }}/assets/tutorials/4/complexity.png" class="img">
 </center>
 
-The image above should make things a bit more clear as to why the bias-variance trade-off exists. Whenever we choose a model with low complexity (like a linear model) and thus low variance, we’re also choosing a model with high bias. If we try to increase the complexity of our model (use maybe a quadratic model) we sacrifice low variance for low bias but high variance.
-
-The best we can do is try to settle somewhere in the middle of the spectrum, where the purple pointer is.
+The image above should make things a bit more clear as to why the bias-variance trade-off exists. Whenever we choose a model with low complexity (like a linear model) and thus low variance, we’re also choosing a model with high bias. If we try to increase the complexity of our model, such as  a quadratic model, we sacrifice low variance in exchange for low bias at the cost of high variance. The best we can do is try to settle somewhere in the middle of the spectrum, where the purple pointer is.
 
 ## Visualization of the bias-variance tradeoff
 
@@ -156,16 +139,13 @@ The bottom graph shows the training error and the test error in red and blue res
   <img src="{{ site.baseurl }}/assets/tutorials/4/errors.png" id="errPic" style="max-width: none; position: absolute;">
 </div>
 </div>
-</center>
-
-<style>
-</style>
-
-<div style="margin: 0px 15%;">
 <p style="font-size: 16px;">
-We are training a locally-weighted linear regression model (LOWESS) on a sine wave with added gaussian noise.. The smoothing parameter is used as a proxy for complexity, and the error is the average L1 distance. Credits to <a target="_blank" href="https://gist.github.com/agramfort/850437">agramfort</a>.
+The top image shows models of different complexities fitting to the data. The bottom image shows the the error of the model against a training set (<span style="color: red">red</span>) and a testing set (<span style="color: blue">blue</span>). 
 </p>
-</div>
+<p style="font-size: 16px;">
+We are training a locally-weighted linear regression model (LOWESS) on a sine wave with added gaussian noise. The smoothing parameter is used as a proxy for complexity, and the error is the average L1 distance. Credits to <a target="_blank" href="https://gist.github.com/agramfort/850437">agramfort</a>.
+</p>
+</center>
 
 ### Analyzing the Training and Test Error
 
@@ -177,19 +157,16 @@ Notice that the best complexity lies where the test error reaches a minimum, tha
 
 ## Noise
  
-Here’s another (more mathematical) insight into what bias and variance is all about. In machine learning and data science we often have a function that we want to model, whether it be a function that associates square footage to house prices or magnitudes of an earthquake and the frequency at which they occur. We assume that there is some perfect, god-given, platonic-ideal of a function that models exactly what we want. But the world isn’t perfect, so when we get real data to train our model it inevitably has noise--random fluctuations from things such as human error and measurement uncertainty.
+Here’s another (more mathematical) insight into what bias and variance is all about. In machine learning and data science, we often have a function that we want to model, whether it be a function that associates square footage to house prices or magnitudes of an earthquake to the frequency at which they occur. We assume that there is some perfect, god-given, ideal function that models exactly what we want. But the world isn’t perfect, so when we get real data to train our model it inevitably has noise--random fluctuations from things such as human error and measurement uncertainty.
  
 In math terms, we say that $$ y = f(x) + \epsilon $$. Where $$ y $$ is the training data we end up measuring, $$ f(x) $$ is that perfect function, and $$ \epsilon $$ is the random error that we can’t avoid.  
 
 <center>
   <img src="{{ site.baseurl }}/assets/tutorials/4/added-noise.png" class="img">
-</center>
-
-<div style="margin: 0px 15%;">
-<p style="font-size: 16px;">
+  <p style="font-size: 16px;">
 Our “perfect” function added to noise is what we end up measuring in the real world.
 </p>
-</div>
+</center>
 
 Our goal in machine learning is to retrieve the perfect function (or something reasonably close to it) from the noisy data. That is, from $$ y $$ we want to construct $$ \hat f(x) $$, an approximation of $$ f(x) $$.
  
@@ -197,13 +174,10 @@ The bias-variance tradeoff results from using our necessarily flawed data, $$ y 
  
 <center>
   <img src="{{ site.baseurl }}/assets/tutorials/4/recover-from-noise.png" class="img">
-</center>
-
-<div style="margin: 0px 15%;">
-<p style="font-size: 16px;">
+  <p style="font-size: 16px;">
 This noise manifests as disorganized data points. What we want to do is recover the perfect function (in green) from these data points.
 </p>
-</div>
+</center>
 
 ## Bias-Variance Decomposition Derivation
  
@@ -229,8 +203,6 @@ If your eyes just started to glaze over, don't worry. Let’s break this down a 
 
 The $$ \operatorname{E} \left[ (y - \hat f(x))^2 \right] $$ on the left hand side of the first equation is the mean squared error (which we talked about in a [previous post]({{ site.baseurl }}/2016/11/06/tutorial-1/)). The right hand side shows it's decomposition into three terms.
 
-The $$ \sigma^2 $$ on the right hand side of the first equation is the variance of the noise (from $$ \epsilon $$). As real-world data must have some noise, for all intents and purposes this is a constant (hence the name "irreducible error").
-
 The first of these three terms (and the second equation) is the bias term: 
 
 $$ \operatorname{Bias} \left[ \hat f(x) \right] = \operatorname{E} \left[ \hat f(x) - f(x) \right] $$
@@ -243,9 +215,9 @@ $$ \operatorname{Var} \left[ \hat f(x) \right] = \operatorname{E} \left [ \hat f
 
 Readers with a bit of background in probability or statistics will likely recognize that this is the exact working definition for variance. Although there are more intuitive expressions for variance, this (rather opaque) formulation will help us later in the derivation. A proof of this formula can be found [here](https://en.wikipedia.org/wiki/Variance#Definition).
  
-Finally, the third term, $$ \sigma^2 $$ is the _irreducible error_. It’s irreducible because no matter what model we use, the error will always be there. This is because the $$ \sigma^2 $$ term comes directly from the noise in our training data: $$ \epsilon $$. For all intents and purposes it is a constant. Note that because both the bias term and the variance term are non-negative (the bias because it’s being squared, and the variance by definition), $$ \sigma^2 $$ is a lower bound for the mean squared error. 
+Finally, the third term, $$ \sigma^2 $$ is the _irreducible error_. It’s irreducible because no matter what model we use, the error will always be there. This is because the $$ \sigma^2 $$ term comes directly from the noise in our training data: $$ \epsilon $$. For all intents and purposes it is a constant because real-world data always has some noise. Note that because both the bias term and the variance term are non-negative (the bias because it’s being squared, and the variance by definition), $$ \sigma^2 $$ is a lower bound for the mean squared error. In other words, the overall error of the model cannot be less than $$\sigma^2$$.
  
-For simplicity, we now denote $$ f(x) $$ by just $$ f $$ and $$ \hat f(x) $$ by just $$ \hat f $$.
+For simplicity of notation, we now denote $$ f(x) $$ by just $$ f $$ and $$ \hat f(x) $$ by just $$ \hat f $$.
  
 To derive the identity, we start with the mean squared error
  
@@ -267,7 +239,7 @@ $$ \operatorname{E}[y^2] = \operatorname{Var}[y] + \operatorname{E}[y]^2 $$
 
 $$ \operatorname{E}[\hat f^2] = \operatorname{Var}[\hat f] + \operatorname{E}[\hat f]^2 $$
 
-Which are exactly the frist and second terms. As for the third term, we can directly calculate the expectation using linearity of expectation:
+Which we can now use to substitute for the first and second terms. As for the third term, we can directly calculate the expectation using linearity of expectation:
 
 $$ \operatorname{E}[2y\hat f] = 2 \operatorname{E}[y]\operatorname{E}[\hat f] $$
 
@@ -275,7 +247,7 @@ Note that because $$ y = f + \epsilon $$ and, $$ \epsilon $$ has mean of 0:
 
 $$ \operatorname{E}[y] = \operatorname{E}[f + \epsilon] = \operatorname{E}[f] = f $$
 
-(The last equality holds because $$ f $$ is a deterministic function. It's average at any point is simply going to be it's value at that point). Thus:
+($$\operatorname{E}[f] = f$$ holds because $$ f $$ is a deterministic function. It's average at any point is simply going to be it's value at that point). Thus:
 
 $$ \operatorname{E}[2y\hat f] = 2f\operatorname{E}[\hat f] $$
 
@@ -315,6 +287,7 @@ Again, we have $$ y = f + \epsilon $$. So, from the definition of variance:
 
 \begin{align}
 \operatorname{Var}[y] &= \operatorname{E}[y^2] - \operatorname{E}[y]^2 \\\
+&= \operatorname{E}[(f + \epsilon)^2] - \operatorname{E}[f + \epsilon]^2 \\\
 &= \operatorname{E}[f^2 + 2f\epsilon + \epsilon^2] - \operatorname{E}[f + \epsilon]^2 \\\
 &= \operatorname{E}[f^2] + 2\operatorname{E}[f]\operatorname{E}[\epsilon] + \operatorname{E}[\epsilon^2] - \operatorname{E}[f]^2 \\\
 &= \operatorname{E}[\epsilon^2]
