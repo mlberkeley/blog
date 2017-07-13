@@ -321,4 +321,8 @@ A better approach to reducing variance is to use regularization. That is, in add
 
 Finally, **ensemble learning** (which we'll be talking about next time!) offers a way to reduce the variance of a model without sacrificing bias. The idea is to have an _ensemble_ of multiple classifiers (typically decision trees) trained on random subsets of the training data. To actually classify a data point, the ensemble of classifiers all "vote" on a classification.
 
+## Conclusion
+
+As you may be starting to see, machine learning is an just as much an art as it is a science. Even basic models like neural networks involve making decisions about many hyperparameters, such as the number of [layers](https://mlberkeley.github.io/blog/2017/02/04/tutorial-3/) to use, what [activation function](https://mlberkeley.github.io/blog/2016/12/24/tutorial-2/) to use for each neuron, and how to define the error with a [cost function](https://mlberkeley.github.io/blog/2016/11/06/tutorial-1/) to use. Adjusting each of these parameters affect how complex your model is and determines whether you overfit or underfit. And while there is probably a 'sweet' spot out there, the best we mortals can do is guess based on our intuition and hope for the best. 
+
 <script src="{{ site.baseurl }}/assets/tutorials/4/visual.js"></script>
