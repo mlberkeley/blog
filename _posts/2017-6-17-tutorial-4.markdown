@@ -323,6 +323,6 @@ Finally, **ensemble learning** (which we'll be talking about next time!) offers 
 
 ## Conclusion
 
-As you may be starting to see, machine learning is an just as much an art as it is a science. Choosing a model and adjusting each of its parameters to affect its complexity is a task that requires skill and, more importantly, experience. And while there is probably a 'sweet' spot out there, us mere mortals will have to rely on our intuition and our cunning to find the best model for the job.
+As you may be starting to see, machine learning is an just as much an art as it is a science. Choosing a model and adjusting each of its parameters to reduce overfitting and underfitting is a task that requires skill and, more importantly, experience. And while there is probably a 'sweet' spot out there, us mere mortals will have to rely on our intuition and our cunning to find the best model for the job.
 
 <script src="{{ site.baseurl }}/assets/tutorials/4/visual.js"></script>
