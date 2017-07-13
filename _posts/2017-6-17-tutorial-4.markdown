@@ -48,9 +48,11 @@ If the engineers had used the correct linear model, their results would have loo
 
 <center>
   <img src="{{ site.baseurl }}/assets/tutorials/4/earthquake-fit.png" class="img">
+  <div style="max-width: 70%;">
   <p style="font-size: 16px;">
 Notice there’s no kink this time, so the line isn’t as steeply sloped on the right. 
 </p>
+</div>
 </center>
  
 The difference between these two models? The overfitted model predicted one earthquake of at least magnitude 9 about every 13000 years while the correct model predicted one earthquake of at least magnitude 9 just about every 300 years. And because of this, the Fukushima Nuclear Power Plant was built only to withstand an earthquake of magnitude 8.6. The 2011 earthquake that devastated the plant was of magnitude 9 (about 2.5 times stronger than a magnitude 8.6 earthquake).
@@ -65,9 +67,11 @@ There is actually a dual problem to overfitting, which is called underfitting. I
 
 <center>
   <img src="{{ site.baseurl }}/assets/tutorials/4/underfitting.png" class="img" style="width: 300px">
+  <div style="max-width: 70%;">
   <p style="font-size: 16px;">
 While the linear model (the blue line) follows the data (the purple X's), it misses the underlying curving trend of the data. A quadratic model would have been better.
 </p>
+</div>
 </center>
 
 
@@ -81,18 +85,22 @@ The name bias-variance dilemma comes from two terms in statistics: **bias**, whi
 
 <center>
 <img src="{{ site.baseurl }}/assets/tutorials/4/underfitting.png" class="img" style="width: 300px">
+  <div style="max-width: 70%;">
 <p style="font-size: 16px;">
 Our example of underfitting from above. The blue line is our model, and the purple X's are the data that we are trying to predict.
 </p>
+</div>
 </center>
  
 The drawing above depicts an example of high **bias**. In other words, the model is _underfitting_. The data points obviously follow some sort of curve, but our predictor isn’t complex enough to capture that information. Our model is _biased_ in that it assumes that the data will behave in a certain fashion (linear, quadratic, etc.) even though that assumption may not be true.  A key point is that there’s nothing wrong with our training---this is the *best* possible fit that a linear model can achieve. There is, however, something wrong with the *model* itself in that it's not complex enough to model our data.
 
 <center>
   <img src="{{ site.baseurl }}/assets/tutorials/4/overfitting.png" class="img" style="width: 300px">
+  <div style="max-width: 70%;">
   <p style="font-size: 16px;">
 Approximating data using a very complex model. Notice how the line tends to over-interpolate between points. Even though there is a general upward trend in the data, the model predicts huge oscillations.
 </p>
+</div>
 </center>
  
 In this drawing, we see an example of a model with very high **variance**. In other words, a model that is _overfitting_. Again, the data points suggest a sort of graceful curve. However, our model uses a very complex curve to get as close to every data point as possible. Consequently, a model with high variance has very low bias because it makes little to no assumption about the data. In fact, it adapts _too_ much to the data. 
@@ -101,9 +109,11 @@ Again, there’s nothing wrong with our training. In fact, our predictor hits *e
 
 <center>
   <img src="{{ site.baseurl }}/assets/tutorials/4/xkcd.png" class="img" style="width: 200px">
+  <div style="max-width: 70%;">
   <p style="font-size: 16px;">
 An example of high “variance” in everyday life from <a target="_blank" href="https://xkcd.com/385/">xkcd</a>. ‘Girls sucking at math’ in this case is an overgeneralization based on only a single data point.
 </p>
+</div>
 </center>
 
 ## Explaining the Dilemma
@@ -163,9 +173,11 @@ In math terms, we say that $$ y = f(x) + \epsilon $$. Where $$ y $$ is the train
 
 <center>
   <img src="{{ site.baseurl }}/assets/tutorials/4/added-noise.png" class="img">
+  <div style="max-width: 70%;">
   <p style="font-size: 16px;">
 Our “perfect” function added to noise is what we end up measuring in the real world.
 </p>
+</div>
 </center>
 
 Our goal in machine learning is to retrieve the perfect function (or something reasonably close to it) from the noisy data. That is, from $$ y $$ we want to construct $$ \hat f(x) $$, an approximation of $$ f(x) $$.
@@ -174,9 +186,11 @@ The bias-variance tradeoff results from using our necessarily flawed data, $$ y 
  
 <center>
   <img src="{{ site.baseurl }}/assets/tutorials/4/recover-from-noise.png" class="img">
+  <div style="max-width: 70%;">
   <p style="font-size: 16px;">
 This noise manifests as disorganized data points. What we want to do is recover the perfect function (in green) from these data points.
 </p>
+</div>
 </center>
 
 ## Bias-Variance Decomposition Derivation
@@ -312,6 +326,16 @@ As we've seen above, overfitting and underfitting have very clear signatures in 
 However, measuring training and test errors is hard when we have relatively few data points and our algorithms require a fair amount of data (which unfortunately happens quite often). In this case we can use a technique called **cross-validation**.
 
 This is where we take our entire dataset and split it into $$ k $$ groups. For each of the $$ k $$ groups, we train on the remaining $$ k - 1 $$ groups and **validate** on the $$ k^{th} $$ group. This way we can make the most use of our data, essentially taking a dataset and training $$ k $$ times on it. 
+
+<center>
+  <img src="{{ site.baseurl }}/assets/tutorials/4/CV_diagram.png" class="img" style="width: 400px;">
+  <div style="max-width: 70%;">
+  <p style="font-size: 16px;">
+    Cross validation with k=3. We divide the entire test set into three parts, and then train our model three times using each part as the test set with the remaining two parts making up our training set.
+  </p>
+  </div>
+</center>
+
 
 As for what to do after you detect a problem? Well, having high bias is symptomatic of a model that is not complex enough. In that case, your best bet would be to just pick a more complex model.
 
