@@ -21,7 +21,7 @@ Here's a riddle:
 <!-- break -->
 
 <center>
-  <img src="{{ site.baseurl }}/assets/tutorials/4/doger_fitting.jpg" class="img">
+  <img src="{{ site.baseurl }}/assets/tutorials/4/doger_fitting.jpg" style="width: 300px" class="img">
 </center>
 
 So what does this have to do with machine learning? Well, it turns out that machine learning algorithms are not that much different from our friend Doge: _they often run the risk of over-extrapolating or over-interpolating from the data that they are trained on._
