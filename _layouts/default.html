@@ -6,6 +6,7 @@
   <body class="sidebar-overlay">
 
     {% include google_analytics.html %}
+
     {% include sidebar.html %}
 
     <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
@@ -34,7 +35,6 @@
         var toggle = document.querySelector('.sidebar-toggle');
         var sidebar = document.querySelector('#sidebar');
         var checkbox = document.querySelector('#sidebar-checkbox');
-        
         document.addEventListener('click', function(e) {
           var target = e.target;
 
@@ -46,6 +46,5 @@
         }, false);
       })(document);
     </script>
-
   </body>
 </html>

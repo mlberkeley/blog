@@ -27,3 +27,4 @@ future:             true
 excerpt_separator:   <!-- break -->
 
 gems: [jekyll-paginate]
+

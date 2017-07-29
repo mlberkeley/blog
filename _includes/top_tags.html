@@ -1,0 +1,38 @@
+{% comment %}
+  Generate a list of the "count_as_number" tags on the site,
+  with the heading 'Top "count_as_heading" Tags'.
+{% endcomment %}
+
+{% capture tagordinal_tagslug_tagcount %}
+  {% for tag in site.tags %}
+    {{ tag[1].size | plus: 1000 }}#{{ tag[0] }}#{{ tag[1].size }}
+  {% endfor %}
+{% endcapture %}
+{% assign sorted_tags = tagordinal_tagslug_tagcount | split: ' ' | sort %}
+
+<h1>Top {{ include.count_as_heading }} Tags</h1>
+<div>
+  <ul class="related-posts">
+    {% for tag in sorted_tags reversed limit:include.count_as_number %}
+      {% assign tagordinal_tagslug_tagcount = tag | split: '#' %}
+      {% assign tag_slug = tagordinal_tagslug_tagcount[1] %}
+      {% assign tag_count = tagordinal_tagslug_tagcount[2] %}
+      {% include find_tag.html tag_to_find_as_slug=tag_slug %}
+      {% if tag_count == '1' %}
+        {% assign post_or_posts = 'post' %}
+      {% else %}
+        {% assign post_or_posts = 'posts' %}
+      {% endif %}
+
+      {% capture post_count %}{{ tag_count }} {{ post_or_posts }}{% endcapture %}
+      {% if site.permalink == 'pretty' %}
+        {% capture tag_page %}{{ tag_slug }}/{% endcapture %}
+      {% else %}
+        {% capture tag_page %}{{ tag_slug }}.html{% endcapture %}
+      {% endif %}
+      {% capture post_url %}{{ site.baseurl }}/tag/{{ tag_page }}{% endcapture %}
+
+      {% include item_formatter.html small_text=post_count item_href=post_url item_link=data_tag.name %}
+    {% endfor %}
+  </ul>
+</div>
