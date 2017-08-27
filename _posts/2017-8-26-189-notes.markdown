@@ -1,0 +1,126 @@
+---
+layout: post
+title:  "CS 189 Notes"
+date:   2017-8-26
+author: Daniel...
+type: tutorial
+comments: true
+published: true
+description: Notes for Berkeley's CS 189 - Introduction to Artificial Intelligence
+---
+
+These are Machine Learning at Berkeley's notes for the Fall 2017 session of Berkeley's CS 189 class, taught by Professor Anant Sahai and Stella Yu. These notes are _unaffiliated_ with the class, but as there (as of now) will not be any webcasts or class notes we thought it might be helpful if these existed.
+
+That being said, we are also just students with very busy lives. We'll try to keep this as updated as possible and devoid of errors. If you spot an error here please feel free to email us at $$ ml.at.berkeley $$ $$ @gmail.com $$.
+
+<!-- break -->
+
+## Lecture 1 (08-24-17)
+
+### Administrative Stuff
+
+* Office Hours are after lecture, 400 Cory right now but is subject to change
+
+* Dicussions are on Friday _only_, all day, first come first serve. Check the [website](http://www.eecs189.org/calendar/) for full list of discussion times and locations
+
+* There is no required book for the classes. However, _Elements of Statistical Learning_ is suggested if you're into that kind of stuff (textbooks that is...)
+
+* The grading can be found [here](http://www.eecs189.org/syllabus/#grading)
+
+* The midterm is Oct. 13, 7 pm
+
+* The final is Dec. 14, 3 pm
+
+### About the Course
+
+* "This is an 'Advanced Upper Division Course'" quoth Sahai
+
+* That means you should probably have taken (mastered) EE16A, EE16B, CS70, and math 53 for sure
+
+* CS170, CS126, and CS127 would be nice to have as well, and your "maturity" (again quoth Sahai) should certainly be at the level of those classes
+
+* This is not a programming class, although it is assumed you have knowledge of material taught in the CS61 series
+
+* Python will be used in this course
+
+### Course structure
+
+* The structure of the course has shifted to be more conceptual and focuses a bit more on advanced neural network topics
+
+    * First 8 lectures
+        * Key ML Ideas in the context of (mostly linear) regression
+    * Next 3 lectures
+        * Introduce non-linear topics, including neural networks (!)
+    * Next 3 lectures
+        * Transition into classification
+    * Next 8 lectures
+        * More advanced classification topics (SVMs, the kernel trick, decision trees, ensemble methods, boosting)
+    * Last 5-6 lectures
+        * Unsupervised learning + Advanced Neural Networks
+
+    * The class will unfortunately not have enough time to teach RL :(
+
+### Levels of Abstraction in ML
+
+Almost all ML problems are solved through these (increasingly detailed) levels of abstraction:
+
+1. Application + Data: What you're trying to do and what the data looks like
+    - ex. Have $$ (x_i, y_i) $$ observations of asteroid. Want to determine it's orbit
+
+2. The model: What kind of pattern do we want to find
+    - ex. We want to fit an ellipse to our observations of asteroid locations
+
+3. Optimization problem: construct an optimization problem to find parameters for your model
+    - ex. Turn "fitting an ellipse" into "minimize some error"
+
+4. Optimization algorithms: how to actually optimize
+    - ex. From least squares, we want to minimize 
+
+    $$ \text{min}_{\vec{x}} \|A\vec{x}-\vec{b}\|^2 $$
+    
+    - To do this we solve the linear system $$ A^T Ax = A^Tb $$
+
+### Ordinary Least Squares
+
+Let's say we have a set of $$ n $$ data points $$ (\vec{a}_i, \vec{b}_i) $$, where $$ \vec{b}_i $$ is $$ m \times 1 $$ and $$ \vec{a}_i $$ is $$ l \times 1 $$. We believe $$ \vec{b}_i \approx X\vec{a}_i $$, where $$ X $$ is $$ m \times l $$. This is our model.
+
+To turn this into an optimization problem we would like to have something of the form
+
+$$ \text{min}_{\vec{x}} \|A\vec{x}-\vec{b}\|^2 $$
+
+To do this we let $$ A $$ be the following (monstrosity of a) matrix
+
+$$ A = \begin{bmatrix} \vec{a}_1^T & 0 & \cdots & \cdots & 0 \\ 0 & \vec{a}_1^T & 0 & \cdots & 0 \\ 0 &  & \ddots & & 0 \\ 0 &  & & 0 & \vec{a}_1^T \\ \vec{a}_2^T & 0 & \cdots & \cdots & 0 \\ 0 & \vec{a}_2^T & 0 & \cdots & 0 \\ 0 &  & \ddots & & 0 \\ 0 &  & & 0 & \vec{a}_2^T \\ \vdots & \vdots & \vdots & \vdots & \vdots \\ \vec{a}_n^T & 0 & \cdots & \cdots & 0 \\ 0 & \vec{a}_n^T & 0 & \cdots & 0 \\ 0 &  & \ddots & & 0 \\ 0 &  & & 0 & \vec{a}_n^T\end{bmatrix} $$
+
+Note that the $$ \vec{a}_i^T $$'s are of $$ l \times 1 $$ dimensional and not just scalars. 
+
+We let $$ \vec{x} $$ be 
+
+$$ \vec{x} = \begin{bmatrix} x_{11} \\ x_{12} \\ \vdots \\ x_{1l} \\ x_{21} \\ \vdots \\ x_{ml} \end{bmatrix} $$
+
+(pardon the pun)
+
+So $$ \vec{x} $$ must be of dimension $$ ml \times 1 $$, and $$ A $$ is of dimension $$ mn \times ml $$ (pardon the pun again...)
+
+Finally let $$ \vec{b} $$ be
+
+$$ \vec{b} = \begin{bmatrix} \vec{b}_1 \\ \vec{b}_2 \\ \vdots \\ \vec{b}_n \end{bmatrix} $$
+
+which is also $$ mn \times 1 $$ dimensional (note this is also a block matrix)
+
+Now if we minimize $$ A \vec{x} - \vec{b} $$ we'll be actually be minimizing the sum of the squared errors for each data point (do the math!).
+
+There are two approaches to minimizing this quantity. One involves vector calculus (which is the topic of discussion), and one involves projections. Let's look at projections.
+
+In order to minimize the above, we note that $$ A\vec{x} - \vec{b} $$ must be perpendicular to the column space of $$ A $$. Thus we can write 
+
+$$ A^T(\vec{b} - A \vec{x} ) = 0 $$
+
+Then, rearranging we arrive at the normal equations
+
+$$ A^TA\vec{x} = A^T\vec{b} $$
+
+## Discussion 1 (08-25-17)
+
+* Discussion was on math review
+* Make sure you know [vector calculus](http://gwthomas.github.io/docs/math4ml.pdf) (Thanks Garret Thomas!)
