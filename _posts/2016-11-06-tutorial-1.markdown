@@ -4,6 +4,7 @@ title:  "Machine Learning Crash Course: Part 1"
 date:   2016-11-06
 author: Daniel Geng and Shannon Shih
 type: tutorial
+tags: [tutorials]
 comments: true
 published: true
 description: The basics of machine learning - regression, cost functions, and gradient descent.

@@ -1,17 +1,19 @@
 ---
-layout: post
-title:  "CS 189 Notes"
+layout: page 
+title:  CS 189 Notes
 date:   2017-8-26
-author: Daniel...
-type: tutorial
+author: Daniel
+type: course-notes
 comments: true
-published: true
+published: true 
+hidden: true
+permalink: /CS189/notes/
 description: Notes for Berkeley's CS 189 - Introduction to Artificial Intelligence
 ---
 
 These are Machine Learning at Berkeley's notes for the Fall 2017 session of Berkeley's CS 189 class, taught by Professor Anant Sahai and Stella Yu. These notes are _unaffiliated_ with the class, but as there (as of now) will not be any webcasts or class notes we thought it might be helpful if these existed.
 
-That being said, we are also just students with very busy lives. We'll try to keep this as updated as possible and devoid of errors. If you spot an error here please feel free to email us at $$ ml.at.berkeley $$ $$ @gmail.com $$.
+That being said, we are also just students with very busy lives. We'll try to keep this as updated as possible and devoid of errors. If you spot an error here please feel free to email us at  [ml.at.berkeley@gmail.com](mailto:ml.at.berkeley@gmail.com).
 
 <!-- break -->
 
