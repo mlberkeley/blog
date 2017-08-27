@@ -7,7 +7,7 @@ type: course-notes
 comments: true
 published: true 
 hidden: true
-permalink: /CS189/notes/
+permalink: /cs189-notes/
 description: Notes for Berkeley's CS 189 - Introduction to Artificial Intelligence
 ---
 
