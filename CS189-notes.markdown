@@ -13,10 +13,15 @@ description: Notes for Berkeley's CS 189 - Introduction to Artificial Intelligen
 
 These are Machine Learning at Berkeley's notes for the Fall 2017 session of Berkeley's CS 189 class, taught by Professor Anant Sahai and Stella Yu. These notes are _unaffiliated_ with the class, but as there (as of now) will not be any webcasts or class notes we thought it might be helpful if these existed.
 
-That being said, we are also just students with very busy lives. We'll try to keep this as updated as possible and devoid of errors. If you spot an error here please feel free to email us at  [ml.at.berkeley@gmail.com](mailto:ml.at.berkeley@gmail.com).
+**These notes are fairly rigorous and assume a lot of background experience in mathematics, optimization, and probability. If you've stumbled upon these notes and are looking for a gentler introduction to machine learning we suggest you check out our [crash course series](https://ml.berkeley.edu/blog/tutorials).**
+
+All that being said, we are also just students with very busy lives. We'll try to keep this as updated and devoid of errors as possible. If you spot any mistakes please feel free to email us at [ml.at.berkeley@gmail.com](mailto:ml.at.berkeley@gmail.com).
 
 <!-- break -->
 
+| [Lecture 1](http://127.0.0.1:4000/blog/cs189-notes/#lecture1) |
+
+<div id="lecture1"></div>
 ## Lecture 1 (08-24-17)
 
 ### Administrative Stuff
