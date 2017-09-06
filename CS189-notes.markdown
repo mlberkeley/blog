@@ -21,10 +21,10 @@ All that being said, we are also just students with very busy lives. We'll try t
 
 ## Contents
 
-- [Lecture 1](https://ml.berkeley.edu/blog/cs189-notes/#lecture1)
-- [Discussion 1](https://ml.berkeley.edu/blog/cs189-notes/#discussion1)
-- [Lecture 2](https://ml.berkeley.edu/blog/cs189-notes/#lecture2)
-- [Lecture 3](https://ml.berkeley.edu/blog/cs189-notes/#lecture3)
+- [Lecture 1]({{ site.url }}{{ site.baseurl }}/cs189-notes/#lecture1)
+- [Discussion 1]({{ site.url }}{{ site.baseurl }}/cs189-notes/#discussion1)
+- [Lecture 2]({{ site.url }}{{ site.baseurl }}/cs189-notes/#lecture2)
+- [Lecture 3]({{ site.url }}{{ site.baseurl }}/cs189-notes/#lecture3)
 
 <div id="lecture1"></div>
 ## Lecture 1 (08-24-17)
