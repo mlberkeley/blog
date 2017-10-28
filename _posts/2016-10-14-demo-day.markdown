@@ -77,7 +77,7 @@ However, no algorithm exists that actually uses the songs *themselves* to recomm
 
 As with many things in life, analyzing digital audio files is not a walk in the park. Although humans may find it easy to understand music, computers have it much harder. This is what a computer sees as music:
 
-![Music Recommendation]({{ site.baseurl }}/assets/2016-10-14-music-recommendation.jpg)
+![Music Recommendation]({{ site.baseurl }}/assets/2016-10-14-demo-day/2016-10-14-music-recommendation.jpg)
 
 This graph, called a spectrogram, plots frequency on the vertical axis, time on the horizontal axis, and amplitude as brightness. What the team is currently working on right now is taking a spectrogram, and separating it into each of the voices in a piece of music. The idea is that by getting a separate track for bass, drums, guitar, voice and so on, analyzing a piece of a music will be much easier.
 
@@ -123,4 +123,4 @@ Machine learning is great at identifying patterns. Thus, predicting things over 
 
 Most algorithms analyze the data by considering overlapping segments of data at a time. For example, they would look at data A, B, C. Then, they move one data segment over and consider B, C, D, and then C, D, E, and so on. This is called a sliding window algorithm. However, the team is trying to make this process more efficient using their recurrent neural network, which can remember previous inputs like the sliding window algorithm. They are also displaying the probabilities of all possibilities (such as 90% chance of increase in stock price and 10% chance of decreasing), allowing the user to have a more complete picture of what will happen in the future.
 
-![Time Series]({{ site.baseurl }}/assets/2016-10-14-time-series.png)
+![Time Series]({{ site.baseurl }}/assets/2016-10-14-demo-day/2016-10-14-time-series.png)
