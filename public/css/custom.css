@@ -17,3 +17,20 @@ pre {
 .post-date { 
   margin-top: 0;
 }
+
+/* make sidebar less obtrusive */
+html {
+  font-family: "PT-Serif", Georgia, "Times New Roman", serif;
+}
+.masthead-title { 
+  font-family: "PT-Sans", Helvetica;
+  font-weight: normal;
+}
+.sidebar {
+  font-family: "PT-Sans", Helvetica;
+  font-size: .8em;
+  width: 15rem;
+}
+#contact-list:hover { 
+  text-decoration: black;
+}
