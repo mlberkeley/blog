@@ -1,0 +1,28 @@
+#!/bin/bash
+#
+# createDraft
+# Copyright 2015 Joe Friedrichsen
+# Licensed under the MIT License
+
+if test $# -ne 1; then
+  echo "Usage: createDraft 'Pretty Name'"
+  exit 1
+fi
+
+newPostPrettyName="$1"
+newPostSlugName="$(echo -n "${newPostPrettyName}" | sed -e 's/[^[:alnum:]]/-/g' | tr -s '-' | tr A-Z a-z)"
+
+gitRepoRoot="$(git rev-parse --show-toplevel)"
+newPostFileName="${gitRepoRoot}/_drafts/${newPostSlugName}.md"
+
+mkdir -p "${gitRepoRoot}/_drafts"
+cat > "${newPostFileName}" <<-new-post-entry
+---
+layout: post
+title: ${newPostPrettyName}
+tags: []
+---
+new-post-entry
+
+echo "Created new draft! Edit this file:"
+echo "  \"${newPostFileName}\""

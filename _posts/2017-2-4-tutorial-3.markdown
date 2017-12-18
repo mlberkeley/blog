@@ -4,6 +4,7 @@ title:  "Machine Learning Crash Course: Part 3"
 date:   2017-2-4
 author: Daniel Geng and Shannon Shih
 type: tutorial
+tags: [tutorials]
 comments: true
 published: true
 description: Neural networks
