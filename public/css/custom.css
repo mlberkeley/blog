@@ -18,6 +18,10 @@ pre {
   margin-top: 0;
 }
 
+.content {
+	padding-top: 0.5rem;
+	margin-left: 26rem; /* centering */
+}
 /* make sidebar less obtrusive */
 html {
   font-family: "PT-Serif", Georgia, "Times New Roman", serif;
@@ -35,6 +39,7 @@ html {
   text-decoration: black;
 }
 
+/* tag stuff */
 .tag {
 	font: 14px/1.5 'PT Sans', serif;
 	background: #eee;

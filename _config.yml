@@ -20,6 +20,9 @@ author:
   github:            mlberkeley
   linkedin:          machine-learning-at-berkeley
 
+# auto generate ids for headings
+auto_ids: true
+
 # Custom vars
 version:             1.0.0
 future:             true 
