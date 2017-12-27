@@ -306,7 +306,15 @@ $$
     * How to use these concepts to solve problems
     * How to implement these concepts
 
+### Training and Test Error
 
+_Totally shameless plug, check out [this cool article](https://ml.berkeley.edu/blog/2017/07/13/tutorial-4/) about overfitting, training and test error, and cross validation._
+
+* **Model Order** is a measure of the complexity of a model
+    * In the case of a polynomial regression model it is the degree of the polynomial
+* In general, training error will alwaus decrease with increasing "model order"
+    * This is because training error is the _very_ thing we're trying to minimize. If the training error isn't decreasing then we have a _big_ problem. 
+* However, while the "True Error" will follow a different sort of curve.
 
 
 <script src="{{ site.baseurl }}/assets/tutorials/4/visual.js"></script>
