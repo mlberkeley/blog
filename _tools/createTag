@@ -1,0 +1,48 @@
+#!/bin/bash
+#
+# createTag
+# Copyright 2014-2015 Joe Friedrichsen
+# Licensed under the MIT License
+
+gitRepoRoot="$(git rev-parse --show-toplevel)"
+tagDataFile="${gitRepoRoot}/_data/tags.yml"
+
+if test $# -ne 1; then
+  echo "Usage: createTag 'Pretty Name'"
+  echo
+  echo "Tag list:"
+  cat "${tagDataFile}" | grep name | awk -F ':' '{print " " $NF}' | sort
+  exit 1
+fi
+
+newTagPrettyName="$1"
+newTagSlugName="$(echo -n "${newTagPrettyName}" | sed -e 's/[^[:alnum:]]/-/g' | tr -s '-' | tr A-Z a-z)"
+tagListFile="${gitRepoRoot}/tag/${newTagSlugName}.md"
+
+if $(grep -q "^- slug: ${newTagSlugName}" "${tagDataFile}"); then
+  echo "\"${newTagSlugName}\" is already a tag in \"${tagDataFile}\"."
+  exit 2
+fi 
+
+cat >> "${tagDataFile}" <<-new-tag-entry
+
+	- slug: ${newTagSlugName}
+	  name: ${newTagPrettyName}
+new-tag-entry
+
+cat > "${tagListFile}" <<-new-tag-list-file
+	---
+	layout: posts_by_tag
+	tag: ${newTagSlugName}
+	title: Posts tagged ${newTagPrettyName}
+	---
+
+new-tag-list-file
+
+echo "Created new tag! Use 'git add' on these files:"
+echo "  git add \"${tagDataFile}\" \"${tagListFile}\""
+echo
+echo "Begin using this tag by adding this line to your post's Front Matter:"
+echo "  ---"
+echo "  tags: [${newTagSlugName}]"
+echo "  ---"

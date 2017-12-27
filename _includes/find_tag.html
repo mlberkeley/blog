@@ -1,0 +1,10 @@
+{% comment %}
+  Fill "data_tag", which is a _data/tags.yml object,
+  from "tag_to_find_as_slug" using _data/tags.yml
+{% endcomment %}
+
+{% for tag_data in site.data.tags %}
+  {% if tag_data.slug == include.tag_to_find_as_slug %}
+    {% assign data_tag = tag_data %}
+  {% endif %}
+{% endfor %}

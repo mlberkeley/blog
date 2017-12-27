@@ -1,16 +1,16 @@
 /*
- *  ___
- * /\_ \
- * \//\ \      __      ___   __  __    ___     ___
- *   \ \ \   /'__`\  /' _ `\/\ \/\ \  / __`\ /' _ `\
- *    \_\ \_/\ \_\.\_/\ \/\ \ \ \_\ \/\ \_\ \/\ \/\ \
- *    /\____\ \__/.\_\ \_\ \_\/`____ \ \____/\ \_\ \_\
- *    \/____/\/__/\/_/\/_/\/_/`/___/> \/___/  \/_/\/_/
- *                               /\___/
- *                               \/__/
+ *  __                  __
+ * /\ \                /\ \
+ * \ \ \___   __  __   \_\ \     __
+ *  \ \  _ `\/\ \/\ \  /'_` \  /'__`\
+ *   \ \ \ \ \ \ \_\ \/\ \_\ \/\  __/
+ *    \ \_\ \_\/`____ \ \___,_\ \____\
+ *     \/_/\/_/`/___/> \/__,_ /\/____/
+ *                /\___/
+ *                \/__/
  *
  * Designed, built, and released under MIT license by @mdo. Learn more at
- * https://github.com/poole/lanyon.
+ * https://github.com/poole/hyde.
  */
 
 
@@ -18,13 +18,11 @@
  * Contents
  *
  * Global resets
- * Masthead
  * Sidebar
- * Slide effect
- * Posts and pages
- * Pagination
+ * Container
  * Reverse layout
  * Themes
+ * Input elements
  */
 
 
@@ -34,92 +32,17 @@
  * Update the foundational and global aspects of the page.
  */
 
-/* Prevent scroll on narrow devices */
-html,
-body {
-  overflow-x: hidden;
-}
-
 html {
-  font-family: "PT Serif", Georgia, "Times New Roman", serif;
-}
-
-h1, h2, h3, h4, h5, h6 {
   font-family: "PT Sans", Helvetica, Arial, sans-serif;
-  font-weight: 400;
-  color: #313131;
-  letter-spacing: -.025rem;
 }
-
-
-/*
- * Wrapper
- *
- * The wrapper is used to position site content when the sidebar is toggled. We
- * use an outter wrap to position the sidebar without interferring with the
- * regular page content.
- */
-
-.wrap {
-  position: relative;
-  width: 100%;
-}
-
-
-/*
- * Container
- *
- * Center the page content.
- */
-
-.container {
-  max-width: 28rem;
-}
-@media (min-width: 38em) {
-  .container {
-    max-width: 32rem;
+@media (min-width: 48em) {
+  html {
+    font-size: 16px;
   }
 }
-@media (min-width: 56em) {
-  .container {
-    max-width: 38rem;
-  }
-}
-
-
-/*
- * Masthead
- *
- * Super small header above the content for site name and short description.
- */
-
-.masthead {
-  padding-top:    1rem;
-  padding-bottom: 1rem;
-  margin-bottom: 3rem;
-  border-bottom: 1px solid #eee;
-}
-.masthead-title {
-  margin-top: 0;
-  margin-bottom: 0;
-  color: #505050;
-}
-.masthead-title a {
-  color: #505050;
-}
-.masthead-title small {
-  font-size: 75%;
-  font-weight: 400;
-  color: #c0c0c0;
-  letter-spacing: 0;
-}
-
-@media (max-width: 48em) {
-  .masthead-title {
-    text-align: center;
-  }
-  .masthead-title small {
-    display: none;
+@media (min-width: 58em) {
+  html {
+    font-size: 20px;
   }
 }
 
@@ -127,284 +50,95 @@ h1, h2, h3, h4, h5, h6 {
 /*
  * Sidebar
  *
- * The sidebar is the drawer, the item we are toggling with our handy hamburger
- * button in the corner of the page.
- *
- * This particular sidebar implementation was inspired by Chris Coyier's
- * "Offcanvas Menu with CSS Target" article, and the checkbox variation from the
- * comments by a reader. It modifies both implementations to continue using the
- * checkbox (no change in URL means no polluted browser history), but this uses
- * `position` for the menu to avoid some potential content reflow issues.
- *
- * Source: http://css-tricks.com/off-canvas-menu-with-css-target/#comment-207504
+ * Flexible banner for housing site name, intro, and "footer" content. Starts
+ * out above content in mobile and later moves to the side with wider viewports.
  */
 
-/* Style and "hide" the sidebar */
 .sidebar {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: -14rem;
-  width: 14rem;
-  visibility: hidden;
-  overflow-y: auto;
-  font-family: "PT Sans", Helvetica, Arial, sans-serif;
-  font-size: .875rem; /* 15px */
-  color: rgba(255,255,255,.6);
+  text-align: center;
+  padding: 2rem 1rem;
+  color: rgba(255,255,255,.5);
   background-color: #202020;
-  -webkit-transition: all .3s ease-in-out;
-          transition: all .3s ease-in-out;
 }
-@media (min-width: 30em) {
+@media (min-width: 48em) {
   .sidebar {
-    font-size: .75rem; /* 14px */
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 18rem;
+    text-align: left;
   }
 }
 
-/* Sidebar content */
+/* Sidebar links */
 .sidebar a {
-  font-weight: normal;
   color: #fff;
 }
-.sidebar-item {
-  padding: 1rem;
-}
-.sidebar-item p:last-child {
-  margin-bottom: 0;
+
+/* About section */
+.sidebar-about h1 {
+  color: #fff;
+  margin-top: 0;
+  font-family: "Abril Fatface", serif;
+  font-size: 3.25rem;
 }
 
 /* Sidebar nav */
 .sidebar-nav {
-  border-bottom: 1px solid rgba(255,255,255,.1);
+  margin-bottom: 1rem;
 }
 .sidebar-nav-item {
   display: block;
-  padding: .5rem 1rem;
-  border-top: 1px solid rgba(255,255,255,.1);
+  line-height: 1.75;
 }
-.sidebar-nav-item.active,
 a.sidebar-nav-item:hover,
 a.sidebar-nav-item:focus {
-  text-decoration: none;
-  background-color: rgba(255,255,255,.1);
-  border-color: transparent;
+  text-decoration: underline;
+}
+.sidebar-nav-item.active {
+  font-weight: bold;
+}
+
+/* Sticky sidebar
+ *
+ * Add the `sidebar-sticky` class to the sidebar's container to affix it the
+ * contents to the bottom of the sidebar in tablets and up.
+ */
+
+@media (min-width: 48em) {
+  .sidebar-sticky {
+    position: absolute;
+    right:  1rem;
+    bottom: 1rem;
+    left:   1rem;
+  }
+}
+
+
+/* Container
+ *
+ * Align the contents of the site above the proper threshold with some margin-fu
+ * with a 25%-wide `.sidebar`.
+ */
+
+.content {
+  padding-top:    4rem;
+  padding-bottom: 4rem;
 }
 
 @media (min-width: 48em) {
-  .sidebar-item {
-    padding: 1.5rem;
-  }
-  .sidebar-nav-item {
-    padding-left:  1.5rem;
-    padding-right: 1.5rem;
+  .content {
+    max-width: 38rem;
+    margin-left: 20rem;
+    margin-right: 2rem;
   }
 }
 
-/* Hide the sidebar checkbox that we toggle with `.sidebar-toggle` */
-.sidebar-checkbox {
-  position: absolute;
-  opacity: 0;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
-}
-
-/* Style the `label` that we use to target the `.sidebar-checkbox` */
-.sidebar-toggle {
-  position: absolute;
-  top:  .8rem;
-  left: 1rem;
-  display: block;
-  padding: .25rem .75rem;
-  color: #505050;
-  background-color: #fff;
-  border-radius: .25rem;
-  cursor: pointer;
-}
-
-.sidebar-toggle:before {
-  display: inline-block;
-  width: 1rem;
-  height: .75rem;
-  content: "";
-  background-image: -webkit-linear-gradient(to bottom, #555, #555 20%, #fff 20%, #fff 40%, #555 40%, #555 60%, #fff 60%, #fff 80%, #555 80%, #555 100%);
-  background-image:    -moz-linear-gradient(to bottom, #555, #555 20%, #fff 20%, #fff 40%, #555 40%, #555 60%, #fff 60%, #fff 80%, #555 80%, #555 100%);
-  background-image:     -ms-linear-gradient(to bottom, #555, #555 20%, #fff 20%, #fff 40%, #555 40%, #555 60%, #fff 60%, #fff 80%, #555 80%, #555 100%);
-  background-image:         linear-gradient(to bottom, #555, #555 20%, #fff 20%, #fff 40%, #555 40%, #555 60%, #fff 60%, #fff 80%, #555 80%, #555 100%);
-}
-
-.sidebar-toggle:active,
-#sidebar-checkbox:focus ~ .sidebar-toggle,
-#sidebar-checkbox:checked ~ .sidebar-toggle {
-  color: #fff;
-  background-color: #555;
-}
-
-.sidebar-toggle:active:before,
-#sidebar-checkbox:focus ~ .sidebar-toggle:before,
-#sidebar-checkbox:checked ~ .sidebar-toggle:before {
-  background-image: -webkit-linear-gradient(to bottom, #fff, #fff 20%, #555 20%, #555 40%, #fff 40%, #fff 60%, #555 60%, #555 80%, #fff 80%, #fff 100%);
-  background-image:    -moz-linear-gradient(to bottom, #fff, #fff 20%, #555 20%, #555 40%, #fff 40%, #fff 60%, #555 60%, #555 80%, #fff 80%, #fff 100%);
-  background-image:     -ms-linear-gradient(to bottom, #fff, #fff 20%, #555 20%, #555 40%, #fff 40%, #fff 60%, #555 60%, #555 80%, #fff 80%, #fff 100%);
-  background-image:         linear-gradient(to bottom, #fff, #fff 20%, #555 20%, #555 40%, #fff 40%, #fff 60%, #555 60%, #555 80%, #fff 80%, #fff 100%);
-}
-
-@media (min-width: 30.1em) {
-  .sidebar-toggle {
-    position: fixed;
-  }
-}
-
-@media print {
-  .sidebar-toggle {
-    display: none;
-  }
-}
-
-/* Slide effect
- *
- * Handle the sliding effects of the sidebar and content in one spot, seperate
- * from the default styles.
- *
- * As an a heads up, we don't use `transform: translate3d()` here because when
- * mixed with `position: fixed;` for the sidebar toggle, it creates a new
- * containing block. Put simply, the fixed sidebar toggle behaves like
- * `position: absolute;` when transformed.
- *
- * Read more about it at http://meyerweb.com/eric/thoughts/2011/09/12/.
- */
-
-.wrap,
-.sidebar,
-.sidebar-toggle {
-  -webkit-backface-visibility: hidden;
-      -ms-backface-visibility: hidden;
-          backface-visibility: hidden;
-}
-.wrap,
-.sidebar-toggle {
-  -webkit-transition: -webkit-transform .3s ease-in-out;
-          transition: transform .3s ease-in-out;
-}
-
-#sidebar-checkbox:checked + .sidebar {
-  z-index: 10;
-  visibility: visible;
-}
-#sidebar-checkbox:checked ~ .sidebar,
-#sidebar-checkbox:checked ~ .wrap,
-#sidebar-checkbox:checked ~ .sidebar-toggle {
-  -webkit-transform: translateX(14rem);
-      -ms-transform: translateX(14rem);
-          transform: translateX(14rem);
-}
-
-
-/*
- * Posts and pages
- *
- * Each post is wrapped in `.post` and is used on default and post layouts. Each
- * page is wrapped in `.page` and is only used on the page layout.
- */
-
-.page,
-.post {
-  margin-bottom: 4em;
-}
-
-/* Blog post or page title */
-.page-title,
-.post-title,
-.post-title a {
-  color: #303030;
-}
-.page-title,
-.post-title {
-  margin-top: 0;
-}
-
-/* Meta data line below post title */
-.post-date {
-  display: block;
-  margin-top: -.5rem;
-  margin-bottom: 1rem;
-  color: #9a9a9a;
-}
-
-/* Related posts */
-.related {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-  border-top: 1px solid #eee;
-}
-.related-posts {
-  padding-left: 0;
-  list-style: none;
-}
-.related-posts h3 {
-  margin-top: 0;
-}
-.related-posts li small {
-  font-size: 75%;
-  color: #999;
-}
-.related-posts li a:hover {
-  color: #268bd2;
-  text-decoration: none;
-}
-.related-posts li a:hover small {
-  color: inherit;
-}
-
-
-/*
- * Pagination
- *
- * Super lightweight (HTML-wise) blog pagination. `span`s are provide for when
- * there are no more previous or next posts to show.
- */
-
-.pagination {
-  overflow: hidden; /* clearfix */
-  margin-left: -1rem;
-  margin-right: -1rem;
-  font-family: "PT Sans", Helvetica, Arial, sans-serif;
-  color: #ccc;
-  text-align: center;
-}
-
-/* Pagination items can be `span`s or `a`s */
-.pagination-item {
-  display: block;
-  padding: 1rem;
-  border: 1px solid #eee;
-}
-.pagination-item:first-child {
-  margin-bottom: -1px;
-}
-
-/* Only provide a hover state for linked pagination items */
-a.pagination-item:hover {
-  background-color: #f5f5f5;
-}
-
-@media (min-width: 30em) {
-  .pagination {
-    margin: 3rem 0;
-  }
-  .pagination-item {
-    float: left;
-    width: 50%;
-  }
-  .pagination-item:first-child {
-    margin-bottom: 0;
-    border-top-left-radius:    4px;
-    border-bottom-left-radius: 4px;
-  }
-  .pagination-item:last-child {
-    margin-left: -1px;
-    border-top-right-radius:    4px;
-    border-bottom-right-radius: 4px;
+@media (min-width: 64em) {
+  .content {
+    margin-left: 22rem;
+    margin-right: 4rem;
   }
 }
 
@@ -412,152 +146,106 @@ a.pagination-item:hover {
 /*
  * Reverse layout
  *
- * Flip the orientation of the page by placing the `.sidebar` and sidebar toggle
- * on the right side.
+ * Flip the orientation of the page by placing the `.sidebar` on the right.
  */
 
-.layout-reverse .sidebar {
-  left: auto;
-  right: -14rem;
-}
-.layout-reverse .sidebar-toggle {
-  left: auto;
-  right: 1rem;
+@media (min-width: 48em) {
+  .layout-reverse .sidebar {
+    left: auto;
+    right: 0;
+  }
+  .layout-reverse .content {
+    margin-left: 2rem;
+    margin-right: 20rem;
+  }
 }
 
-.layout-reverse #sidebar-checkbox:checked ~ .sidebar,
-.layout-reverse #sidebar-checkbox:checked ~ .wrap,
-.layout-reverse #sidebar-checkbox:checked ~ .sidebar-toggle {
-  -webkit-transform: translateX(-14rem);
-      -ms-transform: translateX(-14rem);
-          transform: translateX(-14rem);
+@media (min-width: 64em) {
+  .layout-reverse .content {
+    margin-left: 4rem;
+    margin-right: 22rem;
+  }
 }
+
 
 
 /*
  * Themes
  *
- * Apply custom color schemes by adding the appropriate class to the `body`.
- * Based on colors from Base16: http://chriskempson.github.io/base16/#default.
+ * As of v1.1, Hyde includes optional themes to color the sidebar and links
+ * within blog posts. To use, add the class of your choosing to the `body`.
  */
 
+/* Base16 (http://chriskempson.github.io/base16/#default) */
+
 /* Red */
-.theme-base-08 .sidebar,
-.theme-base-08 .sidebar-toggle:active,
-.theme-base-08 #sidebar-checkbox:checked ~ .sidebar-toggle {
+.theme-base-08 .sidebar {
   background-color: #ac4142;
 }
-.theme-base-08 .container a,
-.theme-base-08 .sidebar-toggle,
+.theme-base-08 .content a,
 .theme-base-08 .related-posts li a:hover {
   color: #ac4142;
 }
 
 /* Orange */
-.theme-base-09 .sidebar,
-.theme-base-09 .sidebar-toggle:active,
-.theme-base-09 #sidebar-checkbox:checked ~ .sidebar-toggle {
+.theme-base-09 .sidebar {
   background-color: #d28445;
 }
-.theme-base-09 .container a,
-.theme-base-09 .sidebar-toggle,
+.theme-base-09 .content a,
 .theme-base-09 .related-posts li a:hover {
   color: #d28445;
 }
 
 /* Yellow */
-.theme-base-0a .sidebar,
-.theme-base-0a .sidebar-toggle:active,
-.theme-base-0a #sidebar-checkbox:checked ~ .sidebar-toggle {
+.theme-base-0a .sidebar {
   background-color: #f4bf75;
 }
-.theme-base-0a .container a,
-.theme-base-0a .sidebar-toggle,
+.theme-base-0a .content a,
 .theme-base-0a .related-posts li a:hover {
   color: #f4bf75;
 }
 
 /* Green */
-.theme-base-0b .sidebar,
-.theme-base-0b .sidebar-toggle:active,
-.theme-base-0b #sidebar-checkbox:checked ~ .sidebar-toggle {
+.theme-base-0b .sidebar {
   background-color: #90a959;
 }
-.theme-base-0b .container a,
-.theme-base-0b .sidebar-toggle,
+.theme-base-0b .content a,
 .theme-base-0b .related-posts li a:hover {
   color: #90a959;
 }
 
 /* Cyan */
-.theme-base-0c .sidebar,
-.theme-base-0c .sidebar-toggle:active,
-.theme-base-0c #sidebar-checkbox:checked ~ .sidebar-toggle {
+.theme-base-0c .sidebar {
   background-color: #75b5aa;
 }
-.theme-base-0c .container a,
-.theme-base-0c .sidebar-toggle,
+.theme-base-0c .content a,
 .theme-base-0c .related-posts li a:hover {
   color: #75b5aa;
 }
 
 /* Blue */
-.theme-base-0d .sidebar,
-.theme-base-0d .sidebar-toggle:active,
-.theme-base-0d #sidebar-checkbox:checked ~ .sidebar-toggle {
+.theme-base-0d .sidebar {
   background-color: #6a9fb5;
 }
-.theme-base-0d .container a,
-.theme-base-0d .sidebar-toggle,
+.theme-base-0d .content a,
 .theme-base-0d .related-posts li a:hover {
   color: #6a9fb5;
 }
 
 /* Magenta */
-.theme-base-0e .sidebar,
-.theme-base-0e .sidebar-toggle:active,
-.theme-base-0e #sidebar-checkbox:checked ~ .sidebar-toggle {
+.theme-base-0e .sidebar {
   background-color: #aa759f;
 }
-.theme-base-0e .container a,
-.theme-base-0e .sidebar-toggle,
+.theme-base-0e .content a,
 .theme-base-0e .related-posts li a:hover {
   color: #aa759f;
 }
 
 /* Brown */
-.theme-base-0f .sidebar,
-.theme-base-0f .sidebar-toggle:active,
-.theme-base-0f #sidebar-checkbox:checked ~ .sidebar-toggle {
+.theme-base-0f .sidebar {
   background-color: #8f5536;
 }
-.theme-base-0f .container a,
-.theme-base-0f .sidebar-toggle,
+.theme-base-0f .content a,
 .theme-base-0f .related-posts li a:hover {
   color: #8f5536;
-}
-
-
-/*
- * Overlay sidebar
- *
- * Make the sidebar content overlay the viewport content instead of pushing it
- * aside when toggled.
- */
-
-.sidebar-overlay #sidebar-checkbox:checked ~ .wrap {
-  -webkit-transform: translateX(0);
-      -ms-transform: translateX(0);
-          transform: translateX(0);
-}
-.sidebar-overlay #sidebar-checkbox:checked ~ .sidebar-toggle {
-  box-shadow: 0 0 0 .25rem #fff;
-}
-.sidebar-overlay #sidebar-checkbox:checked ~ .sidebar {
-  box-shadow: .25rem 0 .5rem rgba(0,0,0,.1);
-}
-
-/* Only one tweak for a reverse layout */
-.layout-reverse.sidebar-overlay #sidebar-checkbox:checked ~ .sidebar {
-  box-shadow: -.25rem 0 .5rem rgba(0,0,0,.1);
 }

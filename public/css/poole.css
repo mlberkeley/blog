@@ -150,7 +150,10 @@ abbr[title] {
 /* Code */
 code,
 pre {
-  font-family: Menlo, Monaco, "Courier New", monospace;
+  font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace;
+  white-space: pre;
+  overflow-x: auto;
+  background-color: #f9f9f9;
 }
 code {
   padding: .25em .5em;
@@ -175,8 +178,18 @@ pre {
 pre code {
   padding: 0;
   font-size: 80%;
+  border: 0px;
   color: inherit;
   background-color: transparent;
+}
+
+td code {
+  border: 0px;
+  background-color: inherit;
+}
+
+blockquote code {
+  color: #555;
 }
 
 /* Pygments via Jekyll */
@@ -190,7 +203,7 @@ pre code {
 
 /* Gist via GitHub Pages */
 .gist .gist-file {
-  font-family: Menlo, Monaco, "Courier New", monospace !important;
+  font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace !important;
 }
 .gist .markdown-body {
   padding: 15px;

@@ -6,6 +6,7 @@ author: Daniel Geng and Shannon Shih
 type: tutorial
 comments: true
 published: true
+tags: [tutorials]
 description: The Bias Variance Dilemma
 ---
 

@@ -24,3 +24,4 @@ This is the repo for the [Machine Learning at Berkeley blog](ml.berkeley.edu/blo
 9. SSH into our server and pull
 10. Run `$ jekyll build --destination ` (setting this up currently)
 11. Check website to make sure changes are up
+

@@ -1,0 +1,32 @@
+#!/bin/bash
+#
+# publishDraft
+# Copyright 2015 Joe Friedrichsen
+# Licensed under the MIT License
+
+gitRepoRoot="$(git rev-parse --show-toplevel)"
+
+if test $# -ne 1; then
+  echo "Usage: publishDraft draft-file-name.md"
+  echo
+  echo "Draft list:"
+  ls -1 "${gitRepoRoot}/_drafts" | gawk '{print "  " $1}'
+  exit 1
+fi
+
+newPostFileName="$1"
+
+currentYear=$(date +%Y)
+currentMonth=$(date +%m)
+currentDay=$(date +%d)
+
+newPostFullSlug="${currentYear}-${currentMonth}-${currentDay}-${newPostFileName}"
+
+draftPostPath="${gitRepoRoot}/_drafts/${newPostFileName}"
+newPostPath="${gitRepoRoot}/_posts/${newPostFullSlug}"
+
+mkdir -p "${gitRepoRoot}/_posts"
+mv -v "${draftPostPath}" "${newPostPath}"
+
+echo "Published new post! Use 'git add' on this file:"
+echo "  git add \"${newPostPath}\""
