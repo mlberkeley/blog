@@ -11,15 +11,31 @@
 html {
   font-family: "PT-Serif", Georgia, "Times New Roman", serif;
 }
-.masthead-title { 
-  font-family: "PT-Sans", Helvetica;
-  font-weight: normal;
-}
 .sidebar {
   font-family: "PT-Sans", Helvetica;
   font-size: .75em;
-  width: 15rem;
 }
+
+#sidebar-logo img {
+  display: inline;
+  width: 50%;
+}
+
+@media (min-width: 48em) {
+  .sidebar {
+    width: 15rem;
+  }
+
+  #sidebar-logo img {
+    display: block;
+    width: 100%;
+  }
+
+  .content {
+    margin-left: 23rem; /* centering */
+  }
+}
+
 #contact-list:hover { 
   text-decoration: black;
 }
@@ -36,6 +52,5 @@ html {
 
 .content {
 	padding-top: 0.5rem;
-	margin-left: 23rem; /* centering */
 }
 
