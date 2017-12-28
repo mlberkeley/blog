@@ -1,0 +1,38 @@
+/* Extra customizations on top of hyde version of website to unify design */
+
+#sidebar-checkbox, .sidebar-toggle { 
+    display: none;
+}
+
+/* make sidebar less obtrusive */
+html {
+  font-family: "PT-Serif", Georgia, "Times New Roman", serif;
+}
+.masthead-title { 
+  font-family: "PT-Sans", Helvetica;
+  font-weight: normal;
+}
+.sidebar {
+  font-family: "PT-Sans", Helvetica;
+  font-size: .75em;
+  width: 15rem;
+}
+#contact-list:hover { 
+  text-decoration: black;
+}
+/* Decoration for sidebar entries. copied from lanyon */
+.sidebar-nav-item { 
+  padding: .5rem 1rem;
+  border-top: 1px solid rgba(255, 255, 255, .1);
+}
+.sidebar-nav-item.active, a.sidebar-nav-item:hover, a.sidebar-nav-item:focus {
+  text-decoration: none;
+  background-color: rgba(255,255,255,.1);
+  border-color: transparent;
+}
+
+.content {
+	padding-top: 0.5rem;
+	margin-left: 23rem; /* centering */
+}
+

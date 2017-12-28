@@ -35,7 +35,7 @@
  * Update the foundational and global aspects of the page.
  */
 
-* {
+ * {
   -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
           box-sizing: border-box;
@@ -150,10 +150,7 @@ abbr[title] {
 /* Code */
 code,
 pre {
-  font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace;
-  white-space: pre;
-  overflow-x: auto;
-  background-color: #f9f9f9;
+  font-family: Menlo, Monaco, "Courier New", monospace;
 }
 code {
   padding: .25em .5em;
@@ -178,18 +175,8 @@ pre {
 pre code {
   padding: 0;
   font-size: 100%;
-  border: 0px;
   color: inherit;
   background-color: transparent;
-}
-
-td code {
-  border: 0px;
-  background-color: inherit;
-}
-
-blockquote code {
-  color: #555;
 }
 
 /* Pygments via Jekyll */
@@ -203,7 +190,7 @@ blockquote code {
 
 /* Gist via GitHub Pages */
 .gist .gist-file {
-  font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace !important;
+  font-family: Menlo, Monaco, "Courier New", monospace !important;
 }
 .gist .markdown-body {
   padding: 15px;
@@ -441,3 +428,4 @@ a.pagination-item:hover {
     border-bottom-right-radius: 4px;
   }
 }
+
