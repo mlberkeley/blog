@@ -3,6 +3,9 @@
 #sidebar-checkbox, .sidebar-toggle { 
     display: none;
 }
+.masthead-title {
+  display: none;
+}
 
 /* make sidebar less obtrusive */
 html {
