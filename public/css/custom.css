@@ -18,27 +18,6 @@ pre {
   margin-top: 0;
 }
 
-.content {
-	padding-top: 0.5rem;
-	margin-left: 23rem; /* centering */
-}
-/* make sidebar less obtrusive */
-html {
-  font-family: "PT-Serif", Georgia, "Times New Roman", serif;
-}
-.masthead-title { 
-  font-family: "PT-Sans", Helvetica;
-  font-weight: normal;
-}
-.sidebar {
-  font-family: "PT-Sans", Helvetica;
-  font-size: .8em;
-  width: 15rem;
-}
-#contact-list:hover { 
-  text-decoration: black;
-}
-
 /* tag stuff */
 .tag {
 	font: 14px/1.5 'PT Sans', serif;
