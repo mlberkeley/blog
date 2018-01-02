@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def zip_im():
-    for i in range(10):
+    for i in range(2):
         num = imread('targeted/' + str(i) + '.png')
         scores = imread('targeted/' + str(i) + '_scores.png')
         num = imresize(num, size=(300, 300), interp='nearest')

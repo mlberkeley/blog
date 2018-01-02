@@ -290,7 +290,8 @@ def sneaky_adversarial(net, n, x_target, steps, eta, lam=.05):
         # Calculate the derivative
         d = input_derivative(net,x,goal)
         
-        # The GD update on x, with an added penalty to the cost function
+        # The GD update on x, with an added penalty 
+        # to the cost function
         # ONLY CHANGE IS RIGHT HERE!!!
         x -= eta * (d + lam * (x - x_target))
 
@@ -362,7 +363,24 @@ def binary_thresholding(n, m):
     print np.round(net.feedforward(x), 2)
 ```
 
-Turns out binary thresholding works! But as it turns out this way of protecting against adversarial attacks is not very good. Not all images will always have an all white background. For example look at the image of the panda at the very beginning of this post. Doing binary thresholding on that image might remove the noise, but not without disturbing the image of the panda a ton. Probably to the point where the network (and humans) can’t even tell it’s a panda. 
+Here's the result:
+
+<h3 class="binaryLabel" style="text-align: center">Adversarial Image</h3>
+
+<div>
+<img class="pixelated binary" height="300px" onclick="plusDivs(-1, 'binary'); document.getElementsByClassName('binaryLabel')[0].innerHTML = 'Binarized Image'; " src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/binary/adversarial.png">
+<img class="pixelated binary" height="300px" onclick="plusDivs(-1, 'binary'); document.getElementsByClassName('binaryLabel')[0].innerHTML = 'Adversarial Image'; " src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/binary/binary.png">
+</div>
+
+<center>
+  <div style="max-width: 70%;">
+   <p style="font-size: 16px;">
+     The effect of binary thresholding on adversarial images on MNIST. The left side is the image and the right side is the output of the neural network. <b> Click </b> on the image to toggle between binarized and adversarial.
+   </p>
+  </div>
+</center>
+
+Turns out binary thresholding works! But this way of protecting against adversarial attacks is not very good. Not all images will always have an all white background. For example look at the image of the panda at the very beginning of this post. Doing binary thresholding on that image might remove the noise, but not without disturbing the image of the panda a ton. Probably to the point where the network (and humans) can’t even tell it’s a panda. 
 
 Another more general thing we could try to do is to train a new neural network on correctly labeled adversarial examples as well as the original training test set. This is what we do here:
 
@@ -447,12 +465,14 @@ var slideIndexDict = {
     'feedforward': 1,
     'nontargeted': 1,
     'targeted': 1,
-    'diff': 1
+    'diff': 1,
+    'binary': 1
 };
 showDivs(slideIndexDict["feedforward"], "feedforward");
 showDivs(slideIndexDict["nontargeted"], "nontargeted");
 showDivs(slideIndexDict["targeted"], "targeted");
 showDivs(slideIndexDict["diff"], "diff");
+showDivs(slideIndexDict["binary"], "binary");
 
 function plusDivs(n, cls) {
     showDivs(slideIndexDict[cls] += n, cls);
