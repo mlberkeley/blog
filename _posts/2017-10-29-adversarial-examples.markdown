@@ -31,11 +31,11 @@ From <a target="_blank" href="https://arxiv.org/abs/1412.6572">Explaining and Ha
   </div>
 </center>
 
-So just how would assassination by adversarial example work? Imagine replacing a stop sign with an adversarial example of it. A sign that a human would recognize instantly but that a neural network would be fooled into thinking was something completely different, perhaps a lightpole. Now imagine placing that adversarial stop sign at a busy intersection that you happen to know your assassination target will drive past.
+So just how would assassination by adversarial example work? Imagine replacing a stop sign with an adversarial example of it--that is, a sign that a human would recognize instantly but a neural network would think is something completely different, perhaps a right turn sign. Now imagine placing that adversarial stop sign at a busy intersection that you happen to know your assassination target will drive past.
 
-Now this might just be one convoluted and slightly sensationalized instance of how people could use adversarial examples for harm, but there are many more. For example, the iPhone X’s “face id” system that unlocks your phone when your phone sees you relies on neural nets, and as such is susceptible to adversarial attacks. The existence of adversarial examples means that systems that incorporate deep learning models actually have a very high security risk.
+Now this might just be one convoluted and (more than) slightly sensationalized instance of how people could use adversarial examples for harm, but there are many more. For example, the iPhone X’s “Face ID” feature relies on neural nets to unlock the phone when it recognizes your face, and is therefore susceptible to adversarial attacks. The existence of adversarial examples means that systems that incorporate deep learning models actually have a very high security risk.
 
-The above adversarial example if a **targeted** example. A small amount of noise was added to an image that caused a neural network to misclassify the image, despite the image looking exactly the same to a human. There are also **non-targeted** examples, which simply try to find _any_ input that tricks the neural network. More than likely this input will look like white noise to a human, but because we aren’t constrained to find an input that resembles something to a human the problem is a lot easier.
+The above adversarial example is a **targeted** example. A small amount of noise was added to an image that caused a neural network to misclassify the image, despite the image looking exactly the same to a human. There are also **non-targeted** examples, which simply try to find _any_ input that tricks the neural network. This input will probably look like white noise to a human, but because we aren’t constrained to find an input that resembles something to a human the problem is a lot easier.
 
 We can find adversarial examples for just about any neural network out there, even state-of-the-art models that have so-called “superhuman” abilities, which is slightly troubling. In fact, it is so easy to create adversarial examples that we will show you how to do it in this post. All the code and dependencies you need to start generating your own adversarial examples can be found in [this](https://github.com/dangeng/Simple_Adversarial_Examples) GitHub repo.
 
@@ -407,6 +407,12 @@ Another more general thing we could try to do is to train a new neural network o
 
 There are many other ways to protect against adversarial attacks that we won't wade into in this introductory post, but the question is still an open research topic and if you're interested there are many great papers on the subject.
 
+## Black Box Attacks
+
+An interesting and important observation of adversarial examples is that they generally are not model or architecture specific. Adversarial examples generated for one neural network architecture will transfer very well to another architecture. In other words, if I want to trick your model I can create my own model and adversarial examples based off of it and then these same adversarial examples will most probably trick your model as well. 
+
+This has huge implications as it means that it is possible to create adversarial examples for a completely black box model where we have no prior knowledge of the internal mechanics. In fact, a team at Berkeley managed to launch a [succesful attack](https://arxiv.org/pdf/1611.02770.pdf) on a commercial AI classification system using this method.
+
 ## Conclusion
 
 As we move toward a future that incorporates more and more neural networks and deep learning algorithms in our daily lives we have to be careful to remember that these models can be fooled very easily. Despite the fact that neural networks are to some extent biologically inspired and have near (or super) human capabilities in a wide variety of tasks, adversarial examples teach us that their method of operation is nothing like how real biological creatures work. As we've seen neural networks can fail quite easily and catastrophically, in ways that are completely alien to us humans. 
@@ -484,11 +490,12 @@ button.slideshow-button{
     overflow:hidden;
     text-decoration:none;
     color:inherit;
-    background-color:#f7f7f7;
+    background-color:#e5e5e5;
     text-align:center;
     cursor:pointer;
     white-space:nowrap;
     margin-bottom: 1em;
+    border-radius: 2px;
 
     -webkit-transition: opacity .2s; /* Safari */
     transition: opacity .2s;
