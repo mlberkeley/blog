@@ -199,7 +199,7 @@ Here are non-targeted adversarial examples for each class along with the neural 
 
 <div>
 
-<h3 class="nontargetedLabel" style="text-align: center">Non-Targeted 0</h3>
+<h3 class="nontargetedLabel" style="text-align: center">Non-Targeted "0"</h3>
 
 <img class="pixelated nontargeted" height="250px"  src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/non_targeted/combined_0.png">
 <img class="pixelated nontargeted" height="250px"  src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/non_targeted/combined_1.png">
@@ -213,8 +213,8 @@ Here are non-targeted adversarial examples for each class along with the neural 
 <img class="pixelated nontargeted" height="250px"  src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/non_targeted/combined_9.png">
 
 <center>
-<button class="slideshow-button" onclick="plusDivs(-1, 'nontargeted'); document.getElementsByClassName('nontargetedLabel')[0].innerHTML = 'Non-Targeted ' + (slideIndexDict['nontargeted'] - 1);">&#10094;</button>
-<button class="slideshow-button" onclick="plusDivs(+1, 'nontargeted'); document.getElementsByClassName('nontargetedLabel')[0].innerHTML = 'Non-Targeted ' + (slideIndexDict['nontargeted'] - 1);">&#10095;</button>
+<button class="slideshow-button" onclick="plusDivs(-1, 'nontargeted'); document.getElementsByClassName('nontargetedLabel')[0].innerHTML = 'Non-Targeted &quot;' + (slideIndexDict['nontargeted'] - 1 + '&quot;');">&#10094;</button>
+<button class="slideshow-button" onclick="plusDivs(+1, 'nontargeted'); document.getElementsByClassName('nontargetedLabel')[0].innerHTML = 'Non-Targeted &quot;' + (slideIndexDict['nontargeted'] - 1 + '&quot;');">&#10095;</button>
 </center>
 
 </div>
@@ -307,7 +307,7 @@ The only thing we’ve changed is the gradient descent update: `x -= eta * (d + 
 
 <div>
 
-<h3 class="targetedLabel" style="text-align: center">Targeted 0</h3>
+<h3 class="targetedLabel" style="text-align: center">Targeted "0" [x_target=6]</h3>
 
 <img class="pixelated targeted" height="250px"  src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/targeted/combined_0.png">
 <img class="pixelated targeted" height="250px"  src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/targeted/combined_1.png">
@@ -321,13 +321,13 @@ The only thing we’ve changed is the gradient descent update: `x -= eta * (d + 
 <img class="pixelated targeted" height="250px"  src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/targeted/combined_9.png">
 
 <center>
-<button class="slideshow-button" onclick="plusDivs(-1, 'targeted'); document.getElementsByClassName('targetedLabel')[0].innerHTML = 'Targeted ' + (slideIndexDict['targeted'] - 1);">&#10094;</button>
-<button class="slideshow-button" onclick="plusDivs(+1, 'targeted'); document.getElementsByClassName('targetedLabel')[0].innerHTML = 'Targeted ' + (slideIndexDict['targeted'] - 1);">&#10095;</button>
+<button class="slideshow-button" onclick="plusDivs(-1, 'targeted'); document.getElementsByClassName('targetedLabel')[0].innerHTML = 'Targeted &quot;' + (slideIndexDict['targeted'] - 1) + '&quot; [x_target=' + (slideIndexDict['targeted'] + 5) % 10 + ']';">&#10094;</button>
+<button class="slideshow-button" onclick="plusDivs(+1, 'targeted'); document.getElementsByClassName('targetedLabel')[0].innerHTML = 'Targeted &quot;' + (slideIndexDict['targeted'] - 1) + '&quot; [x_target=' + (slideIndexDict['targeted'] + 5) % 10 + ']';">&#10095;</button>
 </center>
 
 </div>
 
-Notice that as with the non-targeted attack there are two behaviors. Either the neural network is completely tricked and the activation for the number we want is very high (for example the "targeted 5" image) or the network is just confused and all the activations are low (for example the "targeted 7" image). What’s interesting though is that many more images are in the former category now, completely tricking the neural network. It seems that making adversarial examples that have been regularized to be more “number-like” tends to make convergence better during gradient descent.
+Notice that as with the non-targeted attack there are two behaviors. Either the neural network is completely tricked and the activation for the number we want is very high (for example the "targeted 5" image) or the network is just confused and all the activations are low (for example the "targeted 7" image). What’s interesting though is that many more images are in the former category now, completely tricking the neural network as opposed to just confusing it. It seems that making adversarial examples that have been regularized to be more “number-like” tends to make convergence better during gradient descent.
 
 ## Protecting Against Adversarial Attacks
 
@@ -336,8 +336,8 @@ Awesome! We’ve just created images that trick neural networks. The next questi
 <h3 class="compareLabel" style="text-align: center">Targeted Image</h3>
 
 <div>
-<img class="pixelated diff" height="400px" onclick="plusDivs(-1, 'diff'); document.getElementsByClassName('compareLabel')[0].innerHTML = 'Original Image'; " src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/diff/original.png">
-<img class="pixelated diff" height="400px" onclick="plusDivs(-1, 'diff'); document.getElementsByClassName('compareLabel')[0].innerHTML = 'Targeted Image'; " src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/diff/targeted.png">
+<img class="toggle pixelated diff" height="400px" onclick="plusDivs(-1, 'diff'); document.getElementsByClassName('compareLabel')[0].innerHTML = 'Original Image'; " src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/diff/original.png">
+<img class="toggle pixelated diff" height="400px" onclick="plusDivs(-1, 'diff'); document.getElementsByClassName('compareLabel')[0].innerHTML = 'Targeted Image'; " src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/diff/targeted.png">
 </div>
 
 <center>
@@ -380,8 +380,8 @@ Here's the result:
 <h3 class="binaryLabel" style="text-align: center">Adversarial Image</h3>
 
 <div>
-<img class="pixelated binary" height="300px" onclick="plusDivs(-1, 'binary'); document.getElementsByClassName('binaryLabel')[0].innerHTML = 'Binarized Image'; " src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/binary/adversarial.png">
-<img class="pixelated binary" height="300px" onclick="plusDivs(-1, 'binary'); document.getElementsByClassName('binaryLabel')[0].innerHTML = 'Adversarial Image'; " src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/binary/binary.png">
+<img class="toggle pixelated binary" height="300px" onclick="plusDivs(-1, 'binary'); document.getElementsByClassName('binaryLabel')[0].innerHTML = 'Binarized Image'; " src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/binary/adversarial.png">
+<img class="toggle pixelated binary" height="300px" onclick="plusDivs(-1, 'binary'); document.getElementsByClassName('binaryLabel')[0].innerHTML = 'Adversarial Image'; " src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/binary/binary.png">
 </div>
 
 <center>
@@ -464,6 +464,17 @@ img.pixelated {
     margin-bottom: 1em;
 }
 
+img.toggle {
+    -webkit-transition: opacity .01s; /* Safari */
+    transition: opacity .01s;
+    cursor: pointer;
+}
+
+img.toggle:hover {
+    opacity: .8;
+    cursor: pointer;
+}
+
 button.slideshow-button{
     border:none;
     display:inline-block;
@@ -478,6 +489,14 @@ button.slideshow-button{
     cursor:pointer;
     white-space:nowrap;
     margin-bottom: 1em;
+
+    -webkit-transition: opacity .2s; /* Safari */
+    transition: opacity .2s;
+}
+
+button.slideshow-button:hover {
+    opacity: .6;
+    cursor: pointer;
 }
 
 </style>
