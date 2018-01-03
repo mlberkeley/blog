@@ -107,7 +107,6 @@ def predict(n):
 This method chooses the $$ n^{th} $$ sample from the test set, displays it, and then runs it through the neural network using the `net.feedforward(x)` method. Here’s the output of a few images:
 
 <div>
-<button class="slideshow-button" onclick="plusDivs(-1, 'feedforward')">&#10094;</button>
 
 <img class="pixelated feedforward" height="250px"  src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/feedforward/combined_0.png">
 <img class="pixelated feedforward" height="250px"  src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/feedforward/combined_1.png">
@@ -120,7 +119,10 @@ This method chooses the $$ n^{th} $$ sample from the test set, displays it, and 
 <img class="pixelated feedforward" height="250px"  src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/feedforward/combined_8.png">
 <img class="pixelated feedforward" height="250px"  src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/feedforward/combined_9.png">
 
-<button class="slideshow-button" onclick="plusDivs(+1, 'feedforward')">&#10095;</button>
+    <center>
+        <button class="slideshow-button" onclick="plusDivs(-1, 'feedforward')">&#10094;</button>
+        <button class="slideshow-button" onclick="plusDivs(+1, 'feedforward')">&#10095;</button>
+    </center>
 </div>
 
 
@@ -196,7 +198,6 @@ First we create our $$ y_{goal} $$, called `goal` in the code. Next we initializ
 Here are non-targeted adversarial examples for each class along with the neural network's predictions:
 
 <div>
-<button class="slideshow-button" onclick="plusDivs(-1, 'nontargeted'); document.getElementsByClassName('nontargetedLabel')[0].innerHTML = 'Non-Targeted ' + (slideIndexDict['nontargeted'] - 1);">&#10094;</button>
 
 <h3 class="nontargetedLabel" style="text-align: center">Non-Targeted 0</h3>
 
@@ -211,7 +212,11 @@ Here are non-targeted adversarial examples for each class along with the neural 
 <img class="pixelated nontargeted" height="250px"  src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/non_targeted/combined_8.png">
 <img class="pixelated nontargeted" height="250px"  src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/non_targeted/combined_9.png">
 
+<center>
+<button class="slideshow-button" onclick="plusDivs(-1, 'nontargeted'); document.getElementsByClassName('nontargetedLabel')[0].innerHTML = 'Non-Targeted ' + (slideIndexDict['nontargeted'] - 1);">&#10094;</button>
 <button class="slideshow-button" onclick="plusDivs(+1, 'nontargeted'); document.getElementsByClassName('nontargetedLabel')[0].innerHTML = 'Non-Targeted ' + (slideIndexDict['nontargeted'] - 1);">&#10095;</button>
+</center>
+
 </div>
 
 Incredibly the neural network thinks that ome of the images are actually numbers with a very high confidence. The "3" and "5" are pretty good examples of this. For most of the other numbers the neural network just has very low activations for every number indicating that it is very confused.
@@ -230,7 +235,7 @@ $$ C = \frac{1}{2} \| y_{goal} - \hat y (\vec x) \|^2_2 + \lambda \| \vec x - x_
 
 Where $$ x_{target} $$ is what we want our adversarial example to look like. So what we’re doing now is we’re simultaneously minimizing two terms. The left term $$ \| y_{goal} - \hat y (\vec x) \|^2_2 $$ we’ve already seen. Minimizing this will make the neural network output $$ y_{goal} $$ when given $$ \vec x $$. Minimizing the second term $$ \lambda \| \vec x - x_{target} \|^2_2 $$ will try to force our adversarial image $$ x $$ to be as close as possible to $$ x_{target} $$ as possible (because the norm is smaller when the two vectors are closer), which is what we want! The extra $$ \lambda $$ out front is a hyperparameter that dictates which of the terms is more important. As with most hyperparameters we find after a lot of trial and error that .05 is a good number to set $$ \lambda $$ to. 
 
-If you know anything about ridge regularization, you might find the cost function above very very familiar. In fact, we can interpret the above cost function as placing a prior on our model for our adversarial examples. What’s even cooler is that after we’ve done this we find that far more numbers converge. It seems that making adversarial examples that have been regularized to be more “number-like” tend to make them converge better during gradient descent.
+If you know about ridge regularization you might find the cost function above very very familiar. In fact, we can interpret the above cost function as placing a prior on our model for our adversarial examples. 
 
 If you don't know anything about regularization, feel free to click on the blue box to find out more:
 
@@ -301,7 +306,6 @@ def sneaky_adversarial(net, n, x_target, steps, eta, lam=.05):
 The only thing we’ve changed is the gradient descent update: `x -= eta * (d + lam * (x - x_target))`. The extra term accounts for the new term in our cost function. Let’s take a look at the result of this new generation method:
 
 <div>
-<button class="slideshow-button" onclick="plusDivs(-1, 'targeted'); document.getElementsByClassName('targetedLabel')[0].innerHTML = 'Targeted ' + (slideIndexDict['targeted'] - 1);">&#10094;</button>
 
 <h3 class="targetedLabel" style="text-align: center">Targeted 0</h3>
 
@@ -316,8 +320,14 @@ The only thing we’ve changed is the gradient descent update: `x -= eta * (d + 
 <img class="pixelated targeted" height="250px"  src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/targeted/combined_8.png">
 <img class="pixelated targeted" height="250px"  src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/targeted/combined_9.png">
 
+<center>
+<button class="slideshow-button" onclick="plusDivs(-1, 'targeted'); document.getElementsByClassName('targetedLabel')[0].innerHTML = 'Targeted ' + (slideIndexDict['targeted'] - 1);">&#10094;</button>
 <button class="slideshow-button" onclick="plusDivs(+1, 'targeted'); document.getElementsByClassName('targetedLabel')[0].innerHTML = 'Targeted ' + (slideIndexDict['targeted'] - 1);">&#10095;</button>
+</center>
+
 </div>
+
+Notice that as with the non-targeted attack there are two behaviors. Either the neural network is completely tricked and the activation for the number we want is very high (for example the "targeted 5" image) or the network is just confused and all the activations are low (for example the "targeted 7" image). What’s interesting though is that many more images are in the former category now, completely tricking the neural network. It seems that making adversarial examples that have been regularized to be more “number-like” tends to make convergence better during gradient descent.
 
 ## Protecting Against Adversarial Attacks
 
@@ -333,7 +343,7 @@ Awesome! We’ve just created images that trick neural networks. The next questi
 <center>
   <div style="max-width: 70%;">
    <p style="font-size: 16px;">
-     An adversarial example with noise in the background. <b>Click the image</b> to see the original "9."
+     An adversarial example with noise in the background. <b>Click on the image</b> to toggle between the original and the adversarial example.
    </p>
   </div>
 </center>
@@ -347,8 +357,10 @@ def binary_thresholding(n, m):
     m: index of example image to use (from the test set)
     """
     
+    # Generate adversarial example
     x = sneaky_generate(n, m)
 
+    # Binarize image
     x = (x > .5).astype(float)
     
     print "With binary thresholding: "
@@ -375,88 +387,33 @@ Here's the result:
 <center>
   <div style="max-width: 70%;">
    <p style="font-size: 16px;">
-     The effect of binary thresholding on adversarial images on MNIST. The left side is the image and the right side is the output of the neural network. <b> Click </b> on the image to toggle between binarized and adversarial.
+     The effect of binary thresholding on adversarial images on MNIST. The left side is the image and the right side is the output of the neural network. <b> Click on the image </b> to toggle between binarized and adversarial.
    </p>
   </div>
 </center>
 
 Turns out binary thresholding works! But this way of protecting against adversarial attacks is not very good. Not all images will always have an all white background. For example look at the image of the panda at the very beginning of this post. Doing binary thresholding on that image might remove the noise, but not without disturbing the image of the panda a ton. Probably to the point where the network (and humans) can’t even tell it’s a panda. 
 
-Another more general thing we could try to do is to train a new neural network on correctly labeled adversarial examples as well as the original training test set. This is what we do here:
+<center>
+  <img src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/binary_combined.png" class="img" style="">
+  <div style="max-width: 70%;">
+   <p style="font-size: 16px;">
+        Doing binary thresholding on the panda results in a blobby image
+   </p>
+  </div>
+</center>
 
-```python
-def augment_data(n, data, steps):
-    """
-    n : integer
-        number of adversarial examples to generate
-    data : list of tuples
-        data set to generate adversarial examples using
-    """
-    # Our augmented training set:
-    augmented = []
-    
-    for i in range(n):
-        # Progress "bar"
-        if i % 500 == 0:
-            print "Generated digits: " + str(i)
-            
-        # Randomly choose a digit that the example will look like
-        rnd_actual_digit = np.random.randint(10)
-        
-        # Find random instance of rnd_actual_digit in the training set
-        rnd_actual_idx = np.random.randint(len(data))
-        while np.argmax(data[rnd_actual_idx][1]) != rnd_actual_digit:
-            rnd_actual_idx = np.random.randint(len(data))
-        x_target = data[rnd_actual_idx][0]
-        
-        # Choose value for adversarial attack
-        rnd_fake_digit = np.random.randint(10)
-        
-        # Generate adversarial example
-        x_adversarial = sneaky_adversarial(net, rnd_fake_digit, x_target, steps, 1)
-        
-        # Add new data
-        y_actual = data[rnd_actual_idx][1]
-        
-        augmented.append((x_adversarial, y_actual))
-        
-    return augmented
-```
+Another more general thing we could try to do is to train a new neural network on correctly labeled adversarial examples as well as the original training test set. The code to do this is in the ipython notebook (be aware it takes around 15 minutes to run). Doing this gives an accuracy of about 94% on a test set of all adversarial images which is pretty good. However, this method has it's limitations. Primarily in real life you are very unlikely to know how your attacker is generating adversarial examples. 
 
-This function generates adversarial examples using the `sneaky_adversarial` function and labels them with the *correct* label. It returns the augmented data set. If you’re following along in the ipython notebook be aware that this will probably take quite a long time (~3 min for 10000 examples and ~15 min for 50000 examples on an i7 CPU). Now we’ll visualize our augmented dataset to make sure everything is as it should be:
+There are many other ways to protect against adversarial attacks that we won't wade into in this introductory post, but the question is still an open research topic and if you're interested there are many great papers on the subject.
 
-```python
-def check_augmented(i, augmented):
-    # Show image
-    print 'Image: \n'
-    plt.imshow(augmented[i][0].reshape(28,28), cmap='Greys')
-    plt.show()
-    
-    # Show original network prediction
-    print 'Original network prediction: \n'
-    print np.round(net.feedforward(augmented[i][0]), 2)
-    
-    # Show label
-    print '\nLabel: \n'
-    print augmented[i][1]
-```
+## Conclusion
 
-SHOW VISUALIZATION
+As we move toward a future that incorporates more and more neural networks and deep learning algorithms in our daily lives we have to be careful to remember that these models can be fooled very easily. Despite the fact that neural networks are to some extent biologically inspired and have near (or super) human capabilities in a wide variety of tasks, adversarial examples teach us that their method of operation is nothing like how real biological creatures work. As we've seen neural networks can fail quite easily and catastrophically, in ways that are completely alien to us humans. 
 
-Now with a few simple lines of code we can train a new network on the adversarial examples and the training set:
+Human understanding is centered on causality. We demand a cause for every effect, and not without reason. Evolutionarily it is useful to know what actions result in what outcomes. Striking flint on steel produces sparks that starts a fire? Useful information for our ancestors struggling to survive on the African savannah. We are so inherently intent on imposing causality on the world that almost every culture has created gods that explain away the unexplainable phenomena of the world. Why does it rain and thunder? Because Zeus is mad. Why does the Nile flood every year? Because _Hapi_, the Egyptian god of the Nile, made yearly pilgrimages to Egypt.
 
-```python
-# Create new network
-net2 = network.Network([784, 30, 10])
-
-# Train on augmented + original training set
-net2.SGD(augmented + training_data, 30, 10, 3.0, test_data=test_data)
-```
-
-Be aware that this takes quite a while as well. 
-
-
-
+We do not completely understand neural networks and to attribute "reason" to them would be akin to the Greeks claiming the sun was Apollo riding his firey chariot across the sky every day. Adversarial examples should humble us. They show that although we have made great leaps and bounds there is still much that we do not know.
 
 
 
@@ -504,6 +461,7 @@ img.pixelated {
     margin: 0 auto;
     border-style: solid;
     border-width: 2px;
+    margin-bottom: 1em;
 }
 
 button.slideshow-button{
@@ -519,6 +477,7 @@ button.slideshow-button{
     text-align:center;
     cursor:pointer;
     white-space:nowrap;
+    margin-bottom: 1em;
 }
 
 </style>
