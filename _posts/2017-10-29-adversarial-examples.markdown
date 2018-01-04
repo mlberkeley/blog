@@ -2,7 +2,7 @@
 layout: post
 title:  "Tricking Neural Networks"
 date:   2017-10-29
-author: Daniel Geng
+author: Daniel Geng and Rishi Veerapaneni
 type: tutorial
 comments: true
 published: true
