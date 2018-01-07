@@ -2,7 +2,7 @@
 layout: post
 title:  "Tricking Neural Networks"
 date:   2017-10-29
-author: Daniel Geng
+author: Daniel Geng and Rishi Veerapaneni
 type: tutorial
 comments: true
 published: true
@@ -16,11 +16,11 @@ description: Simple Adversarial Examples for MNIST
   
 </style>
 
-Assassination by neural network. Sound crazy? Well it might happen someday, and not in the way you may think. Of course neural networks could be trained to pilot drones or operate other weapons of mass destruction, but even an innocuous (and presently available) network trained to drive a car could be turned to act against its owner. This is because neural networks are extremely susceptible to something called **adversarial examples**.
+Assassination by neural network. Sound crazy? Well, it might happen someday, and not in the way you may think. Of course neural networks could be trained to pilot drones or operate other weapons of mass destruction, but even an innocuous (and presently available) network trained to drive a car could be turned to act against its owner. This is because neural networks are extremely susceptible to something called **adversarial examples**.
 
 <!-- break -->
 
-Adversarial examples are inputs to a neural network that result in a ridiculous output from the network. It’s probably best to show an example. You can start with an image of a panda on the left which the network thinks with 57.7% confidence is a “panda” (and the panda category has the highest confidence out of all the categories). Then by adding a very small amount of noise you can get an image that looks exactly the same to a human, but that the network thinks with 99.3% confidence is a “gibbon.”
+Adversarial examples are inputs to a neural network that result in an incorrect output from the network. It’s probably best to show an example. You can start with an image of a panda on the left which the network thinks with 57.7% confidence is a “panda.” Since the panda category has the highest confidence out of all the categories, it concludes that the object in the image is a panda. Then by adding a very small amount of noise you can get an image that looks exactly the same to a human, but that the network thinks with 99.3% confidence is a “gibbon.”
 
 <center>
   <img src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/goodfellow.png" class="img" style="">
@@ -31,13 +31,13 @@ From <a target="_blank" href="https://arxiv.org/abs/1412.6572">Explaining and Ha
   </div>
 </center>
 
-So just how would assassination by adversarial example work? Imagine replacing a stop sign with an adversarial example of it--that is, a sign that a human would recognize instantly but a neural network would think is something completely different, perhaps a right turn sign. Now imagine placing that adversarial stop sign at a busy intersection that you happen to know your assassination target will drive past.
+So just how would assassination by adversarial example work? Imagine replacing a stop sign with an adversarial example of it--that is, a sign that a human would recognize instantly but a neural network would not even register. Now imagine placing that adversarial stop sign at a busy intersection that you happen to know your assassination target will drive past. As the self driving car approaches the intersection the on-board neural network would fail to see the stop sign and continue right into on-coming traffic.
 
-Now this might just be one convoluted and (more than) slightly sensationalized instance of how people could use adversarial examples for harm, but there are many more. For example, the iPhone X’s “Face ID” feature relies on neural nets to unlock the phone when it recognizes your face, and is therefore susceptible to adversarial attacks. Other biometric security systems would be at risk and illegal or improper content could bypass neural-network-based content filters. The existence of adversarial examples means that systems that incorporate deep learning models actually have a very high security risk.
+Now this might just be one convoluted and (more than) slightly sensationalized instance of how people could use adversarial examples for harm, but there are many more. For example, the iPhone X’s “Face ID” feature relies on neural nets to unlock the phone when it recognizes your face, and is therefore susceptible to adversarial attacks. People could construct images to bypass the Face ID security features. Other biometric security systems would be at risk and illegal or improper content could bypass neural-network-based content filters. The existence of adversarial examples means that systems that incorporate deep learning models actually have a very high security risk.
 
 
 <center>
-  <img src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/optical_illusion.jpg" class="img" style="">
+  <img src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/optical_illusion.jpg" class="img" style="width: 800px">
   <div style="max-width: 70%;">
    <p style="font-size: 16px;">
 You can understand adversarial examples by thinking of them as optical illusions for neural networks. In the same way optical illusions can trick the human brain, adversarial examples can trick neural networks.
@@ -244,7 +244,7 @@ Here are non-targeted adversarial examples for each class along with the neural 
   </div>
 </center>
 
-Incredibly the neural network thinks that ome of the images are actually numbers with a very high confidence. The "3" and "5" are pretty good examples of this. For most of the other numbers the neural network just has very low activations for every number indicating that it is very confused.
+Incredibly the neural network thinks that some of the images are actually numbers with a very high confidence. The "3" and "5" are pretty good examples of this. For most of the other numbers the neural network just has very low activations for every number indicating that it is very confused.
 
 There might be something bugging you at this point. If we want to make an adversarial example corresponding to a five, then we want to find a $$ \vec x $$ that when fed into the neural network gives an output as close as possible to the one-hot vector representing "5". However, why doesn’t gradient descent just find an image of a "5"? After all, the neural network would almost certainly believe that an image of a "5" was actually a "5" (because it _is_ actually a "5"). I’ve thought about this for a bit and I have an idea (though somebody much smarter than I might have a better reason).
 
