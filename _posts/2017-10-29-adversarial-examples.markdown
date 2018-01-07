@@ -33,9 +33,19 @@ From <a target="_blank" href="https://arxiv.org/abs/1412.6572">Explaining and Ha
 
 So just how would assassination by adversarial example work? Imagine replacing a stop sign with an adversarial example of it--that is, a sign that a human would recognize instantly but a neural network would think is something completely different, perhaps a right turn sign. Now imagine placing that adversarial stop sign at a busy intersection that you happen to know your assassination target will drive past.
 
-Now this might just be one convoluted and (more than) slightly sensationalized instance of how people could use adversarial examples for harm, but there are many more. For example, the iPhone X’s “Face ID” feature relies on neural nets to unlock the phone when it recognizes your face, and is therefore susceptible to adversarial attacks. The existence of adversarial examples means that systems that incorporate deep learning models actually have a very high security risk.
+Now this might just be one convoluted and (more than) slightly sensationalized instance of how people could use adversarial examples for harm, but there are many more. For example, the iPhone X’s “Face ID” feature relies on neural nets to unlock the phone when it recognizes your face, and is therefore susceptible to adversarial attacks. Other biometric security systems would be at risk and illegal or improper content could bypass neural-network-based content filters. The existence of adversarial examples means that systems that incorporate deep learning models actually have a very high security risk.
 
-The above adversarial example is a **targeted** example. A small amount of noise was added to an image that caused a neural network to misclassify the image, despite the image looking exactly the same to a human. There are also **non-targeted** examples, which simply try to find _any_ input that tricks the neural network. This input will probably look like white noise to a human, but because we aren’t constrained to find an input that resembles something to a human the problem is a lot easier.
+
+<center>
+  <img src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/optical_illusion.jpg" class="img" style="">
+  <div style="max-width: 70%;">
+   <p style="font-size: 16px;">
+You can understand adversarial examples by thinking of them as optical illusions for neural networks. In the same way optical illusions can trick the human brain, adversarial examples can trick neural networks.
+   </p>
+  </div>
+</center>
+
+The above adversarial example with the panda is a **targeted** example. A small amount of noise was added to an image that caused a neural network to misclassify the image, despite the image looking exactly the same to a human. There are also **non-targeted** examples, which simply try to find _any_ input that tricks the neural network. This input will probably look like white noise to a human, but because we aren’t constrained to find an input that resembles something to a human the problem is a lot easier.
 
 We can find adversarial examples for just about any neural network out there, even state-of-the-art models that have so-called “superhuman” abilities, which is slightly troubling. In fact, it is so easy to create adversarial examples that we will show you how to do it in this post. All the code and dependencies you need to start generating your own adversarial examples can be found in [this](https://github.com/dangeng/Simple_Adversarial_Examples) GitHub repo.
 
@@ -125,6 +135,13 @@ This method chooses the $$ n^{th} $$ sample from the test set, displays it, and 
     </center>
 </div>
 
+<center>
+  <div style="max-width: 70%;">
+   <p style="font-size: 16px;">
+   The left side is the MNIST image. The right side plots the 10 outputs of the neural network, called activations. The larger the activation at an output the more the neural network thinks the image is that number.
+   </p>
+  </div>
+</center>
 
 So a bit about this pretrained neural network. It has 784 input neurons ($$ 28 \times 28 $$ pixels), one layer of 30 hidden neurons, and 10 output neurons (one for each digit). All it’s activations are sigmoidal, it’s output is a one-hot vector indicating the network’s prediction, and it was trained by minimizing the mean squared error loss.
 
@@ -153,7 +170,7 @@ That is, we want to come up with an image such that the neural network’s outpu
 
 $$ C = \frac{1}{2} \| y_{goal} - \hat y (\vec x) \|^2_2 $$
 
-The $$ y_{goal} $$ is our goal label, from above. The output of the neural network given our image is $$ \hat y (\vec x) $$. You can see that if the output of the network given our generated image $$ \vec x $$ is very close to our goal label, $$ y_{goal} $$, then the corresponding cost is low. If the output of the network is very far from our goal then the cost is high. Therefore, finding a vector $$ \vec x $$ that minimizes the cost $$ C $$ results in an image that the neural network predicts as our goal label. Our problem now is to find this vector $$ \vec x $$. 
+where $$ \| \cdot \|^2_2 $$ is the square of the L2 norm. The $$ y_{goal} $$ is our goal label from above. The output of the neural network given our image is $$ \hat y (\vec x) $$. You can see that if the output of the network given our generated image $$ \vec x $$ is very close to our goal label, $$ y_{goal} $$, then the corresponding cost is low. If the output of the network is very far from our goal then the cost is high. Therefore, finding a vector $$ \vec x $$ that minimizes the cost $$ C $$ results in an image that the neural network predicts as our goal label. Our problem now is to find this vector $$ \vec x $$. 
 
 Notice that this problem is incredibly similar to how we train a neural network, where we define a cost function and then choose weights and biases (a.k.a. parameters) that minimize the cost function. In the case of adversarial example generation, instead of choosing weights and biases that minimize the cost, we hold the weights and biases constant (in essence hold the entire network constant) and choose an $$ \vec x $$ input that minimizes the cost. 
 
@@ -218,6 +235,14 @@ Here are non-targeted adversarial examples for each class along with the neural 
 </center>
 
 </div>
+
+<center>
+  <div style="max-width: 70%;">
+   <p style="font-size: 16px;">
+   The left side is the non-targeted adversarial exampele (a 28 X 28 pixel image). The right side plots the activations of the network when given the image.
+   </p>
+  </div>
+</center>
 
 Incredibly the neural network thinks that ome of the images are actually numbers with a very high confidence. The "3" and "5" are pretty good examples of this. For most of the other numbers the neural network just has very low activations for every number indicating that it is very confused.
 
@@ -326,6 +351,14 @@ The only thing we’ve changed is the gradient descent update: `x -= eta * (d + 
 </center>
 
 </div>
+
+<center>
+  <div style="max-width: 70%;">
+   <p style="font-size: 16px;">
+   The left side is the targeted adversarial exampele (a 28 X 28 pixel image). The right side plots the activations of the network when given the image.
+   </p>
+  </div>
+</center>
 
 Notice that as with the non-targeted attack there are two behaviors. Either the neural network is completely tricked and the activation for the number we want is very high (for example the "targeted 5" image) or the network is just confused and all the activations are low (for example the "targeted 7" image). What’s interesting though is that many more images are in the former category now, completely tricking the neural network as opposed to just confusing it. It seems that making adversarial examples that have been regularized to be more “number-like” tends to make convergence better during gradient descent.
 
