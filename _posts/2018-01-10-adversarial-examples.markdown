@@ -33,7 +33,7 @@ From <a target="_blank" href="https://arxiv.org/abs/1412.6572">Explaining and Ha
 
 So just how would assassination by adversarial example work? Imagine replacing a stop sign with an adversarial example of it--that is, a sign that a human would recognize instantly but a neural network would not even register. Now imagine placing that adversarial stop sign at a busy intersection. As self driving cars approach the intersection the on-board neural networks would fail to see the stop sign and continue right into oncoming traffic, bringing it's occupants to near certain death (in theory).
 
-Now this might just be one convoluted and (more than) slightly sensationalized instance of how people could use adversarial examples for harm, but there are many more. For example, the iPhone X’s “Face ID” unlocking feature relies on neural nets recognize faces and is therefore susceptible to adversarial attacks. People could construct adversarial images to bypass the Face ID security features. Other biometric security systems would also be at risk and illegal or improper content could potentially bypass neural-network-based content filters by using adversarial examples. The existence of these adversarial examples means that systems that incorporate deep learning models actually have a very high security risk.
+Now this might just be one convoluted and (more than) slightly sensationalized instance of how people could use adversarial examples for harm, but there are many more. For example, the iPhone X’s “Face ID” unlocking feature relies on neural nets to recognize faces and is therefore susceptible to adversarial attacks. People could construct adversarial images to bypass the Face ID security features. Other biometric security systems would also be at risk and illegal or improper content could potentially bypass neural-network-based content filters by using adversarial examples. The existence of these adversarial examples means that systems that incorporate deep learning models actually have a very high security risk.
 
 
 <center>
@@ -107,11 +107,17 @@ def predict(n):
     # Get the data from the test set
     x = test_data[n][0]
 
+    # Get output of network and prediction
+    activations = net.feedforward(x)
+    prediction = np.argmax(activations)
+
     # Print the prediction of the network
-    print('Network output: \n' + 
-        str(np.round(net.feedforward(x), 2)) + '\n')
-    print('Network prediction: ' 
-        + str(np.argmax(net.feedforward(x))) + '\n')
+    print('Network output: ')
+    print(activations)
+
+    print('Network prediction: ')
+    print(prediction)
+
     print('Actual image: ')
     
     # Draw the image
@@ -402,12 +408,16 @@ def binary_thresholding(n, m):
     
     plt.imshow(x.reshape(28,28), cmap="Greys")
     plt.show()
+
+    # Get binarized output and prediction
+    binary_activations = net.feedforward(x)
+    binary_prediction = np.argmax(net.feedforward(x))
     
-    print("Prediction with binary thresholding: " + 
-        str(np.argmax(np.round(net.feedforward(x)))) + '\n')
+    print("Prediction with binary thresholding: ")
+    print(binary_prediction)
     
     print("Network output: ")
-    print(np.round(net.feedforward(x), 2))
+    print(binary_activations)
 ```
 
 Here's the result:
