@@ -53,7 +53,7 @@ We can find adversarial examples for just about any neural network out there, ev
   <img src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/meme.jpg" class="img" style="">
   <div style="max-width: 70%;">
    <p style="font-size: 16px;">
-    A meme, extoling the effectivness of adversarial examples
+    A meme, extolling the effectivness of adversarial examples
    </p>
   </div>
 </center>
