@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "Tricking Neural Networks"
-date:   2017-10-29
+title:  "Tricking Neural Networks: Create your own Adversarial Examples"
+date:   2018-01-10
 author: Daniel Geng and Rishi Veerapaneni
 type: tutorial
 comments: true
@@ -16,11 +16,11 @@ description: Simple Adversarial Examples for MNIST
   
 </style>
 
-Assassination by neural network. Sound crazy? Well[,] it might happen someday, and not in the way you may think. Of course neural networks could be trained to pilot drones or operate other weapons of mass destruction, but even an innocuous (and presently available) network trained to drive a car could be turned to act against its owner. This is because neural networks are extremely susceptible to something called **adversarial examples**.
+Assassination by neural network. Sound crazy? Well, it might happen someday, and not in the way you may think. Of course neural networks could be trained to pilot drones or operate other weapons of mass destruction, but even an innocuous (and presently available) network trained to drive a car could be turned to act against its owner. This is because neural networks are extremely susceptible to something called **adversarial examples**.
 
 <!-- break -->
 
-Adversarial examples are inputs to a neural network that result in an incorrect output from the network. It’s probably best to show an example. You can start with an image of a panda on the left which the network thinks with 57.7% confidence is a “panda.” [Since the panda category has the highest confidence out of all the categories, it concludes that the object in the image is a panda.] Then by adding a very small amount of noise you can get an image that looks exactly the same to a human, but that the network thinks with 99.3% confidence is a “gibbon.”
+Adversarial examples are inputs to a neural network that result in an incorrect output from the network. It’s probably best to show an example. You can start with an image of a panda on the left which some network thinks with 57.7% confidence is a “panda.” The panda category is also the category with the highest confidence out of all the categories, so the network concludes that the object in the image is a panda. But then by adding a very small amount of _carefully constructed_ noise you can get an image that looks exactly the same to a human, but that the network thinks with 99.3% confidence is a “gibbon.” Pretty crazy stuff!
 
 <center>
   <img src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/goodfellow.png" class="img" style="">
@@ -31,11 +31,21 @@ From <a target="_blank" href="https://arxiv.org/abs/1412.6572">Explaining and Ha
   </div>
 </center>
 
-So just how would assassination by adversarial example work? Imagine replacing a stop sign with an adversarial example of it--that is, a sign that a human would recognize instantly but a neural network would think is something completely different, perhaps a right turn sign. Now imagine placing that adversarial stop sign at a busy intersection that you happen to know your assassination target will drive past. [Be pedantic and say what will actually happen]
+So just how would assassination by adversarial example work? Imagine replacing a stop sign with an adversarial example of it--that is, a sign that a human would recognize instantly but a neural network would not even register. Now imagine placing that adversarial stop sign at a busy intersection. As self driving cars approach the intersection the on-board neural networks would fail to see the stop sign and continue right into oncoming traffic, bringing it's occupants to near certain death (in theory).
 
-Now this might just be one convoluted and (more than) slightly sensationalized instance of how people could use adversarial examples for harm, but there are many more. For example, the iPhone X’s “Face ID” feature relies on neural nets to unlock the phone when it recognizes your face, and is therefore susceptible to [mistaking one face for another and unlocking itself for an unauthorized person]. The existence of adversarial examples means that systems that incorporate deep learning models actually have a very high security risk.
+Now this might just be one convoluted and (more than) slightly sensationalized instance of how people could use adversarial examples for harm, but there are many more. For example, the iPhone X’s “Face ID” unlocking feature relies on neural nets to recognize faces and is therefore susceptible to adversarial attacks. People could construct adversarial images to bypass the Face ID security features. Other biometric security systems would also be at risk and illegal or improper content could potentially bypass neural-network-based content filters by using adversarial examples. The existence of these adversarial examples means that systems that incorporate deep learning models actually have a very high security risk.
 
-The above adversarial example is a **targeted** example. A small amount of noise was added to an image that caused a neural network to misclassify the image, despite the image looking exactly the same to a human. There are also **non-targeted** examples, which simply try to find _any_ input that tricks the neural network. This input will probably look like white noise to a human, but because we aren’t constrained to find an input that resembles something to a human the problem is a lot easier.
+
+<center>
+  <img src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/optical_illusion.jpg" class="img" style="width: 800px">
+  <div style="max-width: 70%;">
+   <p style="font-size: 16px;">
+You can understand adversarial examples by thinking of them as optical illusions for neural networks. In the same way optical illusions can trick the human brain, adversarial examples can trick neural networks.
+   </p>
+  </div>
+</center>
+
+The above adversarial example with the panda is a **targeted** example. A small amount of carefully constructred noise was added to an image that caused a neural network to misclassify the image, despite the image looking exactly the same to a human. There are also **non-targeted** examples which simply try to find _any_ input that tricks the neural network. This input will probably look like white noise to a human, but because we aren’t constrained to find an input that resembles something to a human the problem is a lot easier.
 
 We can find adversarial examples for just about any neural network out there, even state-of-the-art models that have so-called “superhuman” abilities, which is slightly troubling. In fact, it is so easy to create adversarial examples that we will show you how to do it in this post. All the code and dependencies you need to start generating your own adversarial examples can be found in [this](https://github.com/dangeng/Simple_Adversarial_Examples) GitHub repo.
 
@@ -43,7 +53,7 @@ We can find adversarial examples for just about any neural network out there, ev
   <img src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/meme.jpg" class="img" style="">
   <div style="max-width: 70%;">
    <p style="font-size: 16px;">
-    A meme, extoling the effectivness of adversarial examples
+    A meme, extolling the effectivness of adversarial examples
    </p>
   </div>
 </center>
@@ -56,16 +66,6 @@ _The code for this part can be found in the following GitHub repo (but downloadi
 <a href="https://github.com/dangeng/Simple_Adversarial_Examples" class="button" target="_blank" style="text-align:center;">GitHub Repo</a>
 </div>
 
-Before we do anything we should first import the libraries we'll need.
-
-```python
-import network as network
-import pickle
-import mnist_loader
-import matplotlib.pyplot as plt
-import numpy as np
-```
-
 We will be trying to trick a vanilla feedforward neural network that was trained on the MNIST dataset. MNIST is a dataset of $$ 28 \times 28 $$ pixel images of handwritten digits. They look something like this:
 
 <center>
@@ -77,7 +77,17 @@ We will be trying to trick a vanilla feedforward neural network that was trained
   </div>
 </center>
 
-There are 50000 training images and 10000 test images. We first load up the pretrained neural network (which is stolen from [this](http://neuralnetworksanddeeplearning.com/) amazing website/book):
+Before we do anything we should first import the libraries we'll need.
+
+```python
+import network.network as network
+import network.mnist_loader as mnist_loader
+import pickle
+import matplotlib.pyplot as plt
+import numpy as np
+```
+
+There are 50000 training images and 10000 test images. We first load up the pretrained neural network (which is shamelessly stolen from [this](http://neuralnetworksanddeeplearning.com/) amazing introduction to neural networks):
 
 ```python
 with open('trained_network.pkl', 'rb') as f:  
@@ -88,6 +98,8 @@ training_data, validation_data, test_data = mnist_loader.load_data_wrapper()
 
 For those of you unfamiliar with pickle, it’s a way for python to serialize data (i.e. write to disk) in essence saving classes and objects. Using `pickle.load()` just opens up the saved version of the network.
 
+So a bit about this pretrained neural network. It has 784 input neurons (one for each of the $$ 28 \times 28 = 784 $$ pixels), one layer of 30 hidden neurons, and 10 output neurons (one for each digit). All it’s activations are sigmoidal; it’s output is a one-hot vector indicating the network’s prediction, and it was trained by minimizing the mean squared error loss.
+
 To show that the neural network is actually trained we can write a quick little function:
 
 ```python
@@ -95,10 +107,18 @@ def predict(n):
     # Get the data from the test set
     x = test_data[n][0]
 
+    # Get output of network and prediction
+    activations = net.feedforward(x)
+    prediction = np.argmax(activations)
+
     # Print the prediction of the network
-    print 'Network output: \n' + str(np.round(net.feedforward(x), 2)) + '\n'
-    print 'Network prediction: ' + str(np.argmax(net.feedforward(x))) + '\n'
-    print 'Actual image: '
+    print('Network output: ')
+    print(activations)
+
+    print('Network prediction: ')
+    print(prediction)
+
+    print('Actual image: ')
     
     # Draw the image
     plt.imshow(x.reshape((28,28)), cmap='Greys')
@@ -125,10 +145,15 @@ This method chooses the $$ n^{th} $$ sample from the test set, displays it, and 
     </center>
 </div>
 
+<center>
+  <div style="max-width: 70%;">
+   <p style="font-size: 16px;">
+   The left side is the MNIST image. The right side plots the 10 outputs of the neural network, called activations. The larger the activation at an output the more the neural network thinks the image is that number.
+   </p>
+  </div>
+</center>
 
-So a bit about this pretrained neural network. It has 784 input neurons ($$ 28 \times 28 $$ pixels), one layer of 30 hidden neurons, and 10 output neurons (one for each digit). All it’s activations are sigmoidal, it’s output is a one-hot vector indicating the network’s prediction, and it was trained by minimizing the mean squared error loss.
-
-Alright, so we have a trained network, but how are we going to trick it? We'll first start with a simple non-targeted approach and then once we get that down we'll modify it to work as a targeted approach. 
+Alright, so we have a trained network, but how are we going to trick it? We'll first start with a simple non-targeted approach and then once we get that down we'll be able to use a cool trick to modify the approach to work as a targeted approach. 
 
 ### Non-Targeted Attack
 
@@ -149,17 +174,17 @@ $$ y_{goal} =
 \end{bmatrix}
 $$
 
-That is, we want to come up with an image such that the neural network’s output is the above vector. In other words, find an image such that the neural network thinks the image is a 5 (remember, we're zero indexing). It turns out we can formulate this as an optimization problem in much the same way we train a network. Let’s call the image we want to make $$ \vec x $$. We’ll define a cost function as:
+That is, we want to come up with an image such that the neural network’s output is the above vector. In other words, find an image such that the neural network thinks the image is a 5 (remember, we're zero indexing). It turns out we can formulate this as an optimization problem in much the same way we train a network. Let’s call the image we want to make $$ \vec x $$ (a $$ 784 $$ dimensional vector, because we flatten out the $$ 28 \times 28 $$ pixel image to make calculations easier). We’ll define a cost function as:
 
 $$ C = \frac{1}{2} \| y_{goal} - \hat y (\vec x) \|^2_2 $$
 
-The $$ y_{goal} $$ is our goal label, from above. The output of the neural network given our image is $$ \hat y (\vec x) $$. You can see that if the output of the network given our generated image $$ \vec x $$ is very close to our goal label, $$ y_{goal} $$, then the corresponding cost is low. If the output of the network is very far from our goal then the cost is high. Therefore, finding a vector $$ \vec x $$ that minimizes the cost $$ C $$ results in an image that the neural network predicts as our goal label. Our problem now is to find this vector $$ \vec x $$. 
+where $$ \| \cdot \|^2_2 $$ is the square of the L2 norm. The $$ y_{goal} $$ is our goal label from above. The output of the neural network given our image is $$ \hat y (\vec x) $$. You can see that if the output of the network given our generated image $$ \vec x $$ is very close to our goal label, $$ y_{goal} $$, then the corresponding cost is low. If the output of the network is very far from our goal then the cost is high. Therefore, finding a vector $$ \vec x $$ that minimizes the cost $$ C $$ results in an image that the neural network predicts as our goal label. Our problem now is to find this vector $$ \vec x $$. 
 
 Notice that this problem is incredibly similar to how we train a neural network, where we define a cost function and then choose weights and biases (a.k.a. parameters) that minimize the cost function. In the case of adversarial example generation, instead of choosing weights and biases that minimize the cost, we hold the weights and biases constant (in essence hold the entire network constant) and choose an $$ \vec x $$ input that minimizes the cost. 
 
 To do this, we’ll take the exact same approach used in training a neural network. That is, we’ll use gradient descent! We can find the derivatives of the cost function with respect to the input, $$ \nabla_x C $$, using backpropagation, and then use the gradient descent update to find the best $$ \vec x $$ that minimizes the cost. 
 
-Backpropagation is of course usually used to find the gradients of the weights and biases with respect to the cost, but in full generality backpropagation is just an algorithm that efficiently calculates gradients on a computational graph (which is what a neural network is). Thus it can also be used to calculate the gradients of the cost function with respect to the inputs of the neural network.
+Backpropagation is usually used to find the gradients of the weights and biases with respect to the cost, but in full generality backpropagation is just an algorithm that efficiently calculates gradients on a [computational graph](http://colah.github.io/posts/2015-08-Backprop/) (which is what a neural network is). Thus it can also be used to calculate the gradients of the cost function with respect to the inputs of the neural network.
 
 Alright, let’s look at the code that actually generates adversarial examples:
 
@@ -193,7 +218,7 @@ def adversarial(net, n, steps, eta):
     return x
 ```
 
-First we create our $$ y_{goal} $$, called `goal` in the code. Next we initialize our $$ \vec x $$ as a random 784-dimensional vector. With this vector we can now start gradient descent, which is really only two lines of code. The first line `d = input_derivative(net,x,goal)` calculates $$ \nabla_x C $$ using backpropagation (the full code for this is in the notebook for the curious, but we’ll skip describing it here as it’s really just a ton of math. If you want a very good description of what backprop is (which is what `input_derivative` is doing) check out [this website](http://neuralnetworksanddeeplearning.com/chap2.html) (incidentally, the same place we got the neural network implementation from)). The second and final line of the gradient descent loop, `x -= eta * d` is just the update. We move in the direction opposite the gradient with step size `eta`.
+First we create our $$ y_{goal} $$, called `goal` in the code. Next we initialize our $$ \vec x $$ as a random 784-dimensional vector. With this vector we can now start gradient descent, which is really only two lines of code. The first line `d = input_derivative(net,x,goal)` calculates $$ \nabla_x C $$ using backpropagation (the full code for this is in the notebook for the curious, but we’ll skip describing it here as it’s really just a ton of math. If you want a very good description of what backprop is (which is what `input_derivative` is really doing) check out [this website](http://neuralnetworksanddeeplearning.com/chap2.html) (incidentally, the same place we got the neural network implementation from)). The second and final line of the gradient descent loop, `x -= eta * d` is the update. We move in the direction opposite the gradient with step size `eta`.
 
 Here are non-targeted adversarial examples for each class along with the neural network's predictions:
 
@@ -219,13 +244,21 @@ Here are non-targeted adversarial examples for each class along with the neural 
 
 </div>
 
-Incredibly the neural network thinks that [some] of the images are actually numbers with a very high confidence. The "3" and "5" are pretty good examples of this. For most of the other numbers the neural network just has very low activations for every number indicating that it is very confused.
+<center>
+  <div style="max-width: 70%;">
+   <p style="font-size: 16px;">
+   The left side is the non-targeted adversarial exampele (a 28 X 28 pixel image). The right side plots the activations of the network when given the image.
+   </p>
+  </div>
+</center>
 
-There might be something bugging you at this point. If we want to make an adversarial example corresponding to a five, then we want to find a $$ \vec x $$ that when fed into the neural network gives an output as close as possible to the one-hot vector representing "5". However, why doesn’t gradient descent just find an image of a "5"? After all, the neural network would almost certainly believe that an image of a "5" was actually a "5" (because it _is_ actually a "5"). I’ve thought about this for a bit and I have an idea (though somebody much smarter than I might have a better reason).
+Incredibly the neural network thinks that some of the images are actually numbers with a very high confidence. The "3" and "5" are pretty good examples of this. For most of the other numbers the neural network just has very low activations for every number indicating that it is very confused. Looks pretty good!
 
-The space of all possible $$ 28 \times 28 $$ images is utterly massive. There are $$ 256^{28 \times 28} \approx 10^{1881} $$ possible different $$ 28 \times 28 $$ pixel black and white images. For comparison, a common estimate for the number of atoms in the observable universe is $$ 10^{80} $$. Taking the Buddhist view, if each atom in the universe contained another universe then we would have $$ 10^{160} $$ atoms. If each atom contained another universe whose atoms contained another universe and so on for about 23 times, then we would almost have reached $$ 10^{1881} $$ atoms. Basically, the number of possible images is mind-bogglingly huge.
+There might be something bugging you at this point. If we want to make an adversarial example corresponding to a five then we want to find a $$ \vec x $$ that when fed into the neural network gives an output as close as possible to the one-hot vector representing "5". However, why doesn’t gradient descent just find an image of a "5"? After all, the neural network would almost certainly believe that an image of a "5" was actually a "5" (because it _is_ actually a "5"). A possible theory as to why this happens is the following:
 
-And out of all these photos only an essentially insignificant fraction actually look like numbers to the human eye. Whereas given that there are so many images, a good amount of them would look like numbers to a neural network (part of the problem is that our neural network was never trained on images that _don't_ look like numbers, so given an image that doesn't look like a number the neural network's outputs are essentially random). So when we set off to find something that looks like a number to a neural network, we’re much more likely to find an image that looks like noise or static than to find an image that actually looks like a number to a human just by sheer probability.
+The space of all possible $$ 28 \times 28 $$ images is utterly massive. There are $$ 256^{28 \times 28} \approx 10^{1888} $$ possible different $$ 28 \times 28 $$ pixel black and white images. For comparison, a common estimate for the number of atoms in the observable universe is $$ 10^{80} $$. If each atom in the universe contained another universe then we would have $$ 10^{160} $$ atoms. If each atom contained another universe whose atoms contained another universe and so on for about 23 times, then we would _almost_ have reached $$ 10^{1888} $$ atoms. Basically, the number of possible images is mind-bogglingly huge.
+
+And out of all these photos only an essentially insignificant fraction actually look like numbers to the human eye. Whereas given that there are so many images, a good amount of them would look like numbers to a neural network (part of the problem is that our neural network was never trained on images that _don't_ look like numbers, so given an image that doesn't look like a number the neural network's outputs are pretty much random). So when we set off to find something that looks like a number to a neural network we’re much more likely to find an image that looks like noise or static than to find an image that actually looks like a number to a human just by sheer probability.
 
 ### Targeted Attack
 
@@ -233,7 +266,7 @@ These adversarial examples are cool and all, but to humans they just look like n
 
 $$ C = \frac{1}{2} \| y_{goal} - \hat y (\vec x) \|^2_2 + \lambda \| \vec x - x_{target} \|^2_2 $$
 
-Where $$ x_{target} $$ is what we want our adversarial example to look like. So what we’re doing now is we’re simultaneously minimizing two terms. The left term $$ \| y_{goal} - \hat y (\vec x) \|^2_2 $$ we’ve already seen. Minimizing this will make the neural network output $$ y_{goal} $$ when given $$ \vec x $$. Minimizing the second term $$ \lambda \| \vec x - x_{target} \|^2_2 $$ will try to force our adversarial image $$ x $$ to be as close as possible to $$ x_{target} $$ as possible (because the norm is smaller when the two vectors are closer), which is what we want! The extra $$ \lambda $$ out front is a hyperparameter that dictates which of the terms is more important. As with most hyperparameters we find after a lot of trial and error that .05 is a good number to set $$ \lambda $$ to. 
+Where $$ x_{target} $$ is what we want our adversarial example to look like ($$ x_{target} $$ is therefore a $$ 784 $$ dimensional vector, the same dimension as our input). So what we’re doing now is we’re simultaneously minimizing two terms. The left term $$ \| y_{goal} - \hat y (\vec x) \|^2_2 $$ we’ve seen already. Minimizing this will make the neural network output $$ y_{goal} $$ when given $$ \vec x $$. Minimizing the second term $$ \lambda \| \vec x - x_{target} \|^2_2 $$ will try to force our adversarial image $$ x $$ to be as close as possible to $$ x_{target} $$ as possible (because the norm is smaller when the two vectors are closer), which is what we want! The extra $$ \lambda $$ out front is a hyperparameter that dictates which of the terms is more important. As with most hyperparameters we find after a lot of trial and error that .05 is a good number to set $$ \lambda $$ to. 
 
 If you know about ridge regularization you might find the cost function above very very familiar. In fact, we can interpret the above cost function as placing a prior on our model for our adversarial examples. 
 
@@ -241,17 +274,17 @@ If you don't know anything about regularization, feel free to click on the blue 
 
 {% capture regularization %}
 
-Regularization is a way to use information you already have (called a **prior**) to influence the results of your model. For an example, it is often cited that the most common name in the world is "Muhammad" (and all its variations). It is also often joked that if you had to guess a person's name then you should always guess "Muhammad" because you have the best chances of being right with that guess--probabilistically speaking. 
+Regularization is a way to use information you already have (called a **prior**) to influence the results of your model. For an example, it is often cited that the most common name in the world is "Muhammad" (including all its variations). It is also often joked that if you had to guess a person's name then you should always guess "Muhammad" because you have the best chances of being right with that guess--probabilistically speaking. 
 
-The joke is that you often have a lot more information to go off of. For instance, if you happen to realize the person is a girl then the probability that her name is "Muhammad" drops to basically zero. If you happen to notice the person has blue eyes and blond hair then the probability drops considerably as well. And if you happen to notice that the person is wearing a sticker saying "Hello I am Ben" then the probability of the person being named "Muhammad" is also basically zero.
+The joke is that you often have a lot more information to go off of. For instance, if you happen to realize the person is a girl then the probability that her name is "Muhammad" drops to basically zero. If you happen to notice the person has blue eyes and blond hair then the probability drops considerably as well. And if you happen to notice that the person is wearing a sticker saying "Hello I am Ben" then the probability of the person being named "Muhammad" is pretty much zero.
 
-The "prior" is the information you have before seeing the person. That is, your knowledge that "Muhammad" is the most common name in the world. But then when you actually see the person you have to update your guess. But you also don't completely forget about your prior. For example, if you could only see the person from across the room and couldn't get a good look at them then you would have to go off of your prior and probably guess "Muhammad." But if you came face to face and realized the person looked exactly like Anna Kendrick then you would probably guess her name was Anna Kendrick. Thus, we say that your observation _washed out_ the _effect_ of the prior. As a side note, your estimate of the probabilities using both the prior and the observations is called the "posterior" probabilities.
+The "prior" is the information you have before seeing the person. That is, your knowledge that "Muhammad" is the most common name in the world. But then when you actually see the person you have to "update" your guess. But you also don't completely forget about your prior. For example, if you could only see the person from across the room and couldn't get a good look at them then you would have to go off of your prior and guess "Muhammad." But if you came face to face and realized the person looked exactly like Anna Kendrick then you would probably completely ignore your prior and guess that her name was Anna Kendrick. Thus, we say that your observation _washed out_ the _effect_ of the prior. In the first case there wasn't enough data to wash out the prior, so you had to depend on it a lot more. As a side note, your estimate of the probabilities using both the prior and the observations is called the "posterior" probabilities.
 
 In machine learning, one common prior is the ridge prior. The ridge prior says that we expect our weights to have a small L2 norm. Mathematically, we can write a cost function that looks like
 
 $$ C = \|Xw - y\|^2_2 + \lambda\|w\|^2_2 $$
 
-notice that if $$ w $$ gets too large the second term in the cost function will also get very large. The $$ \lambda $$ let's us control the strength of our prior. If $$ \lambda $$ were very high then the effect of a large $$ w $$ would be amplified so optimization would look for smaller $$ w $$'s. This essentially increases the effect of the prior.If $$ \lambda $$ were small then the effect of the prior would be small.
+where $$ X $$ is a matrix of the data, $$ w $$ are learned weights, and $$ y $$ are labels for the data. Without the $$ \lambda\|w\|^2_2 $$ term the expression reduces to the cost function for least squares linear regression. But notice that with the term if $$ w $$ gets too large the second term in the cost function will also get very large, which is undesirable as we're trying to minimize the cost. This forces $$ w $$ to be small. The $$ \lambda $$ let's us control the strength of our prior. If $$ \lambda $$ were very high then the effect of a large $$ w $$ would be amplified so optimization would look for smaller $$ w $$'s. This essentially increases the effect of the prior. If $$ \lambda $$ were small then the effect of the prior would be small.
 
 Now check out our cost function for a targeted adversarial attack:
 
@@ -264,7 +297,7 @@ The second term on the right hand side acts as a prior. We're saying our prior a
 {% endcapture %}
 {% include collapsible.html content=regularization title="Regularization"%}
 
-The code to implement minimizing the new cost function is almost identical to the original code (we called the function `sneaky_adversarial()` because we're being sneaky by using a targeted attack. Naming is always the hardest part of programming...):
+The code to implement minimizing the new cost function is almost identical to the original code (we called the function `sneaky_adversarial()` because we're being sneaky by using a targeted attack. Naming is always the hardest part of programming...)
 
 ```python
 def sneaky_adversarial(net, n, x_target, steps, eta, lam=.05):
@@ -327,6 +360,14 @@ The only thing we’ve changed is the gradient descent update: `x -= eta * (d + 
 
 </div>
 
+<center>
+  <div style="max-width: 70%;">
+   <p style="font-size: 16px;">
+   The left side is the targeted adversarial exampele (a 28 X 28 pixel image). The right side plots the activations of the network when given the image.
+   </p>
+  </div>
+</center>
+
 Notice that as with the non-targeted attack there are two behaviors. Either the neural network is completely tricked and the activation for the number we want is very high (for example the "targeted 5" image) or the network is just confused and all the activations are low (for example the "targeted 7" image). What’s interesting though is that many more images are in the former category now, completely tricking the neural network as opposed to just confusing it. It seems that making adversarial examples that have been regularized to be more “number-like” tends to make convergence better during gradient descent.
 
 ## Protecting Against Adversarial Attacks
@@ -363,16 +404,20 @@ def binary_thresholding(n, m):
     # Binarize image
     x = (x > .5).astype(float)
     
-    print "With binary thresholding: "
+    print("With binary thresholding: ")
     
     plt.imshow(x.reshape(28,28), cmap="Greys")
     plt.show()
+
+    # Get binarized output and prediction
+    binary_activations = net.feedforward(x)
+    binary_prediction = np.argmax(net.feedforward(x))
     
-    print "Prediction with binary thresholding: " + 
-        str(np.argmax(np.round(net.feedforward(x)))) + '\n'
+    print("Prediction with binary thresholding: ")
+    print(binary_prediction)
     
-    print "Network output: "
-    print np.round(net.feedforward(x), 2)
+    print("Network output: ")
+    print(binary_activations)
 ```
 
 Here's the result:
@@ -387,7 +432,7 @@ Here's the result:
 <center>
   <div style="max-width: 70%;">
    <p style="font-size: 16px;">
-     The effect of binary thresholding on adversarial images on MNIST. The left side is the image and the right side is the output of the neural network. <b> Click on the image </b> to toggle between binarized and adversarial.
+     The effect of binary thresholding on an MNIST adversarial image. The left side is the image and the right side is the output of the neural network. <b> Click on the image </b> to toggle between binarized and adversarial.
    </p>
   </div>
 </center>
@@ -403,13 +448,13 @@ Turns out binary thresholding works! But this way of protecting against adversar
   </div>
 </center>
 
-Another more general thing we could try to do is to train a new neural network on correctly labeled adversarial examples as well as the original training test set. The code to do this is in the ipython notebook (be aware it takes around 15 minutes to run). Doing this gives an accuracy of about 94% on a test set of all adversarial images which is pretty good. However, this method has it's limitations. Primarily in real life you are very unlikely to know how your attacker is generating adversarial examples. 
+Another more general thing we could try to do is to train a new neural network on correctly labeled adversarial examples as well as the original training test set. The code to do this is in the ipython notebook (be aware it takes around 15 minutes to run). Doing this gives an accuracy of about 94% on a test set of all adversarial images which is pretty good. However, this method has it's own limitations. Primarily in real life you are very unlikely to know how your attacker is generating adversarial examples. 
 
 There are many other ways to protect against adversarial attacks that we won't wade into in this introductory post, but the question is still an open research topic and if you're interested there are many great papers on the subject.
 
 ## Black Box Attacks
 
-An interesting and important observation of adversarial examples is that they generally are not model or architecture specific. Adversarial examples generated for one neural network architecture will transfer very well to another architecture. In other words, if I want to trick your model I can create my own model and adversarial examples based off of it and then these same adversarial examples will most probably trick your model as well. 
+An interesting and important observation of adversarial examples is that they generally are not model or architecture specific. Adversarial examples generated for one neural network architecture will transfer very well to another architecture. In other words, if you wanted to trick a model you could create your own model and adversarial examples based off of it. Then these same adversarial examples will most probably trick the other model as well. 
 
 This has huge implications as it means that it is possible to create adversarial examples for a completely black box model where we have no prior knowledge of the internal mechanics. In fact, a team at Berkeley managed to launch a [succesful attack](https://arxiv.org/pdf/1611.02770.pdf) on a commercial AI classification system using this method.
 
@@ -417,9 +462,18 @@ This has huge implications as it means that it is possible to create adversarial
 
 As we move toward a future that incorporates more and more neural networks and deep learning algorithms in our daily lives we have to be careful to remember that these models can be fooled very easily. Despite the fact that neural networks are to some extent biologically inspired and have near (or super) human capabilities in a wide variety of tasks, adversarial examples teach us that their method of operation is nothing like how real biological creatures work. As we've seen neural networks can fail quite easily and catastrophically, in ways that are completely alien to us humans. 
 
-Human understanding is centered on causality. We demand a cause for every effect, and not without reason. Evolutionarily it is useful to know what actions result in what outcomes. Striking flint on steel produces sparks that starts a fire? Useful information for our ancestors struggling to survive on the African savannah. We are so inherently intent on imposing causality on the world that almost every culture has created gods that explain away the unexplainable phenomena of the world. Why does it rain and thunder? Because Zeus is mad. Why does the Nile flood every year? Because _Hapi_, the Egyptian god of the Nile, made yearly pilgrimages to Egypt.
+We do not completely understand neural networks and to use our human intuition to describe neural networks would be unwise. For example, often times you will hear people say something to the effect of "the neural network thinks the image is of a cat because of the orange fur texture." The thing is a neural network does not "think" in the sense that humans "think." They are fundamentally just a series of matrix multiplications with some added non-linearities. And as adversarial examples show us, the outputs of these models are incredibly fragile. We must be careful not to attribute human qualities to neural networks despite the fact that they have human capabilities. That is, we must not [anthropomorphize machine learning models](https://blog.keras.io/the-limitations-of-deep-learning.html).
 
-We do not completely understand neural networks and to attribute "reason" to them would be akin to the Greeks claiming the sun was Apollo riding his firey chariot across the sky every day. Adversarial examples should humble us. They show that although we have made great leaps and bounds there is still much that we do not know.
+<center>
+  <img src="{{ site.baseurl }}/assets/2017-10-31-adversarial-examples/dumbbells.png" class="img" style="">
+  <div style="max-width: 70%;">
+   <p style="font-size: 16px;">
+   A neural network trained to detect dumbbells "believes" that "dumbbells" are sometimes paired with a disembodied arm. Clearly not what we would expect. From <a target="_blank" href="https://research.googleblog.com/2015/06/inceptionism-going-deeper-into-neural.html">Google Research</a>.
+   </p>
+  </div>
+</center>
+
+All in all, adversarial examples should humble us. They show us that although we have made great leaps and bounds there is still much that we do not know.
 
 
 
@@ -471,13 +525,14 @@ img.pixelated {
 }
 
 img.toggle {
-    -webkit-transition: opacity .01s; /* Safari */
-    transition: opacity .01s;
+    -webkit-transition: border-color .01s; /* Safari */
+    transition: border-color .01s;
     cursor: pointer;
+    border-width: 10px;
 }
 
 img.toggle:hover {
-    opacity: .8;
+    border-color: grey;
     cursor: pointer;
 }
 
