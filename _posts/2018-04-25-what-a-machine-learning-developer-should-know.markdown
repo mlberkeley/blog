@@ -16,7 +16,7 @@ description: What a ML dev should know
   
 </style>
 
-_This is a sponsored post by [Mobilunity](https://mobilunity.com/)_
+_This is a sponsored post by Mobilunity_
 
 Machine learning has become a massive buzzword, a term often coupled with artificial intelligence and is almost always present in talks, conferences, and events centered on technological innovations. While it’s easy to get excited about the term and get eager to dabble with the technology, any aspiring [machine learning developer](https://mobilunity.com/blog/why-machine-learning-developers-are-in-a-high-demand/) should first be aware of what machine learning truly entails and how it’s a driving force for recent artificial intelligence breakthroughs.
 
