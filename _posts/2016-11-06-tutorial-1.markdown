@@ -159,7 +159,7 @@ $$y=mx+b$$
 $$y(x)$$ is our output, or in this case the price of a house, and $$x$$ is our feature, or in this case the size of the house. $$c_{0}$$ is the y intercept, to account for the base price of the house.
 
 
-Now the question becomes: How does a machine learning algorithm choose $$c_{2}$$ and $$c_{1}$$ so that the line best predicts house prices?
+Now the question becomes: How does a machine learning algorithm choose $$c_{1}$$ and $$c_{0}$$ so that the line best predicts house prices?
 
 
 *It’s worth noting here that the coefficients can actually be found directly and very efficiently through a matrix relation called the [normal equation](http://mathworld.wolfram.com/NormalEquation.html). However, since this method becomes impractical when working with hundreds or thousands of variables, we'll be using the method machine learning algorithms often use.
