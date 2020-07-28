@@ -1,6 +1,6 @@
 # MLAB Blog
 
-This is the repo for the [Machine Learning at Berkeley blog](ml.berkeley.edu/blog). 
+This is the repo for the [Machine Learning at Berkeley blog](https://ml.berkeley.edu/blog/). 
 
 ## For our bloggers:
 
