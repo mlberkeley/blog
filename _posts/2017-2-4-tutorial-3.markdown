@@ -305,7 +305,7 @@ Where:
 + $$ J $$ is the cost function
 + and taking the derivative of a matrix means taking the derivative of the elements
 
-While this may seem like a daunting task at first, it turns out that the only tool we really need is our good friend chain rule (if you haven’t met it already, [allow us to introduce you](https://www.math.hmc.edu/calculus/tutorials/multichainrule/)). By blindly throwing the chain rule at our cost function, we’ll eventually be able to stumble upon the derivatives that we want. When in doubt, chain rule!
+While this may seem like a daunting task at first, it turns out that the only tool we really need is our good friend chain rule (if you haven’t met it already, [allow us to introduce you](https://math.hmc.edu/calculus/hmc-mathematics-calculus-online-tutorials/multivariable-calculus/multi-variable-chain-rule/)). By blindly throwing the chain rule at our cost function, we’ll eventually be able to stumble upon the derivatives that we want. When in doubt, chain rule!
 
 First off, let’s talk about the cost function. Our assumption is that the cost function is some function of the outputs of the neural network and our training examples. So in general our cost function is $$ J(a^L_1, a^L_2, \dots, a^L_m, y) $$ where $$ L $$ represents the last layer which has $$ m $$ output neurons, and $$ y $$ represents our training data. For one, this should seem pretty intuitive for our cost function, after all the cost function should probably only be a function of the outputs of our algorithm (and our training examples). 
 
